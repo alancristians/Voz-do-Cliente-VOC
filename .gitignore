@@ -1,0 +1,12 @@
+# Dados (o robô vai gerar os dele na nuvem)
+data/
+*.csv
+*.parquet
+
+# Python
+__pycache__/
+venv/
+.env
+
+# VS Code
+.vscode/

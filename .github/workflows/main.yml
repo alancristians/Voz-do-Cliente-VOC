@@ -1,0 +1,58 @@
+name: FinVoC Daily Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Agendamento: Todo dia à meia-noite (UTC)
+  workflow_dispatch:      # Permite rodar manualmente pelo site
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar bibliotecas
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🥉 Ingestão Bronze (Fontes)
+        run: |
+          python scripts/bcb_ingestion.py
+          python scripts/news_ingestion.py
+          python scripts/consumidor_ingestion.py
+
+      - name: 🥈 Transformação Prata (Limpeza)
+        run: python scripts/silver_transformation.py
+
+      - name: 🥇 Análise Ouro (Negócio)
+        run: python scripts/gold_analysis.py
+
+      - name: 📦 Atualizar Repositório (Dados e Dash)
+        run: |
+          git config --global user.name 'Alan (FinVoC Bot)'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          
+          mkdir -p data/bronze data/silver data/gold
+          git add -f data/
+          
+          if git diff --staged --quiet; then
+            echo "Nada novo para salvar."
+          else
+            git commit -m "data: daily medallion update [skip ci]"
+            git push origin main
+          fi

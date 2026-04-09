@@ -1,0 +1,6 @@
+bank,qtd_noticias_recentes,índice,ano,trimestre,categoria,tipo,cnpj_if,instituição_financeira,quantidade_total_de_reclamações_respondidas,quantidade_de_reclamações_procedentes,quantidade_de_reclamações_procedentes_extrapoladas,quantidade_total_de_reclamações_analisadas,quantidade_total_de_clientes__ccs_e_scr,quantidade_de_clientes__ccs,quantidade_de_clientes__scr,unnamed:_14,extraction_at
+Banco do Brasil,10,0.0,,,,,,,,,,,,,,,
+Bradesco,10,51.74,2025.0,3º,"Top 15 - Bancos, Financeiras e Instituições de Pagamento",Conglomerado, ,BRADESCO (conglomerado),33228.0,474.0,5718.0,2688.0,110494968.0,104541140.0,45293962.0,,2026-04-09 20:25:01.913703
+Itaú,10,45.13,2025.0,3º,"Top 15 - Bancos, Financeiras e Instituições de Pagamento",Conglomerado, ,ITAU (conglomerado),28923.0,520.0,4525.0,3437.0,100248541.0,84467103.0,52834510.0,,2026-04-09 20:25:01.913703
+Nubank,9,12.67,2025.0,3º,"Top 15 - Bancos, Financeiras e Instituições de Pagamento",Conglomerado, ,NU PAGAMENTOS (conglomerado),39389.0,78.0,1386.0,1977.0,109315016.0,107429767.0,67737881.0,,2026-04-09 20:25:01.913703
+Santander,10,29.25,2025.0,3º,"Top 15 - Bancos, Financeiras e Instituições de Pagamento",Conglomerado, ,SANTANDER (conglomerado),24095.0,176.0,2038.0,1809.0,69660783.0,64961127.0,26387946.0,,2026-04-09 20:25:01.913703
