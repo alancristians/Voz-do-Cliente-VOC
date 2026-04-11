@@ -3,17 +3,29 @@ import pandas as pd
 import plotly.express as px
 import os
 
+# 1. Configuração e Estilo
 st.set_page_config(page_title="FinVoC Dashboard", layout="wide", page_icon="📈")
 st.markdown("<style>.stMetric { background-color: #1e1e1e; padding: 15px; border-radius: 10px; border: 1px solid #333; }</style>", unsafe_allow_html=True)
+
 st.title("🛡️ FinVoC: Inteligência de Mercado & Reclamações")
 
-# Glossário no Topo
-with st.expander("ℹ️ Guia de Leitura: Como interpretar os indicadores?"):
+# --- GLOSSÁRIO EXPANDIDO NO TOPO ---
+with st.expander("ℹ️ Guia Técnico: Como interpretar os indicadores?"):
     st.markdown("""
-    * **Média Eficiência:** Porcentagem de reclamações que o BCB considerou **procedentes**. Quanto **menor**, mais eficiente é o banco em resolver problemas internamente.
-    * **Índice BCB:** Queixas por 1 milhão de clientes. É o ranking oficial de insatisfação.
+    ### Métricas de Exposição e Qualidade
+    
+    * **Volume de Notícias:** Contagem de menções na mídia (Google News) nos últimos 7 dias. Ajuda a identificar picos de atenção pública.
+    * **Índice de Reclamações (BCB):** Ranking oficial do Banco Central. Calcula o volume de queixas para cada 1 milhão de clientes. **Dica:** Quanto menor o índice, melhor a reputação.
+    
+    ### Métricas de Eficiência e Escala
+    
+    * **Média Eficiência (Taxa de Procedência):** É o "termômetro da verdade". Indica qual a porcentagem de queixas que o BCB analisou e confirmou que o banco realmente errou. 
+        * *Fórmula:* (Reclamações Procedentes ÷ Total de Respondidas) × 100.
+        * *Interpretação:* Uma taxa baixa (ex: 1.04%) mostra que a Ouvidoria do banco é eficiente e resolve a maioria dos problemas internamente.
+    * **Market Share (Clientes):** Indica o tamanho da base de clientes ativos (dados CCS/SCR). Serve para dar contexto: um banco gigante pode ter muitas reclamações em números absolutos, mas um índice de satisfação excelente proporcionalmente.
     """)
 
+# 2. Carga de Dados
 GOLD_PATH = "data/gold/fact_finvoc_summary.csv"
 NEWS_DETAIL_PATH = "data/bronze/noticias_bancos.parquet"
 
@@ -24,7 +36,7 @@ def load_data():
         for col in ['indice_bcb', 'total_clientes', 'recl_procedentes', 'total_respondidas']:
             if col in df.columns:
                 df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
-        # Cálculo da Taxa de Procedência
+        # Cálculo da Taxa de Procedência Individual
         df['taxa_procedencia'] = (df['recl_procedentes'] / df['total_respondidas'] * 100).fillna(0)
         return df
     return None
@@ -32,39 +44,53 @@ def load_data():
 df = load_data()
 
 if df is not None:
+    # 3. Sidebar e KPIs
     bancos = st.sidebar.multiselect("Bancos:", options=df['bank'].unique(), default=df['bank'].unique())
     df_p = df[df['bank'].isin(bancos)]
 
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Bancos Analisados", len(df_p))
     k2.metric("Total Notícias", int(df_p['qtd_noticias_recentes'].sum()))
-    # KPI COM MAIS PRECISÃO (2 CASAS DECIMAIS)
     k3.metric("Média Eficiência", f"{df_p['taxa_procedencia'].mean():.2f}%")
     k4.metric("Market Share (Clientes)", f"{df_p['total_clientes'].sum()/1e6:.1f}M")
 
     st.divider()
-    # Gráficos de Notícias e Índice (O que já funcionava)
+
+    # 4. Gráficos Originais (Performance)
+    st.subheader("📊 Performance: Notícias vs. Reclamações")
     c1, c2 = st.columns(2)
-    with c1: st.plotly_chart(px.bar(df_p, x='bank', y='qtd_noticias_recentes', color='bank', template="plotly_dark", title="Volume de Notícias"), width="stretch")
-    with c2: st.plotly_chart(px.line(df_p.sort_values('indice_bcb', ascending=False), x='bank', y='indice_bcb', markers=True, template="plotly_dark", title="Índice BCB"), width="stretch")
+    with c1:
+        st.plotly_chart(px.bar(df_p, x='bank', y='qtd_noticias_recentes', color='bank', template="plotly_dark", title="Volume de Notícias"), width="stretch")
+    with c2:
+        st.plotly_chart(px.line(df_p.sort_values('indice_bcb', ascending=False), x='bank', y='indice_bcb', markers=True, template="plotly_dark", title="Índice BCB"), width="stretch")
 
     st.divider()
-    # Gráficos de Escala e Eficiência
-    c3, c4 = st.columns(2)
-    with c3: st.plotly_chart(px.pie(df_p, values='total_clientes', names='bank', hole=.4, template="plotly_dark", title="Market Share (Clientes)"), width="stretch")
-    with c4: st.plotly_chart(px.bar(df_p, x='bank', y='taxa_procedencia', color='bank', text_auto='.2f', template="plotly_dark", title="Taxa de Procedência (%)"), width="stretch")
 
+    # 5. Novos Gráficos (Escala e Resolução)
+    st.subheader("🎯 Insights de Escala e Resolução")
+    c3, c4 = st.columns(2)
+    with c3:
+        st.plotly_chart(px.pie(df_p, values='total_clientes', names='bank', hole=.4, template="plotly_dark", title="Market Share (Clientes)"), width="stretch")
+    with c4:
+        st.plotly_chart(px.bar(df_p, x='bank', y='taxa_procedencia', color='bank', text_auto='.2f', template="plotly_dark", title="Taxa de Procedência (%)"), width="stretch")
+
+    # 6. Diagnóstico Operacional
     st.subheader("⚠️ Diagnóstico de Operação")
     st.dataframe(df_p[['bank', 'principal_motivo', 'indice_bcb', 'taxa_procedencia']], width="stretch", hide_index=True)
 
+    # 7. Explorador de Notícias
     st.divider()
-    st.subheader("🔍 Explorador de Notícias")
+    st.subheader("🔍 Explorador Detalhado de Notícias")
     if os.path.exists(NEWS_DETAIL_PATH):
         df_news = pd.read_parquet(NEWS_DETAIL_PATH)
-        search = st.text_input("Filtrar notícias:")
+        search = st.text_input("Filtrar notícias por termo:")
         if search:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
         st.dataframe(df_news, column_config={"link": st.column_config.LinkColumn("Link")}, width="stretch", hide_index=True)
+
 else:
-    st.error("Dados não encontrados.")
+    st.error("❌ Dados da Camada Gold não encontrados.")
+
+st.sidebar.markdown("---")
+st.sidebar.caption("FinVoC | Alan Cristian - Poli-USP")
