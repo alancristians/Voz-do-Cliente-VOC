@@ -4,8 +4,20 @@ import unicodedata
 
 def normalizar(texto):
     if not isinstance(texto, str): return ""
-    return "".join([c for c in unicodedata.normalize('NFKD', texto) 
-                    if not unicodedata.combining(c)]).lower().strip()
+    nfkd = unicodedata.normalize('NFKD', texto)
+    texto_limpo = "".join([c for c in nfkd if not unicodedata.combining(c)])
+    return texto_limpo.lower().replace('–', '-').replace('—', '-').strip()
+
+def limpar_numero(valor):
+    """Converte strings formatadas (ex: 1.234,56) para float (1234.56)."""
+    if pd.isna(valor) or valor == "" or valor == " ": return 0.0
+    if isinstance(valor, str):
+        # Remove ponto de milhar e troca vírgula decimal por ponto
+        valor = valor.replace('.', '').replace(',', '.')
+    try:
+        return float(valor)
+    except:
+        return 0.0
 
 def run_gold_analysis():
     print("🥇 Gerando Camada Ouro: Inteligência Bancária 2026...")
@@ -20,17 +32,15 @@ def run_gold_analysis():
         df_cons = pd.read_parquet(cons_path)
         df_news = pd.read_parquet(news_path)
         
-        # Mapeamento dinâmico de colunas para evitar erros de caracteres especiais
-        cols = {normalizar(c): c for c in df_bcb.columns}
-        
-        c_inst = next((v for k, v in cols.items() if 'instituicao' in k), None)
-        c_idx = next((v for k, v in cols.items() if 'indice' in k), None)
-        c_cli = next((v for k, v in cols.items() if 'clientes' in k and 'ccs' in k), None)
-        c_proc = next((v for k, v in cols.items() if 'reclamacoes' in k and 'procedentes' in k and 'extra' not in k), None)
-        c_resp = next((v for k, v in cols.items() if 'reclamacoes' in k and 'respondidas' in k), None)
+        # Mapeamento dinâmico de colunas
+        cols_orig = {normalizar(c): c for c in df_bcb.columns}
+        c_inst = next((v for k, v in cols_orig.items() if 'instituicao' in k), None)
+        c_idx = next((v for k, v in cols_orig.items() if 'indice' in k), None)
+        c_cli = next((v for k, v in cols_orig.items() if 'clientes' in k and 'ccs' in k), None)
+        c_proc = next((v for k, v in cols_orig.items() if 'procedentes' in k and 'extra' not in k), None)
+        c_resp = next((v for k, v in cols_orig.items() if 'respondidas' in k), None)
 
         news_summary = df_news.groupby('bank').size().reset_index(name='qtd_noticias_recentes')
-        
         synonyms = {"itau": "itau", "bradesco": "bradesco", "santander": "santander",
                     "banco do brasil": "banco do brasil", "nubank": "nu ", "caixa": "caixa economica"}
 
@@ -47,18 +57,18 @@ def run_gold_analysis():
                 gold_data.append({
                     'bank': bank_name,
                     'qtd_noticias_recentes': row_news['qtd_noticias_recentes'],
-                    'indice_bcb': match_bcb[c_idx].values[0],
-                    'total_clientes': match_bcb[c_cli].values[0],
-                    'recl_procedentes': match_bcb[c_proc].values[0],
-                    'total_respondidas': match_bcb[c_resp].values[0],
+                    'indice_bcb': limpar_numero(match_bcb[c_idx].values[0]),
+                    'total_clientes': limpar_numero(match_bcb[c_cli].values[0]),
+                    'recl_procedentes': limpar_numero(match_bcb[c_proc].values[0]),
+                    'total_respondidas': limpar_numero(match_bcb[c_resp].values[0]),
                     'principal_motivo': top_status
                 })
 
         df_gold = pd.DataFrame(gold_data)
         df_gold.to_csv("data/gold/fact_finvoc_summary.csv", index=False)
-        print(f"✅ Sucesso! Gerado arquivo com colunas: {df_gold.columns.tolist()}")
+        print(f"✅ Sucesso! {len(df_gold)} bancos processados com valores numéricos limpos.")
     else:
-        print("❌ Erro: Arquivos não encontrados.")
+        print("❌ Erro: Arquivos base não encontrados.")
 
 if __name__ == "__main__":
     run_gold_analysis()
