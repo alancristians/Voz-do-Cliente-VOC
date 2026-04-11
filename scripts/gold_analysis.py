@@ -9,10 +9,8 @@ def normalizar(texto):
     return texto_limpo.lower().replace('–', '-').replace('—', '-').strip()
 
 def limpar_numero(valor):
-    """Converte strings formatadas (ex: 1.234,56) para float (1234.56)."""
     if pd.isna(valor) or valor == "" or valor == " ": return 0.0
     if isinstance(valor, str):
-        # Remove ponto de milhar e troca vírgula decimal por ponto
         valor = valor.replace('.', '').replace(',', '.')
     try:
         return float(valor)
@@ -32,7 +30,6 @@ def run_gold_analysis():
         df_cons = pd.read_parquet(cons_path)
         df_news = pd.read_parquet(news_path)
         
-        # Mapeamento dinâmico de colunas
         cols_orig = {normalizar(c): c for c in df_bcb.columns}
         c_inst = next((v for k, v in cols_orig.items() if 'instituicao' in k), None)
         c_idx = next((v for k, v in cols_orig.items() if 'indice' in k), None)
@@ -48,7 +45,6 @@ def run_gold_analysis():
         for _, row_news in news_summary.iterrows():
             bank_name = row_news['bank']
             term = synonyms.get(normalizar(bank_name), normalizar(bank_name))
-            
             match_bcb = df_bcb[df_bcb[c_inst].str.contains(term, case=False, na=False)].iloc[0:1]
             match_cons = df_cons[df_cons["banco"].str.contains(term, case=False, na=False)]
             top_status = match_cons['status'].value_counts().idxmax() if not match_cons.empty else "Normal"
@@ -64,11 +60,8 @@ def run_gold_analysis():
                     'principal_motivo': top_status
                 })
 
-        df_gold = pd.DataFrame(gold_data)
-        df_gold.to_csv("data/gold/fact_finvoc_summary.csv", index=False)
-        print(f"✅ Sucesso! {len(df_gold)} bancos processados com valores numéricos limpos.")
-    else:
-        print("❌ Erro: Arquivos base não encontrados.")
+        pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False)
+        print("✅ Camada Ouro atualizada!")
 
 if __name__ == "__main__":
     run_gold_analysis()
