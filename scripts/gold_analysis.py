@@ -6,6 +6,7 @@ def normalizar(texto):
     if not isinstance(texto, str): return ""
     nfkd = unicodedata.normalize('NFKD', texto)
     texto_limpo = "".join([c for c in nfkd if not unicodedata.combining(c)])
+    # Normaliza traços e espaços para garantir o match
     return texto_limpo.lower().replace('–', '-').replace('—', '-').strip()
 
 def limpar_numero(valor):
@@ -30,10 +31,14 @@ def run_gold_analysis():
         df_cons = pd.read_parquet(cons_path)
         df_news = pd.read_parquet(news_path)
         
+        # Mapeamento Inteligente
         cols_orig = {normalizar(c): c for c in df_bcb.columns}
+        
         c_inst = next((v for k, v in cols_orig.items() if 'instituicao' in k), None)
         c_idx = next((v for k, v in cols_orig.items() if 'indice' in k), None)
-        c_cli = next((v for k, v in cols_orig.items() if 'clientes' in k and 'ccs' in k), None)
+        # Prioriza a coluna 'total' de clientes
+        c_cli = next((v for k, v in cols_orig.items() if 'total' in k and 'clientes' in k), 
+                     next((v for k, v in cols_orig.items() if 'clientes' in k), None))
         c_proc = next((v for k, v in cols_orig.items() if 'procedentes' in k and 'extra' not in k), None)
         c_resp = next((v for k, v in cols_orig.items() if 'respondidas' in k), None)
 
@@ -61,7 +66,7 @@ def run_gold_analysis():
                 })
 
         pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False)
-        print("✅ Camada Ouro atualizada!")
+        print("✅ Dados limpos e exportados!")
 
 if __name__ == "__main__":
     run_gold_analysis()
