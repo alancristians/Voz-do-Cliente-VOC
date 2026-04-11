@@ -10,7 +10,7 @@ st.set_page_config(
     page_icon="📈"
 )
 
-# 2. Estilo CSS para os cards (Tema Escuro conforme print)
+# 2. Estilo CSS para os cards (Tema Escuro preservado)
 st.markdown("""
     <style>
     .stMetric { 
@@ -27,13 +27,14 @@ st.markdown("""
 st.title("🛡️ FinVoC: Voz do Cliente & Mercado")
 st.markdown("Análise integrada de menções na mídia vs. indicadores oficiais do Banco Central.")
 
-# 3. Caminho dos dados
-DATA_PATH = "data/gold/fact_finvoc_summary.csv"
+# 3. Funções de Carga de Dados
+DATA_PATH_GOLD = "data/gold/fact_finvoc_summary.csv"
+DATA_PATH_NEWS = "data/bronze/noticias_bancos.parquet"
 
 @st.cache_data
-def load_data():
-    if os.path.exists(DATA_PATH):
-        df = pd.read_csv(DATA_PATH)
+def load_gold_data():
+    if os.path.exists(DATA_PATH_GOLD):
+        df = pd.read_csv(DATA_PATH_GOLD)
         idx_cols = [c for c in df.columns if 'indice' in c.lower() or 'índice' in c.lower()]
         if idx_cols:
             df = df.rename(columns={idx_cols[0]: 'indice_bcb'})
@@ -41,19 +42,26 @@ def load_data():
         return df
     return None
 
-df = load_data()
+@st.cache_data
+def load_news_data():
+    if os.path.exists(DATA_PATH_NEWS):
+        # Carrega o parquet com os detalhes das notícias
+        return pd.read_parquet(DATA_PATH_NEWS)
+    return None
 
-if df is not None:
-    # 4. Sidebar com Filtros
-    st.sidebar.header("⚙️ Configurações")
-    bancos_disponiveis = df['bank'].unique()
-    bancos = st.sidebar.multiselect(
-        "Selecione os Bancos para comparar:", 
+df_gold = load_gold_data()
+df_news = load_news_data()
+
+if df_gold is not None:
+    # 4. Sidebar com Filtros (Afeta apenas os gráficos)
+    st.sidebar.header("⚙️ Configurações Dash")
+    bancos_disponiveis = df_gold['bank'].unique()
+    bancos_sel = st.sidebar.multiselect(
+        "Filtrar Bancos nos Gráficos:", 
         options=bancos_disponiveis, 
         default=bancos_disponiveis
     )
-    
-    df_plot = df[df['bank'].isin(bancos)]
+    df_plot = df_gold[df_gold['bank'].isin(bancos_sel)]
 
     # 5. KPIs de Topo
     m1, m2, m3 = st.columns(3)
@@ -65,48 +73,59 @@ if df is not None:
 
     # 6. Gráficos Principais (Lado a Lado)
     col_esq, col_dir = st.columns(2)
-
     with col_esq:
-        st.subheader("📰 Volume de Notícias (Google News)")
-        fig_news = px.bar(
-            df_plot, x='bank', y='qtd_noticias_recentes', 
-            color='bank', text_auto=True,
-            template="plotly_dark",
-            labels={'bank': 'Banco', 'qtd_noticias_recentes': 'Nº de Notícias'}
-        )
+        st.subheader("📰 Volume de Notícias")
+        fig_news = px.bar(df_plot, x='bank', y='qtd_noticias_recentes', color='bank', template="plotly_dark")
         st.plotly_chart(fig_news, use_container_width=True)
 
     with col_dir:
-        st.subheader("📉 Índice de Reclamações (BCB 2025)")
-        df_ordenado = df_plot.sort_values(by='indice_bcb', ascending=False)
-        fig_idx = px.line(
-            df_ordenado, x='bank', y='indice_bcb', 
-            markers=True, template="plotly_dark",
-            labels={'bank': 'Banco', 'indice_bcb': 'Índice de Reclamações'}
-        )
+        st.subheader("📉 Índice de Reclamações")
+        df_ord = df_plot.sort_values(by='indice_bcb', ascending=False)
+        fig_idx = px.line(df_ord, x='bank', y='indice_bcb', markers=True, template="plotly_dark")
         st.plotly_chart(fig_idx, use_container_width=True)
 
-    # 7. Tabela de Dados Brutos
-    st.subheader("📄 Detalhamento da Camada Ouro")
-    st.dataframe(df_plot, use_container_width=True)
+    # 7. SEÇÃO DE NOTÍCIAS (Independente e Compacta no final)
+    st.divider()
+    st.subheader("🔍 Explorador de Notícias Detalhado")
+    
+    if df_news is not None:
+        # Busca específica para notícias
+        search = st.text_input("Pesquisar termo nas notícias (ex: fraude, lucro, nome do banco):")
+        
+        # Ordenação por data (mais recentes primeiro) - assume coluna 'date' ou 'published'
+        date_col = next((c for c in df_news.columns if 'date' in c or 'pub' in c), None)
+        if date_col:
+            df_news[date_col] = pd.to_datetime(df_news[date_col])
+            df_news = df_news.sort_values(by=date_col, ascending=False)
 
-    # 8. Glossário (CORRIGIDO: Aspas triplas fechadas na linha 102)
-    with st.expander("ℹ️ Entenda as Métricas (Glossário Técnico)"):
+        # Filtro de busca
+        if search:
+            df_news_filt = df_news[df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)]
+        else:
+            df_news_filt = df_news
+
+        # Exibição compacta com link clicável
+        st.dataframe(
+            df_news_filt,
+            column_config={
+                "link": st.column_config.LinkColumn("Link Original"),
+                "url": st.column_config.LinkColumn("URL"),
+            },
+            hide_index=True,
+            use_container_width=True
+        )
+    else:
+        st.info("ℹ️ Arquivo de detalhes das notícias (parquet) não encontrado para busca profunda.")
+
+    # 8. Glossário Técnico
+    with st.expander("ℹ️ Glossário"):
         st.markdown("""
-        ### Como interpretar este Dashboard?
-        
-        **1. Volume de Notícias:**
-        Indica a exposição midiática do banco nos últimos 7 dias.
-        
-        **2. Índice de Reclamações (BCB):**
-        Esta é a métrica oficial do Banco Central para medir a insatisfação.
-        * **Cálculo:** (Reclamações Procedentes / Total de Clientes) * 1.000.000.
-        * **Interpretação:** Representa reclamações para cada 1 milhão de clientes. No caso do Itaú (45.13), são aprox. 45 reclamações críticas.
-        * **Análise:** Quanto MENOR o índice, melhor a qualidade.
+        * **Volume**: Menções na mídia nos últimos 7 dias.
+        * **Índice BCB**: Reclamações procedentes por 1 milhão de clientes. O **45.13 do Itaú** é a referência.
         """)
 
 else:
-    st.error(f"❌ Erro: Não foi possível carregar os dados de {DATA_PATH}.")
+    st.error(f"❌ Erro ao carregar dados em {DATA_PATH_GOLD}")
 
 st.sidebar.markdown("---")
-st.sidebar.caption("Projeto FinVoC | Alan Cristian - Poli-USP")
+st.sidebar.caption("FinVoC | Alan Cristian - Poli-USP")
