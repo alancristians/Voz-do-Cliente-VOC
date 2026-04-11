@@ -5,24 +5,30 @@ import os
 
 # 1. Configuração e Estilo
 st.set_page_config(page_title="FinVoC Dashboard", layout="wide", page_icon="📈")
-st.markdown("<style>.stMetric { background-color: #1e1e1e; padding: 15px; border-radius: 10px; border: 1px solid #333; }</style>", unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    .stMetric { background-color: #1e1e1e; padding: 15px; border-radius: 10px; border: 1px solid #333; }
+    </style>
+""", unsafe_allow_html=True)
 
 st.title("🛡️ FinVoC: Inteligência de Mercado & Reclamações")
 
-# --- GLOSSÁRIO EXPANDIDO NO TOPO ---
+# Definição das cores solicitadas (Hexadecimais)
+BANK_COLORS = {
+    "Itau": "#EC7000",      # Laranja Itaú
+    "Itaú": "#EC7000",      
+    "Bradesco": "#C8102E",   # Vermelho Bradesco (mais fechado)
+    "Santander": "#FF0000",  # Vermelho Vivo Santander
+    "Nubank": "#820AD1",     # Roxo Nubank
+    "Banco do Brasil": "#F8D117", # Amarelo BB
+    "Caixa": "#005CA9"       # Azul Caixa
+}
+
+# Glossário
 with st.expander("ℹ️ Guia Técnico: Como interpretar os indicadores?"):
     st.markdown("""
-    ### Métricas de Exposição e Qualidade
-    
-    * **Volume de Notícias:** Contagem de menções na mídia (Google News) nos últimos 7 dias. Ajuda a identificar picos de atenção pública.
-    * **Índice de Reclamações (BCB):** Ranking oficial do Banco Central. Calcula o volume de queixas para cada 1 milhão de clientes. **Dica:** Quanto menor o índice, melhor a reputação.
-    
-    ### Métricas de Eficiência e Escala
-    
-    * **Média Eficiência (Taxa de Procedência):** É o "termômetro da verdade". Indica qual a porcentagem de queixas que o BCB analisou e confirmou que o banco realmente errou. 
-        * *Fórmula:* (Reclamações Procedentes ÷ Total de Respondidas) × 100.
-        * *Interpretação:* Uma taxa baixa (ex: 1.04%) mostra que a Ouvidoria do banco é eficiente e resolve a maioria dos problemas internamente.
-    * **Market Share (Clientes):** Indica o tamanho da base de clientes ativos (dados CCS/SCR). Serve para dar contexto: um banco gigante pode ter muitas reclamações em números absolutos, mas um índice de satisfação excelente proporcionalmente.
+    * **Média Eficiência:** Porcentagem de queixas procedentes. Quanto **menor**, melhor.
+    * **Market Share:** Volume total de clientes ativos (CCS/SCR).
     """)
 
 # 2. Carga de Dados
@@ -36,7 +42,6 @@ def load_data():
         for col in ['indice_bcb', 'total_clientes', 'recl_procedentes', 'total_respondidas']:
             if col in df.columns:
                 df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
-        # Cálculo da Taxa de Procedência Individual
         df['taxa_procedencia'] = (df['recl_procedentes'] / df['total_respondidas'] * 100).fillna(0)
         return df
     return None
@@ -44,7 +49,6 @@ def load_data():
 df = load_data()
 
 if df is not None:
-    # 3. Sidebar e KPIs
     bancos = st.sidebar.multiselect("Bancos:", options=df['bank'].unique(), default=df['bank'].unique())
     df_p = df[df['bank'].isin(bancos)]
 
@@ -52,17 +56,24 @@ if df is not None:
     k1.metric("Bancos Analisados", len(df_p))
     k2.metric("Total Notícias", int(df_p['qtd_noticias_recentes'].sum()))
     k3.metric("Média Eficiência", f"{df_p['taxa_procedencia'].mean():.2f}%")
-    k4.metric("Market Share (Clientes)", f"{df_p['total_clientes'].sum()/1e6:.1f}M")
+    k4.metric("Market Share", f"{df_p['total_clientes'].sum()/1e6:.1f}M")
 
     st.divider()
 
-    # 4. Gráficos Originais (Performance)
+    # 4. Gráficos de Performance (Com cores travadas)
     st.subheader("📊 Performance: Notícias vs. Reclamações")
     c1, c2 = st.columns(2)
     with c1:
-        st.plotly_chart(px.bar(df_p, x='bank', y='qtd_noticias_recentes', color='bank', template="plotly_dark", title="Volume de Notícias"), width="stretch")
+        fig_bar = px.bar(df_p, x='bank', y='qtd_noticias_recentes', 
+                         color='bank', color_discrete_map=BANK_COLORS,
+                         template="plotly_dark", title="Volume de Notícias")
+        st.plotly_chart(fig_bar, width="stretch")
     with c2:
-        st.plotly_chart(px.line(df_p.sort_values('indice_bcb', ascending=False), x='bank', y='indice_bcb', markers=True, template="plotly_dark", title="Índice BCB"), width="stretch")
+        # Gráfico de linha usa uma cor fixa ou pode ser mapeado se houver mais linhas
+        fig_line = px.line(df_p.sort_values('indice_bcb', ascending=False), x='bank', y='indice_bcb', 
+                           markers=True, template="plotly_dark", title="Índice BCB")
+        fig_line.update_traces(line_color='#00ffcc') 
+        st.plotly_chart(fig_line, width="stretch")
 
     st.divider()
 
@@ -70,15 +81,20 @@ if df is not None:
     st.subheader("🎯 Insights de Escala e Resolução")
     c3, c4 = st.columns(2)
     with c3:
-        st.plotly_chart(px.pie(df_p, values='total_clientes', names='bank', hole=.4, template="plotly_dark", title="Market Share (Clientes)"), width="stretch")
+        fig_pie = px.pie(df_p, values='total_clientes', names='bank', 
+                         hole=.4, color='bank', color_discrete_map=BANK_COLORS,
+                         template="plotly_dark", title="Market Share (Clientes)")
+        st.plotly_chart(fig_pie, width="stretch")
     with c4:
-        st.plotly_chart(px.bar(df_p, x='bank', y='taxa_procedencia', color='bank', text_auto='.2f', template="plotly_dark", title="Taxa de Procedência (%)"), width="stretch")
+        fig_eff = px.bar(df_p, x='bank', y='taxa_procedencia', 
+                         color='bank', color_discrete_map=BANK_COLORS,
+                         text_auto='.2f', template="plotly_dark", title="Taxa de Procedência (%)")
+        st.plotly_chart(fig_eff, width="stretch")
 
-    # 6. Diagnóstico Operacional
+    # 6. Diagnóstico e Explorador
     st.subheader("⚠️ Diagnóstico de Operação")
     st.dataframe(df_p[['bank', 'principal_motivo', 'indice_bcb', 'taxa_procedencia']], width="stretch", hide_index=True)
 
-    # 7. Explorador de Notícias
     st.divider()
     st.subheader("🔍 Explorador Detalhado de Notícias")
     if os.path.exists(NEWS_DETAIL_PATH):
@@ -90,7 +106,7 @@ if df is not None:
         st.dataframe(df_news, column_config={"link": st.column_config.LinkColumn("Link")}, width="stretch", hide_index=True)
 
 else:
-    st.error("❌ Dados da Camada Gold não encontrados.")
+    st.error("❌ Dados não encontrados.")
 
 st.sidebar.markdown("---")
 st.sidebar.caption("FinVoC | Alan Cristian - Poli-USP")

@@ -55,4 +55,14 @@ def run_gold_analysis():
                     'bank': bank_name,
                     'qtd_noticias_recentes': row_news['qtd_noticias_recentes'],
                     'indice_bcb': limpar_numero(match_bcb[c_idx].values[0]),
-                    'total_clientes': limpar_numero(match_bcb[c_cli].values
+                    'total_clientes': limpar_numero(match_bcb[c_cli].values[0]),
+                    'recl_procedentes': limpar_numero(match_bcb[c_proc].values[0]),
+                    'total_respondidas': limpar_numero(match_bcb[c_resp].values[0]),
+                    'principal_motivo': top_status
+                })
+
+        pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False)
+        print("✅ Camada Ouro sincronizada com as cores configuradas!")
+
+if __name__ == "__main__":
+    run_gold_analysis()
