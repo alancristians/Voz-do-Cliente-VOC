@@ -3,100 +3,100 @@ import pandas as pd
 import plotly.express as px
 import os
 
-# Configuração da página para ocupar a tela toda
-st.set_page_config(page_title="Voz do Cliente - VOC 2026", layout="wide", page_icon="📊")
+# 1. Configuração da Página
+st.set_page_config(
+    page_title="FinVoC Dashboard", 
+    layout="wide", 
+    page_icon="📈"
+)
 
-# Estilização básica para manter o padrão profissional
+# 2. Estilo CSS para os cards (Ajustado para o tema escuro do print)
 st.markdown("""
     <style>
-    .main { background-color: #0e1117; }
-    .stMetric { background-color: #161b22; padding: 15px; border-radius: 10px; border: 1px solid #30363d; }
+    .stMetric { 
+        background-color: #1e1e1e; 
+        padding: 15px; 
+        border-radius: 10px; 
+        border: 1px solid #333; 
+    }
+    [data-testid="stMetricValue"] { color: #ffffff !important; }
+    [data-testid="stMetricLabel"] { color: #aaaaaa !important; }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
-st.title("📊 Voz do Cliente (VOC) & Sentimento de Mercado")
-st.markdown("Monitoramento consolidado de reclamações e notícias dos principais bancos.")
+st.title("🛡️ FinVoC: Voz do Cliente & Mercado")
+st.markdown("Análise integrada de menções na mídia vs. indicadores oficiais do Banco Central.")
 
-# --- CARREGAMENTO DOS DADOS ---
-# Caminhos das camadas Bronze/Gold do projeto
-PATH_REC = "data/bronze/reclamacoes.parquet"
-PATH_NEWS = "data/bronze/noticias_bancos.parquet"
+# 3. Caminho dos dados
+DATA_PATH = "data/gold/fact_finvoc_summary.csv"
 
-def load_data(path):
-    if os.path.exists(path):
-        return pd.read_parquet(path)
-    return pd.DataFrame()
+@st.cache_data
+def load_data():
+    if os.path.exists(DATA_PATH):
+        df = pd.read_csv(DATA_PATH)
+        # Identifica a coluna do índice do BCB
+        idx_cols = [c for c in df.columns if 'indice' in c.lower() or 'índice' in c.lower()]
+        if idx_cols:
+            df = df.rename(columns={idx_cols[0]: 'indice_bcb'})
+            df['indice_bcb'] = pd.to_numeric(df['indice_bcb'], errors='coerce').fillna(0)
+        return df
+    return None
 
-df_rec = load_data(PATH_REC)
-df_news = load_data(PATH_NEWS)
+df = load_data()
 
-# --- SIDEBAR DE FILTROS ---
-st.sidebar.header("Configurações")
-bancos_disponiveis = ["Todos"]
-if not df_rec.empty:
-    bancos_disponiveis.extend(sorted(df_rec['banco'].unique()))
-
-banco_sel = st.sidebar.selectbox("Escolha a Instituição", bancos_disponiveis)
-
-# --- FILTRAGEM ---
-df_rec_filt = df_rec if banco_sel == "Todos" else df_rec[df_rec['banco'] == banco_sel]
-df_news_filt = df_news if banco_sel == "Todos" else df_news[df_news['bank'] == banco_sel]
-
-# =========================================================
-# SEÇÃO 1: DASHBOARD DE RECLAMAÇÕES (VOC ORIGINAL)
-# =========================================================
-st.subheader("📈 Análise de Reclamações")
-
-if not df_rec_filt.empty:
-    # Métricas Principais
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Total de Reclamações", len(df_rec_filt))
-    
-    # Se houver coluna de índice de reclamação ou similar
-    top_banco = df_rec['banco'].value_counts().idxmax()
-    c2.metric("Líder de Reclamações", top_banco)
-    
-    # Gráfico de Volume por Banco (Plotly)
-    fig_vol = px.bar(
-        df_rec_filt['banco'].value_counts().reset_index(),
-        x='banco', y='count',
-        title="Volume de Reclamações por Banco",
-        labels={'count': 'Quantidade', 'banco': 'Instituição'},
-        color='count', color_continuous_scale='Reds'
+if df is not None:
+    # 4. Sidebar com Filtros
+    st.sidebar.header("⚙️ Configurações")
+    bancos_disponiveis = df['bank'].unique()
+    bancos = st.sidebar.multiselect(
+        "Selecione os Bancos para comparar:", 
+        options=bancos_disponiveis, 
+        default=bancos_disponiveis
     )
-    fig_vol.update_layout(template="plotly_dark", plot_bgcolor='rgba(0,0,0,0)')
-    st.plotly_chart(fig_vol, use_container_width=True)
-else:
-    st.warning("Aguardando carregamento da base de reclamações...")
+    
+    # Filtrando os dados
+    df_plot = df[df['bank'].isin(bancos)]
 
-st.divider()
+    # 5. KPIs de Topo (Exatamente como no print)
+    m1, m2, m3 = st.columns(3)
+    m1.metric("Bancos Analisados", len(df_plot))
+    m2.metric("Total de Notícias (Semana)", int(df_plot['qtd_noticias_recentes'].sum()))
+    m3.metric("Média Índice BCB", f"{df_plot['indice_bcb'].mean():.2f}")
 
-# =========================================================
-# SEÇÃO 2: NOTÍCIAS (SENTIMENTO DE MERCADO)
-# =========================================================
-st.subheader("📰 Notícias e Fatos Relevantes")
+    st.divider()
 
-if not df_news_filt.empty:
-    # Garantir ordenação por data
-    if 'published_dt' in df_news_filt.columns:
-        df_news_filt = df_news_filt.sort_values(by='published_dt', ascending=False)
+    # 6. Gráficos Principais (Lado a Lado)
+    col_esq, col_dir = st.columns(2)
 
-    # Grid de Notícias
-    for _, row in df_news_filt.iterrows():
-        with st.container(border=True):
-            col_t, col_d = st.columns([4, 1])
-            col_t.markdown(f"### {row['title']}")
-            
-            # Data formatada com segurança
-            data_news = row['published'] if 'published' in row else "Recent"
-            col_d.write(f"⏱️ {data_news}")
-            
-            st.markdown(f"**Fonte:** {row.get('source', 'N/A')} | **Banco:** {row.get('bank', 'N/A')}")
-            
-            # Exibição do resumo com proteção contra KeyError
-            conteudo = row.get('summary', "Resumo indisponível no momento.")
-            st.write(conteudo)
-            
-            st.link_button("Abrir notícia completa", row['link'])
-else:
-    st.info("Nenhuma notícia recente encontrada para os critérios selecionados.")
+    with col_esq:
+        st.subheader("📰 Volume de Notícias (Google News)")
+        fig_news = px.bar(
+            df_plot, x='bank', y='qtd_noticias_recentes', 
+            color='bank', text_auto=True,
+            template="plotly_dark",
+            labels={'bank': 'Banco', 'qtd_noticias_recentes': 'Nº de Notícias'}
+        )
+        st.plotly_chart(fig_news, use_container_width=True)
+
+    with col_dir:
+        st.subheader("📉 Índice de Reclamações (BCB 2025)")
+        # Ordenação para manter o padrão visual do print
+        df_ordenado = df_plot.sort_values(by='indice_bcb', ascending=False)
+        fig_idx = px.line(
+            df_ordenado, x='bank', y='indice_bcb', 
+            markers=True, template="plotly_dark",
+            labels={'bank': 'Banco', 'indice_bcb': 'Índice de Reclamações'}
+        )
+        st.plotly_chart(fig_idx, use_container_width=True)
+
+    # 7. Tabela de Dados Brutos
+    st.subheader("📄 Detalhamento da Camada Ouro")
+    st.dataframe(df_plot, use_container_width=True)
+
+    # 8. Glossário (Recuperado conforme solicitado)
+    with st.expander("ℹ️ Entenda as Métricas (Glossário Técnico)"):
+        st.markdown("""
+        ### Como interpretar este Dashboard?
+        
+        **1. Volume de Notícias:**
+        Ind
