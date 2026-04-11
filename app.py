@@ -12,24 +12,14 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("🛡️ FinVoC: Inteligência de Mercado & Reclamações")
+st.caption("Passe o mouse sobre os títulos e números para entender as métricas.")
 
-# Definição das cores solicitadas (Hexadecimais)
+# Cores das Marcas
 BANK_COLORS = {
-    "Itau": "#EC7000",      # Laranja Itaú
-    "Itaú": "#EC7000",      
-    "Bradesco": "#C8102E",   # Vermelho Bradesco (mais fechado)
-    "Santander": "#FF0000",  # Vermelho Vivo Santander
-    "Nubank": "#820AD1",     # Roxo Nubank
-    "Banco do Brasil": "#F8D117", # Amarelo BB
-    "Caixa": "#005CA9"       # Azul Caixa
+    "Itau": "#EC7000", "Itaú": "#EC7000",
+    "Bradesco": "#C8102E", "Santander": "#FF0000",
+    "Nubank": "#820AD1", "Banco do Brasil": "#F8D117", "Caixa": "#005CA9"
 }
-
-# Glossário
-with st.expander("ℹ️ Guia Técnico: Como interpretar os indicadores?"):
-    st.markdown("""
-    * **Média Eficiência:** Porcentagem de queixas procedentes. Quanto **menor**, melhor.
-    * **Market Share:** Volume total de clientes ativos (CCS/SCR).
-    """)
 
 # 2. Carga de Dados
 GOLD_PATH = "data/gold/fact_finvoc_summary.csv"
@@ -49,61 +39,66 @@ def load_data():
 df = load_data()
 
 if df is not None:
+    # 3. Sidebar
     bancos = st.sidebar.multiselect("Bancos:", options=df['bank'].unique(), default=df['bank'].unique())
     df_p = df[df['bank'].isin(bancos)]
 
+    # 4. KPIs de Topo com HELP (Tooltips)
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Bancos Analisados", len(df_p))
-    k2.metric("Total Notícias", int(df_p['qtd_noticias_recentes'].sum()))
-    k3.metric("Média Eficiência", f"{df_p['taxa_procedencia'].mean():.2f}%")
-    k4.metric("Market Share", f"{df_p['total_clientes'].sum()/1e6:.1f}M")
+    k2.metric("Total Notícias", int(df_p['qtd_noticias_recentes'].sum()), 
+              help="Contagem total de menções na mídia nos últimos 7 dias.")
+    k3.metric("Média Eficiência", f"{df_p['taxa_procedencia'].mean():.2f}%", 
+              help="Porcentagem de queixas que o BCB considerou procedentes. Quanto MENOR, mais eficiente o banco.")
+    k4.metric("Market Share (Clientes)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", 
+              help="Volume total de clientes ativos registrados no CCS/SCR.")
 
     st.divider()
 
-    # 4. Gráficos de Performance (Com cores travadas)
-    st.subheader("📊 Performance: Notícias vs. Reclamações")
+    # 5. Performance (Help nos Subheaders)
+    st.subheader("📊 Performance: Notícias vs. Reclamações", 
+                 help="Cruzamento entre o volume midiático e o índice oficial de queixas por 1 milhão de clientes.")
     c1, c2 = st.columns(2)
     with c1:
-        fig_bar = px.bar(df_p, x='bank', y='qtd_noticias_recentes', 
-                         color='bank', color_discrete_map=BANK_COLORS,
-                         template="plotly_dark", title="Volume de Notícias")
-        st.plotly_chart(fig_bar, width="stretch")
+        st.plotly_chart(px.bar(df_p, x='bank', y='qtd_noticias_recentes', color='bank', 
+                               color_discrete_map=BANK_COLORS, template="plotly_dark", title="Volume de Notícias"), width="stretch")
     with c2:
-        # Gráfico de linha usa uma cor fixa ou pode ser mapeado se houver mais linhas
-        fig_line = px.line(df_p.sort_values('indice_bcb', ascending=False), x='bank', y='indice_bcb', 
-                           markers=True, template="plotly_dark", title="Índice BCB")
-        fig_line.update_traces(line_color='#00ffcc') 
-        st.plotly_chart(fig_line, width="stretch")
+        st.plotly_chart(px.line(df_p.sort_values('indice_bcb', ascending=False), x='bank', y='indice_bcb', 
+                                markers=True, template="plotly_dark", title="Índice BCB (Ranking de Insatisfação)"), width="stretch")
 
     st.divider()
 
-    # 5. Novos Gráficos (Escala e Resolução)
-    st.subheader("🎯 Insights de Escala e Resolução")
+    # 6. Insights de Escala e Resolução
+    st.subheader("🎯 Insights de Escala e Resolução", 
+                 help="Market Share em volume de clientes e a eficácia real das ouvidorias (Taxa de Procedência).")
     c3, c4 = st.columns(2)
     with c3:
-        fig_pie = px.pie(df_p, values='total_clientes', names='bank', 
-                         hole=.4, color='bank', color_discrete_map=BANK_COLORS,
-                         template="plotly_dark", title="Market Share (Clientes)")
-        st.plotly_chart(fig_pie, width="stretch")
+        st.plotly_chart(px.pie(df_p, values='total_clientes', names='bank', hole=.4, 
+                               color='bank', color_discrete_map=BANK_COLORS, 
+                               template="plotly_dark", title="Market Share (Clientes)"), width="stretch")
     with c4:
-        fig_eff = px.bar(df_p, x='bank', y='taxa_procedencia', 
-                         color='bank', color_discrete_map=BANK_COLORS,
-                         text_auto='.2f', template="plotly_dark", title="Taxa de Procedência (%)")
-        st.plotly_chart(fig_eff, width="stretch")
+        st.plotly_chart(px.bar(df_p, x='bank', y='taxa_procedencia', color='bank', 
+                               color_discrete_map=BANK_COLORS, text_auto='.2f', 
+                               template="plotly_dark", title="Taxa de Procedência (%)"), width="stretch")
 
-    # 6. Diagnóstico e Explorador
-    st.subheader("⚠️ Diagnóstico de Operação")
-    st.dataframe(df_p[['bank', 'principal_motivo', 'indice_bcb', 'taxa_procedencia']], width="stretch", hide_index=True)
+    # 7. Tabela de Diagnóstico
+    st.subheader("⚠️ Diagnóstico de Operação", 
+                 help="Resumo analítico com o principal status identificado na camada bronze.")
+    st.dataframe(df_p[['bank', 'principal_motivo', 'indice_bcb', 'taxa_procedencia']], 
+                 width="stretch", hide_index=True)
 
+    # 8. Explorador de Notícias
     st.divider()
-    st.subheader("🔍 Explorador Detalhado de Notícias")
+    st.subheader("🔍 Explorador Detalhado de Notícias", 
+                 help="Busque por palavras-chave em todos os títulos e resumos das notícias coletadas.")
     if os.path.exists(NEWS_DETAIL_PATH):
         df_news = pd.read_parquet(NEWS_DETAIL_PATH)
-        search = st.text_input("Filtrar notícias por termo:")
+        search = st.text_input("Digite um termo para filtrar as notícias:")
         if search:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
-        st.dataframe(df_news, column_config={"link": st.column_config.LinkColumn("Link")}, width="stretch", hide_index=True)
+        st.dataframe(df_news, column_config={"link": st.column_config.LinkColumn("Link")}, 
+                     width="stretch", hide_index=True)
 
 else:
     st.error("❌ Dados não encontrados.")

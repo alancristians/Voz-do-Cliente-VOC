@@ -62,7 +62,7 @@ def run_gold_analysis():
                 })
 
         pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False)
-        print("✅ Camada Ouro sincronizada com as cores configuradas!")
+        print("✅ Dados processados e prontos para o Dashboard.")
 
 if __name__ == "__main__":
     run_gold_analysis()
