@@ -10,7 +10,7 @@ st.set_page_config(
     page_icon="📈"
 )
 
-# 2. Estilo CSS para os cards (Ajustado para o tema escuro do print)
+# 2. Estilo CSS para os cards (Tema Escuro conforme print)
 st.markdown("""
     <style>
     .stMetric { 
@@ -34,7 +34,6 @@ DATA_PATH = "data/gold/fact_finvoc_summary.csv"
 def load_data():
     if os.path.exists(DATA_PATH):
         df = pd.read_csv(DATA_PATH)
-        # Identifica a coluna do índice do BCB
         idx_cols = [c for c in df.columns if 'indice' in c.lower() or 'índice' in c.lower()]
         if idx_cols:
             df = df.rename(columns={idx_cols[0]: 'indice_bcb'})
@@ -54,10 +53,9 @@ if df is not None:
         default=bancos_disponiveis
     )
     
-    # Filtrando os dados
     df_plot = df[df['bank'].isin(bancos)]
 
-    # 5. KPIs de Topo (Exatamente como no print)
+    # 5. KPIs de Topo
     m1, m2, m3 = st.columns(3)
     m1.metric("Bancos Analisados", len(df_plot))
     m2.metric("Total de Notícias (Semana)", int(df_plot['qtd_noticias_recentes'].sum()))
@@ -80,7 +78,6 @@ if df is not None:
 
     with col_dir:
         st.subheader("📉 Índice de Reclamações (BCB 2025)")
-        # Ordenação para manter o padrão visual do print
         df_ordenado = df_plot.sort_values(by='indice_bcb', ascending=False)
         fig_idx = px.line(
             df_ordenado, x='bank', y='indice_bcb', 
@@ -93,10 +90,23 @@ if df is not None:
     st.subheader("📄 Detalhamento da Camada Ouro")
     st.dataframe(df_plot, use_container_width=True)
 
-    # 8. Glossário (Recuperado conforme solicitado)
+    # 8. Glossário (CORRIGIDO: Aspas triplas fechadas na linha 102)
     with st.expander("ℹ️ Entenda as Métricas (Glossário Técnico)"):
         st.markdown("""
         ### Como interpretar este Dashboard?
         
         **1. Volume de Notícias:**
-        Ind
+        Indica a exposição midiática do banco nos últimos 7 dias.
+        
+        **2. Índice de Reclamações (BCB):**
+        Esta é a métrica oficial do Banco Central para medir a insatisfação.
+        * **Cálculo:** (Reclamações Procedentes / Total de Clientes) * 1.000.000.
+        * **Interpretação:** Representa reclamações para cada 1 milhão de clientes. No caso do Itaú (45.13), são aprox. 45 reclamações críticas.
+        * **Análise:** Quanto MENOR o índice, melhor a qualidade.
+        """)
+
+else:
+    st.error(f"❌ Erro: Não foi possível carregar os dados de {DATA_PATH}.")
+
+st.sidebar.markdown("---")
+st.sidebar.caption("Projeto FinVoC | Alan Cristian - Poli-USP")
