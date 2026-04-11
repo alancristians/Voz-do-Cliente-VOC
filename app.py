@@ -10,7 +10,7 @@ st.set_page_config(
     page_icon="📈"
 )
 
-# 2. Estilo CSS para os cards (Tema Escuro conforme print)
+# 2. Estilo CSS para os cards (Tema Escuro preservado)
 st.markdown("""
     <style>
     .stMetric { 
@@ -71,8 +71,7 @@ if df is not None:
         fig_news = px.bar(
             df_plot, x='bank', y='qtd_noticias_recentes', 
             color='bank', text_auto=True,
-            template="plotly_dark",
-            labels={'bank': 'Banco', 'qtd_noticias_recentes': 'Nº de Notícias'}
+            template="plotly_dark"
         )
         st.plotly_chart(fig_news, use_container_width=True)
 
@@ -81,16 +80,28 @@ if df is not None:
         df_ordenado = df_plot.sort_values(by='indice_bcb', ascending=False)
         fig_idx = px.line(
             df_ordenado, x='bank', y='indice_bcb', 
-            markers=True, template="plotly_dark",
-            labels={'bank': 'Banco', 'indice_bcb': 'Índice de Reclamações'}
+            markers=True, template="plotly_dark"
         )
         st.plotly_chart(fig_idx, use_container_width=True)
 
-    # 7. Tabela de Dados Brutos
-    st.subheader("📄 Detalhamento da Camada Ouro")
-    st.dataframe(df_plot, use_container_width=True)
+    st.divider()
 
-    # 8. Glossário (CORRIGIDO: Aspas triplas fechadas na linha 102)
+    # 7. NOVA SEÇÃO: Busca e Conteúdo de Notícias
+    st.subheader("🔍 Explorador de Conteúdo")
+    search_term = st.text_input("Pesquise por banco, palavra-chave ou termo nas notícias:", "")
+
+    # Filtro dinâmico: busca em todas as colunas de texto (bank e summary/title se existirem)
+    if search_term:
+        # Criamos uma máscara que verifica se o termo está em qualquer coluna de texto
+        mask = df_plot.apply(lambda row: row.astype(str).str.contains(search_term, case=False).any(), axis=1)
+        df_filtered = df_plot[mask]
+    else:
+        df_filtered = df_plot
+
+    st.write(f"Exibindo {len(df_filtered)} registros encontrados:")
+    st.dataframe(df_filtered, use_container_width=True)
+
+    # 8. Glossário Técnico
     with st.expander("ℹ️ Entenda as Métricas (Glossário Técnico)"):
         st.markdown("""
         ### Como interpretar este Dashboard?
@@ -99,14 +110,12 @@ if df is not None:
         Indica a exposição midiática do banco nos últimos 7 dias.
         
         **2. Índice de Reclamações (BCB):**
-        Esta é a métrica oficial do Banco Central para medir a insatisfação.
-        * **Cálculo:** (Reclamações Procedentes / Total de Clientes) * 1.000.000.
-        * **Interpretação:** Representa reclamações para cada 1 milhão de clientes. No caso do Itaú (45.13), são aprox. 45 reclamações críticas.
+        Métrica oficial do Banco Central (Reclamações / Clientes * 1M).
         * **Análise:** Quanto MENOR o índice, melhor a qualidade.
         """)
 
 else:
-    st.error(f"❌ Erro: Não foi possível carregar os dados de {DATA_PATH}.")
+    st.error(f"❌ Erro: Arquivo {DATA_PATH} não encontrado.")
 
 st.sidebar.markdown("---")
 st.sidebar.caption("Projeto FinVoC | Alan Cristian - Poli-USP")
