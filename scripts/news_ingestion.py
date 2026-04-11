@@ -2,9 +2,15 @@ import feedparser
 import pandas as pd
 from datetime import datetime
 import os
-import sys
 import requests
 from urllib.parse import quote
+from bs4 import BeautifulSoup
+
+def clean_html(html_text):
+    if not html_text:
+        return ""
+    soup = BeautifulSoup(html_text, "html.parser")
+    return soup.get_text()
 
 def run_news_ingestion():
     print("📡 Iniciando coleta de notícias (Voz do Mercado)...")
@@ -20,7 +26,6 @@ def run_news_ingestion():
         bank_encoded = quote(bank)
         print(f"🔍 Buscando: {bank}")
         
-        # URL simplificada (sem o 'quando:7d' que estava travando)
         rss_url = f"https://news.google.com/rss/search?q={bank_encoded}+banco&hl=pt-BR&gl=BR&ceid=BR:pt-419"
         
         try:
@@ -28,15 +33,18 @@ def run_news_ingestion():
             feed = feedparser.parse(response.content)
             
             if not feed.entries:
-                print(f"⚠️ Sem notícias recentes para {bank}.")
                 continue
 
-            for entry in feed.entries[:10]:
+            for entry in feed.entries[:15]: # Aumentei para 15 para ter mais volume
+                raw_summary = entry.summary if hasattr(entry, 'summary') else ""
+                clean_summary = clean_html(raw_summary)
+
                 all_news.append({
                     'bank': bank,
                     'title': entry.title,
                     'link': entry.link,
                     'published': entry.published,
+                    'summary': clean_summary,
                     'source': entry.source.title if hasattr(entry, 'source') else 'Google News',
                     'extraction_at': datetime.now()
                 })
@@ -45,13 +53,23 @@ def run_news_ingestion():
             continue
 
     if not all_news:
-        print("❌ Nenhuma notícia capturada. Mantendo pipeline vivo.")
-        return True # Retorna True para não quebrar o GitHub Actions
+        return True 
 
     df = pd.DataFrame(all_news)
+    
+    # --- TRATAMENTO DE DATA E ORDENAÇÃO ---
+    # Converte a coluna 'published' para datetime real
+    df['published_dt'] = pd.to_datetime(df['published'], errors='coerce')
+    
+    # Ordena: Mais recentes primeiro (descendente)
+    df = df.sort_values(by='published_dt', ascending=False)
+    
+    # Remove a coluna auxiliar para manter o parquet limpo (opcional)
+    # df = df.drop(columns=['published_dt'])
+
     os.makedirs("data/bronze", exist_ok=True)
     df.to_parquet("data/bronze/noticias_bancos.parquet", index=False)
-    print(f"✅ Sucesso! {len(df)} notícias salvas.")
+    print(f"✅ Sucesso! {len(df)} notícias ordenadas por data.")
     return True
 
 if __name__ == "__main__":
