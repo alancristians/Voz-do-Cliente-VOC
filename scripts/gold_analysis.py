@@ -2,16 +2,15 @@ import pandas as pd
 import os
 import unicodedata
 
-def remove_acentos(texto):
+def normalizar(texto):
     if not isinstance(texto, str): return ""
-    nfkd_form = unicodedata.normalize('NFKD', texto)
-    return "".join([c for c in nfkd_form if not unicodedata.combining(c)]).lower().strip()
+    return "".join([c for c in unicodedata.normalize('NFKD', texto) 
+                    if not unicodedata.combining(c)]).lower().strip()
 
 def run_gold_analysis():
     print("🥇 Gerando Camada Ouro: Inteligência Bancária 2026...")
     os.makedirs("data/gold", exist_ok=True)
     
-    # Caminhos dos arquivos base
     bcb_path = "data/bronze/reclamacoes_bcb.parquet"
     cons_path = "data/bronze/reclamacoes_consumidor.parquet"
     news_path = "data/silver/stg_noticias.parquet"
@@ -21,30 +20,26 @@ def run_gold_analysis():
         df_cons = pd.read_parquet(cons_path)
         df_news = pd.read_parquet(news_path)
         
-        # Mapeamento exato das colunas do seu Parquet Bronze
-        c_inst = "Instituição financeira"
-        c_idx = "Índice"
-        c_cli = "Quantidade total de clientes – CCS e SCR"
-        c_proc = "Quantidade de reclamações procedentes"
-        c_resp = "Quantidade total de reclamações respondidas"
+        # Mapeamento dinâmico de colunas para evitar erros de caracteres especiais
+        cols = {normalizar(c): c for c in df_bcb.columns}
+        
+        c_inst = next((v for k, v in cols.items() if 'instituicao' in k), None)
+        c_idx = next((v for k, v in cols.items() if 'indice' in k), None)
+        c_cli = next((v for k, v in cols.items() if 'clientes' in k and 'ccs' in k), None)
+        c_proc = next((v for k, v in cols.items() if 'reclamacoes' in k and 'procedentes' in k and 'extra' not in k), None)
+        c_resp = next((v for k, v in cols.items() if 'reclamacoes' in k and 'respondidas' in k), None)
 
-        # 1. Resumo de Notícias
         news_summary = df_news.groupby('bank').size().reset_index(name='qtd_noticias_recentes')
         
-        synonyms = {
-            "itau": "itau", "bradesco": "bradesco", "santander": "santander",
-            "banco do brasil": "banco do brasil", "nubank": "nu ", "caixa": "caixa economica"
-        }
+        synonyms = {"itau": "itau", "bradesco": "bradesco", "santander": "santander",
+                    "banco do brasil": "banco do brasil", "nubank": "nu ", "caixa": "caixa economica"}
 
         gold_data = []
         for _, row_news in news_summary.iterrows():
             bank_name = row_news['bank']
-            term = synonyms.get(remove_acentos(bank_name), remove_acentos(bank_name))
+            term = synonyms.get(normalizar(bank_name), normalizar(bank_name))
             
-            # Busca no BCB (Ranking)
             match_bcb = df_bcb[df_bcb[c_inst].str.contains(term, case=False, na=False)].iloc[0:1]
-            
-            # Busca no Consumidor (Top Status)
             match_cons = df_cons[df_cons["banco"].str.contains(term, case=False, na=False)]
             top_status = match_cons['status'].value_counts().idxmax() if not match_cons.empty else "Normal"
 
@@ -61,9 +56,9 @@ def run_gold_analysis():
 
         df_gold = pd.DataFrame(gold_data)
         df_gold.to_csv("data/gold/fact_finvoc_summary.csv", index=False)
-        print(f"✅ Sucesso! {len(df_gold)} instituições processadas.")
+        print(f"✅ Sucesso! Gerado arquivo com colunas: {df_gold.columns.tolist()}")
     else:
-        print("❌ Erro: Arquivos bronze/silver não encontrados.")
+        print("❌ Erro: Arquivos não encontrados.")
 
 if __name__ == "__main__":
     run_gold_analysis()
