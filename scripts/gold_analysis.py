@@ -19,17 +19,17 @@ def limpar_numero(valor):
         return 0.0
 
 def run_gold_analysis():
-    print("🥇 Executando Pipeline Ouro: Voz do Cliente | Monitor de Reputação...")
+    print("🥇 Processando Ouro: Voz do Cliente | Monitor de Reputação...")
     os.makedirs("data/gold", exist_ok=True)
     
-    # 🔍 Busca dinâmica: pega o arquivo do BCB mais recente na pasta bronze
+    # Busca dinâmica pelo arquivo mais atual do BCB
     arquivos_bcb = glob.glob("data/bronze/reclamacoes_bcb*.parquet")
     if not arquivos_bcb:
-        print("❌ Alerta: Nenhum arquivo do BCB encontrado.")
+        print("❌ Erro: Nenhum arquivo do BCB encontrado.")
         return
 
-    bcb_path = sorted(arquivos_bcb)[-1] # Pega o alfabeticamente maior (ex: 4T > 3T)
-    print(f"📂 Processando: {bcb_path}")
+    bcb_path = sorted(arquivos_bcb)[-1]
+    print(f"📂 Arquivo detectado: {bcb_path}")
 
     cons_path = "data/bronze/reclamacoes_consumidor.parquet"
     news_path = "data/silver/stg_noticias.parquet"
@@ -40,8 +40,6 @@ def run_gold_analysis():
         df_news = pd.read_parquet(news_path)
         
         cols_orig = {normalizar(c): c for c in df_bcb.columns}
-        
-        # Mapeamento dinâmico de colunas
         c_inst = next((v for k, v in cols_orig.items() if 'instituicao' in k), None)
         c_idx = next((v for k, v in cols_orig.items() if 'indice' in k), None)
         c_cli = next((v for k, v in cols_orig.items() if 'total' in k and 'clientes' in k), 
@@ -49,7 +47,7 @@ def run_gold_analysis():
         c_proc = next((v for k, v in cols_orig.items() if 'procedentes' in k and 'extra' not in k), None)
         c_resp = next((v for k, v in cols_orig.items() if 'respondidas' in k), None)
         
-        # Detecção automática do período (Ano/Trimestre)
+        # Identifica Ano e Trimestre para o rótulo do Dash
         c_ano = next((v for k, v in cols_orig.items() if 'ano' in k), "2025")
         c_tri = next((v for k, v in cols_orig.items() if 'trimestre' in k), "4º")
         label_periodo = f"{df_bcb[c_tri].iloc[0]} Trimestre / {df_bcb[c_ano].iloc[0]}"
@@ -79,9 +77,9 @@ def run_gold_analysis():
                 })
 
         pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False)
-        print(f"✅ Camada Ouro consolidada para o {label_periodo}")
+        print(f"✅ Camada Gold finalizada para o {label_periodo}")
     else:
-        print("❌ Faltam arquivos na Silver ou Consumidor.")
+        print("❌ Faltam arquivos base para processar.")
 
 if __name__ == "__main__":
     run_gold_analysis()
