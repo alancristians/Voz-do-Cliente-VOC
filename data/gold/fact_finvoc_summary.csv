@@ -1,5 +1,5 @@
-bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo
-Bradesco,10,51.74,110494968.0,474.0,33228.0,Site Indisponível
-Itaú,10,45.13,100248541.0,520.0,28923.0,Normal
-Nubank,10,12.67,109315016.0,78.0,39389.0,Normal
-Santander,10,29.25,69660783.0,176.0,24095.0,Site Indisponível
+bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo
+Bradesco,10,51.74,110494968.0,474.0,33228.0,Site Indisponível,3º Trimestre / 2025
+Itaú,9,45.13,100248541.0,520.0,28923.0,Normal,3º Trimestre / 2025
+Nubank,8,12.67,109315016.0,78.0,39389.0,Normal,3º Trimestre / 2025
+Santander,10,29.25,69660783.0,176.0,24095.0,Site Indisponível,3º Trimestre / 2025
