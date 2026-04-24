@@ -1,26 +1,27 @@
 import pandas as pd
 import os
 import glob
-import google.generativeai as genai
+from google import genai # Mudança aqui!
 from datetime import datetime
 
-# Configuração da IA (Pegando do Secret do GitHub)
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel('gemini-1.5-flash')
+# Configuração da Nova API (2026 Standard)
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def get_sentiment(text):
-    """Envia o título da notícia para o Gemini e retorna Positivo, Negativo ou Neutro."""
+    """Nova forma de chamar o Gemini 1.5 Flash"""
     if not text or pd.isna(text): 
         return "Neutro"
     
-    # Prompt curto e direto para evitar que a IA 'alucine' ou escreva textos longos
     prompt = f"Analise o sentimento desta notícia bancária e responda apenas com UMA palavra (Positivo, Negativo ou Neutro): {text}"
     
     try:
-        response = model.generate_content(prompt)
+        # Syntax nova: client.models.generate_content
+        response = client.models.generate_content(
+            model='gemini-1.5-flash',
+            contents=prompt
+        )
         sentiment = response.text.strip().capitalize()
         
-        # Garante que a resposta seja uma das nossas categorias
         if "Positivo" in sentiment: return "Positivo"
         if "Negativo" in sentiment: return "Negativo"
         return "Neutro"
@@ -29,52 +30,34 @@ def get_sentiment(text):
         return "Neutro"
 
 def clean_news(df):
-    """Limpa e padroniza os dados do Google News"""
     if df is None or df.empty: return None
-    # Remove duplicatas de títulos ANTES da IA para economizar tokens
     df = df.drop_duplicates(subset=['title'])
-    # Padroniza nomes de colunas para snake_case
     df.columns = [c.lower().replace(' ', '_') for c in df.columns]
     return df
 
 def run_silver_transformation():
-    print("💎 Iniciando Transformação Camada Prata com IA...")
+    print("💎 Silver 2.1: Migrando para a nova SDK do Gemini...")
     os.makedirs("data/silver", exist_ok=True)
     
-    # 1. Processando Notícias (Vindo do Bronze)
     news_path = "data/bronze/noticias_bancos.parquet"
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
         df_news_clean = clean_news(df_news)
         
         if df_news_clean is not None and not df_news_clean.empty:
-            print(f"🤖 IA analisando sentimento de {len(df_news_clean)} notícias...")
-            # Aplica a análise de sentimento no título
+            print(f"🤖 IA analisando sentimentos com a nova SDK...")
             df_news_clean['sentimento'] = df_news_clean['title'].apply(get_sentiment)
-            
             df_news_clean.to_parquet("data/silver/stg_noticias.parquet", index=False)
-            print(f"✅ Notícias processadas e analisadas.")
+            print(f"✅ Notícias processadas.")
 
-    # 2. Processando BCB de forma dinâmica
+    # Processamento BCB (Mantido igual, pois já estava bom)
     arquivos_bcb = glob.glob("data/bronze/reclamacoes_bcb*.parquet")
-    
     if arquivos_bcb:
         bcb_path = sorted(arquivos_bcb)[-1]
-        print(f"📂 Aplicando limpeza no arquivo: {bcb_path}")
-        
         df_bcb = pd.read_parquet(bcb_path)
-        
-        # Padroniza colunas (remove acentos e pontos)
-        df_bcb.columns = [
-            c.lower().replace(' ', '_').replace('.', '')
-            .replace('í', 'i').replace('ã', 'a').replace('ç', 'c') 
-            for c in df_bcb.columns
-        ]
-        
+        df_bcb.columns = [c.lower().replace(' ', '_').replace('.', '').replace('í', 'i').replace('ã', 'a').replace('ç', 'c') for c in df_bcb.columns]
         df_bcb.to_parquet("data/silver/stg_bcb.parquet", index=False)
-        print(f"✅ Dados BCB processados e salvos na Camada Prata.")
-    else:
-        print("⚠️ Nenhum arquivo BCB encontrado no Bronze.")
+        print(f"✅ Dados BCB processados.")
 
     print("🚀 Camada Prata atualizada com sucesso!")
 

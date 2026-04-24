@@ -6,4 +6,5 @@ pyarrow
 feedparser
 beautifulsoup4
 openpyxl
-google-generativeai
+google-genai
+fastparquet
