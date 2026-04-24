@@ -8,24 +8,27 @@ from datetime import datetime
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def get_sentiment(text):
-    """Nova forma de chamar o Gemini 1.5 Flash"""
+    """Versão 2.2: Forçando a rota estável da API"""
     if not text or pd.isna(text): 
         return "Neutro"
     
     prompt = f"Analise o sentimento desta notícia bancária e responda apenas com UMA palavra (Positivo, Negativo ou Neutro): {text}"
     
     try:
-        # Syntax nova: client.models.generate_content
+        # Forçamos o modelo sem o prefixo 'models/' e deixamos a SDK gerenciar a rota estável
         response = client.models.generate_content(
-            model='gemini-1.5-flash',
+            model='gemini-1.5-flash', # Tente também 'gemini-1.5-flash-latest' se o erro persistir
             contents=prompt
         )
-        sentiment = response.text.strip().capitalize()
         
-        if "Positivo" in sentiment: return "Positivo"
-        if "Negativo" in sentiment: return "Negativo"
+        if response and response.text:
+            sentiment = response.text.strip().capitalize()
+            if "Positivo" in sentiment: return "Positivo"
+            if "Negativo" in sentiment: return "Negativo"
         return "Neutro"
+        
     except Exception as e:
+        # Se o 404 continuar, vamos tentar um fallback para o modelo pro
         print(f"⚠️ Erro na API Gemini: {e}")
         return "Neutro"
 
