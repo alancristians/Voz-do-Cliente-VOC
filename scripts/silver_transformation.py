@@ -3,77 +3,62 @@ import os
 import glob
 import time
 from google import genai
-from datetime import datetime
 
-# Configuração da Nova API (2026 Standard)
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-def get_sentiment(text):
-    if not text or pd.isna(text): 
-        return "Neutro"
+def run_silver_transformation():
+    print("🚀 Silver 3.0: Processamento em LOTE (Batch Mode) iniciado...")
+    os.makedirs("data/silver", exist_ok=True)
     
-    prompt = f"Responda apenas Positivo, Negativo ou Neutro para esta notícia: {text}"
+    news_path = "data/bronze/noticias_bancos.parquet"
+    if not os.path.exists(news_path):
+        print("⚠️ Arquivo bronze não encontrado.")
+        return
+
+    df = pd.read_parquet(news_path)
+    # Limpeza básica de colunas
+    df.columns = [c.lower().replace(' ', '_') for c in df.columns]
+    df = df.drop_duplicates(subset=['title'])
     
-    for attempt in range(3): 
+    if not df.empty:
+        # Preparamos a lista de notícias formatada para a IA
+        noticias_list = "\n".join([f"{i}: {title}" for i, title in enumerate(df['title'])])
+        
+        prompt = f"""
+        Analise o sentimento das seguintes manchetes bancárias. 
+        Responda APENAS no formato 'ÍNDICE: SENTIMENTO' (ex: 0: Positivo, 1: Negativo).
+        Use apenas Positivo, Negativo ou Neutro.
+        
+        Notícias:
+        {noticias_list}
+        """
+        
         try:
+            print(f"🧠 Enviando {len(df)} notícias para análise em lote...")
             response = client.models.generate_content(
                 model='gemini-2.0-flash',
                 contents=prompt
             )
             
-            if response and response.text:
-                sentiment = response.text.strip().capitalize()
-                # 10 segundos de folga para o Google não nos bloquear (Free Tier Safety)
-                time.sleep(10) 
-                
-                if "Positivo" in sentiment: return "Positivo"
-                if "Negativo" in sentiment: return "Negativo"
-                return "Neutro"
+            # Parse das respostas
+            respostas = response.text.strip().split('\n')
+            sentimentos_map = {}
+            for linha in respostas:
+                if ':' in linha:
+                    idx, sent = linha.split(':', 1)
+                    sentimentos_map[int(idx.strip())] = sent.strip().capitalize()
+            
+            # Mapeamos de volta para o DataFrame
+            df['sentimento'] = df.index.map(sentimentos_map).fillna('Neutro')
+            print(f"✅ Sucesso! {len(sentimentos_map)} notícias classificadas.")
             
         except Exception as e:
-            if "429" in str(e):
-                wait_time = (attempt + 1) * 20
-                print(f"⏳ Quota atingida. Banho de gelo de {wait_time}s...")
-                time.sleep(wait_time)
-            else:
-                print(f"⚠️ Erro na API: {e}")
-                return "Neutro"
-    return "Neutro"
+            print(f"⚠️ Erro no processamento Batch: {e}")
+            df['sentimento'] = 'Neutro'
 
-def clean_news(df):
-    if df is None or df.empty: return None
-    df = df.drop_duplicates(subset=['title'])
-    df.columns = [c.lower().replace(' ', '_') for c in df.columns]
-    return df
+        df.to_parquet("data/silver/stg_noticias.parquet", index=False)
 
-def run_silver_transformation():
-    print("💎 Silver 2.4: Processamento Seletivo ativado...")
-    os.makedirs("data/silver", exist_ok=True)
-    
-    news_path = "data/bronze/noticias_bancos.parquet"
-    if os.path.exists(news_path):
-        df_news = pd.read_parquet(news_path)
-        df_news_clean = clean_news(df_news)
-        
-        if df_news_clean is not None and not df_news_clean.empty:
-            # 1. Criamos a coluna com valor padrão (Garante que todas as notícias apareçam no Dash)
-            df_news_clean['sentimento'] = 'Neutro (Não analisado)'
-            
-            # 2. Limitamos a análise de IA apenas para as TOP 15 notícias (Mais recentes)
-            # Isso evita o erro 429 e mantém o processo em menos de 5 minutos
-            print(f"🤖 Analisando as 15 notícias mais recentes de um total de {len(df_news_clean)}...")
-            
-            indices_para_analisar = df_news_clean.index[:15]
-            
-            for i, idx in enumerate(indices_para_analisar):
-                title = df_news_clean.at[idx, 'title']
-                df_news_clean.at[idx, 'sentimento'] = get_sentiment(title)
-                print(f"✅ Notícia {i+1}/15 analisada.")
-
-            df_news_clean.to_parquet("data/silver/stg_noticias.parquet", index=False)
-            print(f"🚀 Camada Prata: Notícias salvas com sucesso.")
-
-    # Processamento BCB (Mantido igual)
+    # Processamento BCB (Sempre rápido)
     arquivos_bcb = glob.glob("data/bronze/reclamacoes_bcb*.parquet")
     if arquivos_bcb:
         bcb_path = sorted(arquivos_bcb)[-1]
@@ -81,6 +66,8 @@ def run_silver_transformation():
         df_bcb.columns = [c.lower().replace(' ', '_').replace('.', '').replace('í', 'i').replace('ã', 'a').replace('ç', 'c') for c in df_bcb.columns]
         df_bcb.to_parquet("data/silver/stg_bcb.parquet", index=False)
         print(f"✅ Dados BCB processados.")
+
+    print("🏆 Camada Prata FINALIZADA em tempo recorde!")
 
 if __name__ == "__main__":
     run_silver_transformation()
