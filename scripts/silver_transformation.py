@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import glob
+import time # Importante para o delay
 from google import genai # Mudança aqui!
 from datetime import datetime
 
@@ -8,32 +9,37 @@ from datetime import datetime
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def get_sentiment(text):
-    """Versão 2.3: Usando os modelos de 2026 (Gemini 2.0)"""
     if not text or pd.isna(text): 
         return "Neutro"
     
-    try:
-        # Atualizamos para um modelo que EXISTE na sua lista
-        response = client.models.generate_content(
-            model='gemini-2.0-flash', # Ou 'gemini-flash-latest'
-            contents=f"Responda apenas com a palavra Positivo, Negativo ou Neutro para o sentimento desta notícia: {text}"
-        )
-        
-        if response and response.text:
-            sentiment = response.text.strip().capitalize()
-            # Filtro para garantir que a IA não mande texto extra
-            if "Positivo" in sentiment: return "Positivo"
-            if "Negativo" in sentiment: return "Negativo"
-        return "Neutro"
-        
-    except Exception as e:
-        print(f"⚠️ Erro na API Gemini: {e}")
-        return "Neutro"
-        
-    except Exception as e:
-        # Se o 404 continuar, vamos tentar um fallback para o modelo pro
-        print(f"⚠️ Erro na API Gemini: {e}")
-        return "Neutro"
+    # Prompt otimizado para ser curto (economiza tokens)
+    prompt = f"Sentimento (Positivo, Negativo, Neutro): {text}"
+    
+    # Tentativas de retry (Backoff simples)
+    for attempt in range(3): 
+        try:
+            response = client.models.generate_content(
+                model='gemini-2.0-flash',
+                contents=prompt
+            )
+            
+            if response and response.text:
+                sentiment = response.text.strip().capitalize()
+                # Pausa de 4 segundos entre requisições para respeitar o RPM do Free Tier
+                time.sleep(4) 
+                
+                if "Positivo" in sentiment: return "Positivo"
+                if "Negativo" in sentiment: return "Negativo"
+            return "Neutro"
+            
+        except Exception as e:
+            if "429" in str(e):
+                print(f"⏳ Quota atingida. Aguardando 10s para re-tentativa {attempt+1}/3...")
+                time.sleep(10) # Se der erro de quota, espera mais
+            else:
+                print(f"⚠️ Erro na API: {e}")
+                return "Neutro"
+    return "Neutro"
 
 def clean_news(df):
     if df is None or df.empty: return None
