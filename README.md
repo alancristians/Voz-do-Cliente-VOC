@@ -1,4 +1,4 @@
-# 🛡️ FinVoC: Voz do Cliente & Mercado
+# 🗣️ FinVoC: Voz do Cliente & Mercado
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge.svg)](https://voz-do-cliente-voc-2026.streamlit.app/)
 

@@ -37,6 +37,8 @@ jobs:
           python scripts/consumidor_ingestion.py
 
       - name: 🥈 Transformação Prata (Limpeza)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # 🔑 Injeta a chave aqui
         run: python scripts/silver_transformation.py
 
       - name: 🥇 Análise Ouro (Negócio)
