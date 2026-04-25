@@ -3,24 +3,24 @@ import pandas as pd
 import plotly.express as px
 import os
 
-# 1. Configurações de Interface
 st.set_page_config(page_title="Voz do Cliente | Monitor de Reputação", layout="wide", page_icon="🛡️")
 
-# Restauro do visual de "Caixas" para os KPIs com CSS fixo
+# CSS para restaurar o fundo escuro e bordas dos KPIs (Caixas)
 st.markdown("""
     <style>
+    [data-testid="stMetricValue"] { font-size: 28px; }
     div[data-testid="stMetric"] {
         background-color: #1e1e1e;
-        padding: 15px 20px;
-        border-radius: 10px;
+        padding: 20px;
+        border-radius: 12px;
         border: 1px solid #333;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
     }
     </style>
 """, unsafe_allow_html=True)
 
 st.title("🗣️ Voz do Cliente | Monitor de Reputação Bancária")
-st.caption("Engenharia de Dados (BCB/Consumidor.gov) | Arquitetura Medalhão 2026.")
+st.caption("Engenharia de Dados (BCB) | Arquitetura Medalhão 2026.")
 
 BANK_COLORS = {
     "Itaú": "#EC7000", "Bradesco": "#C8102E", "Santander": "#FF0000", 
@@ -32,10 +32,14 @@ BANK_COLORS = {
 def carregar_dados():
     path = "data/gold/fact_finvoc_summary.csv"
     if os.path.exists(path):
+        # Lê a base e força a conversão decimal se ainda houver vírgulas residuais
         df = pd.read_csv(path)
         cols = ['indice_bcb', 'total_clientes', 'recl_procedentes', 'total_respondidas', 'qtd_noticias_recentes']
         for col in cols:
+            if df[col].dtype == 'object':
+                df[col] = df[col].str.replace(',', '.')
             df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+        
         df['taxa_procedencia'] = (df['recl_procedentes'] / df['total_respondidas'] * 100).fillna(0)
         return df
     return None
@@ -48,7 +52,7 @@ if df is not None:
     bancos = st.sidebar.multiselect("Filtrar:", options=df['bank'].unique(), default=df['bank'].unique())
     df_p = df[df['bank'].isin(bancos)]
 
-    # 4. KPIs Principais com fundo restaurado
+    # KPIs com visual de caixa restaurado
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Bancos Analisados", len(df_p))
     k2.metric("Exposição (Notícias)", int(df_p['qtd_noticias_recentes'].sum()))
@@ -88,10 +92,8 @@ if df is not None:
                           title="Taxa de Procedência (%) - Ranking de Eficiência")
         st.plotly_chart(fig_proc, width='stretch')
 
-    # 7. Matriz de Diagnóstico com Tratamento de Casas Decimais
+    # 7. Matriz de Diagnóstico com formatação de Milhões (M)
     st.subheader("⚠️ Matriz de Diagnóstico VOC")
-    
-    # Tratamento para exibição em Milhões na tabela
     df_matrix = df_p.copy()
     df_matrix['total_clientes_m'] = df_matrix['total_clientes'] / 1e6
 
@@ -106,7 +108,6 @@ if df is not None:
         width='stretch', hide_index=True
     )
 
-    # Explorador de Notícias
     st.divider()
     st.subheader("🔍 Explorador de Notícias")
     news_path = "data/silver/stg_noticias.parquet"

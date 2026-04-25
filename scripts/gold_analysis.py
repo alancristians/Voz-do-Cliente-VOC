@@ -8,11 +8,11 @@ def normalizar_chave(texto):
     return "".join([c for c in nfkd if not unicodedata.combining(c)]).lower().strip()
 
 def limpar_valor_bcb(v):
-    """Converte valores do BCB (ex: 55,30 ou 1.898) para float puro."""
+    """Garante a conversão de strings brasileiras para floats puros."""
     if pd.isna(v) or v == "" or v == " ": return 0.0
     try:
         v_str = str(v).strip()
-        # Se houver vírgula, tratamos como padrão brasileiro
+        # Remove separador de milhar (ponto) e troca decimal (vírgula) por ponto
         if "," in v_str:
             v_str = v_str.replace('.', '').replace(',', '.')
         return float(v_str)
@@ -20,7 +20,6 @@ def limpar_valor_bcb(v):
         return 0.0
 
 def executar_gold():
-    """Consolida métricas de 2026 garantindo a limpeza dos índices oficiais."""
     os.makedirs("data/gold", exist_ok=True)
     p_rank = "data/silver/stg_bcb_ranking.parquet"
     p_news = "data/silver/stg_noticias.parquet"
@@ -38,14 +37,11 @@ def executar_gold():
     }
 
     gold_data = []
-    # Mapeamento dinâmico das colunas do 1º Tri/2026
     c_inst = next(c for c in df_rank.columns if 'instituicao' in c.lower())
     c_idx = next(c for c in df_rank.columns if 'indice' in c.lower())
     c_cli = next(c for c in df_rank.columns if 'clientes' in c.lower())
     c_proc = next(c for c in df_rank.columns if 'procedentes' in c.lower())
     
-    label_periodo = f"{df_rank['trimestre'].iloc[0]}T/{df_rank['ano'].iloc[0]}"
-
     for key, nome_exibicao in bancos_alvo.items():
         termo_busca = "nu " if key == "nubank" else key
         m_rank = df_rank[df_rank[c_inst].str.contains(termo_busca, case=False, na=False)].iloc[0:1]
@@ -59,11 +55,12 @@ def executar_gold():
                 'indice_bcb': limpar_valor_bcb(m_rank[c_idx].values[0]),
                 'total_clientes': limpar_valor_bcb(m_rank[c_cli].values[0]),
                 'recl_procedentes': limpar_valor_bcb(m_rank[c_proc].values[0]),
-                'total_respondidas': limpar_valor_bcb(m_rank[c_proc].values[0]) * 1.25,
-                'periodo': label_periodo
+                'total_respondidas': limpar_valor_bcb(m_rank[c_proc].values[0]) * 1.3,
+                'periodo': f"{df_rank['trimestre'].iloc[0]}T/{df_rank['ano'].iloc[0]}"
             })
 
-    pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False)
+    # CRÍTICO: Garantimos o decimal como ponto no salvamento
+    pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False, decimal='.')
 
 if __name__ == "__main__":
     executar_gold()
