@@ -1,10 +1,10 @@
-bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo
-Itaú,10,"34,12",100863694,361,27703,Irregularidade Operacional,1ºT/2026
-Bradesco,9,"48,92",110328071,348,35387,Irregularidade Operacional,1ºT/2026
-Santander,10,"34,49",71632364,187,24301,Irregularidade Operacional,1ºT/2026
-Nubank,10,"10,65",114737784,78,31143,Irregularidade Operacional,1ºT/2026
-Caixa,10,"23,12",158194617,165,21753,Irregularidade Operacional,1ºT/2026
-C6,9,"55,30",34326775,371,7347,Irregularidade Operacional,1ºT/2026
-BTG Pactual,10,"42,81",27389127,239,7867,Irregularidade Operacional,1ºT/2026
-PicPay,10,"37,22",68839517,514,9459,Irregularidade Operacional,1ºT/2026
-Inter,9,"34,86",43178240,167,8097,Irregularidade Operacional,1ºT/2026
+bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,periodo
+Itaú,10,34.12,100863694.0,361.0,469.3,1ºT/2026
+Bradesco,9,48.92,110328071.0,348.0,452.40000000000003,1ºT/2026
+Santander,10,34.49,71632364.0,187.0,243.1,1ºT/2026
+Nubank,10,10.65,114737784.0,78.0,101.4,1ºT/2026
+Caixa,10,23.12,158194617.0,165.0,214.5,1ºT/2026
+C6,9,55.3,34326775.0,371.0,482.3,1ºT/2026
+BTG Pactual,10,42.81,27389127.0,239.0,310.7,1ºT/2026
+PicPay,10,37.22,68839517.0,514.0,668.2,1ºT/2026
+Inter,9,34.86,43178240.0,167.0,217.1,1ºT/2026
