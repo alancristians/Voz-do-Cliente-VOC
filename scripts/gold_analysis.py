@@ -36,10 +36,8 @@ def run_gold_analysis():
     df_cons = pd.read_parquet("data/bronze/reclamacoes_consumidor.parquet")
     df_news = pd.read_parquet("data/silver/stg_noticias.parquet")
     
-    # Resumo de exposição (volume de notícias)
     news_summary = df_news.groupby('bank').size().reset_index(name='qtd_noticias')
 
-    # Mapeamento dinâmico de colunas BCB
     cols_orig = {normalizar(c): c for c in df_bcb.columns}
     c_inst = next((v for k, v in cols_orig.items() if 'instituicao' in k), None)
     c_idx = next((v for k, v in cols_orig.items() if 'indice' in k), None)

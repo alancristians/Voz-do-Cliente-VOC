@@ -2,8 +2,8 @@ name: FinVoC Daily Update
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Agendamento: Todo dia à meia-noite (UTC)
-  workflow_dispatch:      # Permite rodar manualmente
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true

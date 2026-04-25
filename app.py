@@ -95,4 +95,38 @@ if df is not None:
     with c3:
         # Gráfico de Distribuição de Clientes (Market Share)
         fig_pie = px.pie(df_p, values='total_clientes', names='bank', hole=.4, 
-                         color='bank
+                         color='bank', color_discrete_map=BANK_COLORS, 
+                         template="plotly_dark", title="Market Share (Clientes Ativos)")
+        st.plotly_chart(fig_pie, use_container_width=True)
+        
+    with c4:
+        # Gráfico de Taxa de Procedência
+        fig_proc = px.bar(df_p, x='bank', y='taxa_procedencia', 
+                          color='bank', color_discrete_map=BANK_COLORS, 
+                          text_auto='.2f', template="plotly_dark", 
+                          title="Taxa de Procedência (%) - Qualidade da Resolução")
+        st.plotly_chart(fig_proc, use_container_width=True)
+
+    # 7. Matriz de Diagnóstico VOC (Tabela Detalhada)
+    st.subheader("⚠️ Matriz de Diagnóstico VOC")
+    st.dataframe(df_p[['bank', 'principal_motivo', 'indice_bcb', 'taxa_procedencia', 'total_clientes']], 
+                 width="stretch", hide_index=True)
+
+    # 8. Explorador de Notícias (Dados da Silver)
+    st.divider()
+    st.subheader("🔍 Explorador de Notícias")
+    news_path = "data/silver/stg_noticias.parquet"
+    if os.path.exists(news_path):
+        df_news = pd.read_parquet(news_path)
+        search = st.text_input("Filtrar notícias por palavra-chave (ex: Lucro, Pix, Fraude):")
+        if search:
+            mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
+            df_news = df_news[mask]
+        st.dataframe(df_news, column_config={"link": st.column_config.LinkColumn("Fonte")}, 
+                     width="stretch", hide_index=True)
+
+else:
+    st.error("❌ Erro: Dados da camada Gold não encontrados. Execute o pipeline via GitHub Actions.")
+
+st.sidebar.markdown("---")
+st.sidebar.caption("FinVoC 2.0 | Sistema de Monitoramento de Reputação")
