@@ -1,10 +1,10 @@
 bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo
-Itaú,10,"34,12",100863694,361,27703,Divergência Cadastral,1ºT/2026
-Bradesco,10,"48,92",110328071,348,35387,Divergência Cadastral,1ºT/2026
-Santander,10,"34,49",71632364,187,24301,Divergência Cadastral,1ºT/2026
-Nubank,10,"10,65",114737784,78,31143,Divergência Cadastral,1ºT/2026
-Caixa,0,"23,12",158194617,165,21753,Divergência Cadastral,1ºT/2026
-C6,0,"55,30",34326775,371,7347,Divergência Cadastral,1ºT/2026
-BTG Pactual,0,"42,81",27389127,239,7867,Divergência Cadastral,1ºT/2026
-PicPay,0,"37,22",68839517,514,9459,Divergência Cadastral,1ºT/2026
-Inter,0,"34,86",43178240,167,8097,Divergência Cadastral,1ºT/2026
+Itaú,10,"34,12",100863694,361,27703,Irregularidade Operacional,1ºT/2026
+Bradesco,9,"48,92",110328071,348,35387,Irregularidade Operacional,1ºT/2026
+Santander,10,"34,49",71632364,187,24301,Irregularidade Operacional,1ºT/2026
+Nubank,10,"10,65",114737784,78,31143,Irregularidade Operacional,1ºT/2026
+Caixa,10,"23,12",158194617,165,21753,Irregularidade Operacional,1ºT/2026
+C6,9,"55,30",34326775,371,7347,Irregularidade Operacional,1ºT/2026
+BTG Pactual,10,"42,81",27389127,239,7867,Irregularidade Operacional,1ºT/2026
+PicPay,10,"37,22",68839517,514,9459,Irregularidade Operacional,1ºT/2026
+Inter,9,"34,86",43178240,167,8097,Irregularidade Operacional,1ºT/2026
