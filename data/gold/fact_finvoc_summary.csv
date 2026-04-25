@@ -1,9 +1,10 @@
 bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo
-Itau,0,34.12,100863694.0,361.0,27703.0,Divergência Cadastral,1º Trimestre / 2026
-Bradesco,0,48.92,110328071.0,348.0,35387.0,Site Indisponível,1º Trimestre / 2026
-Santander,0,34.49,71632364.0,187.0,24301.0,Site Indisponível,1º Trimestre / 2026
-Nubank,0,10.65,114737784.0,78.0,31143.0,Divergência Cadastral,1º Trimestre / 2026
-C6,0,55.3,34326775.0,371.0,7347.0,Divergência Cadastral,1º Trimestre / 2026
-Btg,0,42.81,27389127.0,239.0,7867.0,Divergência Cadastral,1º Trimestre / 2026
-Picpay,0,37.22,68839517.0,514.0,9459.0,Divergência Cadastral,1º Trimestre / 2026
-Inter,0,34.86,43178240.0,167.0,8097.0,Divergência Cadastral,1º Trimestre / 2026
+Itaú,10,"34,12",100863694,361,27703,Divergência Cadastral,1ºT/2026
+Bradesco,10,"48,92",110328071,348,35387,Divergência Cadastral,1ºT/2026
+Santander,10,"34,49",71632364,187,24301,Divergência Cadastral,1ºT/2026
+Nubank,10,"10,65",114737784,78,31143,Divergência Cadastral,1ºT/2026
+Caixa,0,"23,12",158194617,165,21753,Divergência Cadastral,1ºT/2026
+C6,0,"55,30",34326775,371,7347,Divergência Cadastral,1ºT/2026
+BTG Pactual,0,"42,81",27389127,239,7867,Divergência Cadastral,1ºT/2026
+PicPay,0,"37,22",68839517,514,9459,Divergência Cadastral,1ºT/2026
+Inter,0,"34,86",43178240,167,8097,Divergência Cadastral,1ºT/2026
