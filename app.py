@@ -48,8 +48,25 @@ df = carregar_dados()
 if df is not None:
     st.info(f"📊 **Dados de Referência:** {df['periodo'].iloc[0]}")
     
-    bancos = st.sidebar.multiselect("Filtrar:", options=df['bank'].unique(), default=df['bank'].unique())
-    df_p = df[df['bank'].isin(bancos)]
+    # --- MELHORIA DO FILTRO (SIDEBAR) ---
+    st.sidebar.header("⚙️ Configurações")
+    with st.sidebar.expander("🏦 Filtrar Instituições", expanded=True):
+        todos_bancos = df['bank'].unique().tolist()
+        
+        # Botão para limpar seleção rapidamente
+        if st.button("Limpar Seleção"):
+            st.session_state["filtro_bancos"] = []
+            st.rerun()
+
+        selected_banks = st.multiselect(
+            "Selecione os bancos:",
+            options=todos_bancos,
+            default=todos_bancos,
+            key="filtro_bancos",
+            label_visibility="collapsed" # Remove o título interno para limpar o visual
+        )
+    
+    df_p = df[df['bank'].isin(selected_banks)]
 
     # 4. KPIs com Tooltips (Help) restaurados
     k1, k2, k3, k4 = st.columns(4)
@@ -140,3 +157,9 @@ if df is not None:
         st.dataframe(df_news, width='stretch', hide_index=True)
 else:
     st.error("❌ Dados não encontrados.")
+
+# --- RESTAURO DO RODAPÉ (SIDEBAR) ---
+st.sidebar.markdown("---")
+st.sidebar.caption("🛡️ **FinVoC 2.0**")
+st.sidebar.caption("Sistema de Monitoramento de Reputação")
+st.sidebar.caption("Engenharia de Dados | Alan Cristian 2026")
