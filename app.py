@@ -14,7 +14,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("🗣️ Voz do Cliente | Monitor de Reputação Bancária")
-st.caption("Análise consolidada de dados oficiais (BCB/Consumidor.gov) e exposição mediática via Pipeline Medalhão.")
+st.caption("Análise consolidada de dados oficiais (BCB/Consumidor.gov) e exposição midiática via Pipeline Medalhão.")
 
 # 2. Identidade Visual Protegida (Cores Oficiais dos Bancos)
 BANK_COLORS = {
