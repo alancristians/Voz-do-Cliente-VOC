@@ -59,7 +59,7 @@ def executar_gold():
                 'periodo': f"{df_rank['trimestre'].iloc[0]}T/{df_rank['ano'].iloc[0]}"
             })
 
-    # CRÍTICO: Garantimos o decimal como ponto no salvamento
+    # FORÇAMOS O DECIMAL COMO PONTO NO SALVAMENTO
     pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False, decimal='.')
 
 if __name__ == "__main__":
