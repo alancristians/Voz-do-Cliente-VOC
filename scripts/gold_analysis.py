@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import unicodedata
+import glob
 
 def normalizar_chave(texto):
     if not isinstance(texto, str): return ""
@@ -22,10 +23,16 @@ def executar_gold():
     p_rank = "data/silver/stg_bcb_ranking.parquet"
     p_news = "data/silver/stg_noticias.parquet"
     
+    # Busca o arquivo de assuntos mais recente na Bronze
+    subject_files = glob.glob("data/bronze/bcb_assuntos_*.parquet")
+    p_subjects = subject_files[-1] if subject_files else None
+    
     if not os.path.exists(p_rank) or not os.path.exists(p_news): return
 
     df_rank = pd.read_parquet(p_rank)
     df_news = pd.read_parquet(p_news)
+    df_subjects = pd.read_parquet(p_subjects) if p_subjects else pd.DataFrame()
+    
     df_news['bank_clean'] = df_news['bank'].apply(normalizar_chave)
 
     bancos_alvo = {
@@ -35,12 +42,10 @@ def executar_gold():
     }
 
     gold_data = []
-    # Mapeamento dinâmico das colunas reais do arquivo de 2026
     c_inst = next(c for c in df_rank.columns if 'instituicao' in c.lower())
     c_idx = next(c for c in df_rank.columns if 'indice' in c.lower())
     c_cli = next(c for c in df_rank.columns if 'clientes' in c.lower())
     c_proc = next(c for c in df_rank.columns if 'procedentes' in c.lower())
-    # LOCALIZAÇÃO DA COLUNA REAL DE RESPONDIDAS
     c_resp = next((c for c in df_rank.columns if 'respondidas' in c.lower()), None)
     
     for key, nome_exibicao in bancos_alvo.items():
@@ -48,9 +53,21 @@ def executar_gold():
         m_rank = df_rank[df_rank[c_inst].str.contains(termo_busca, case=False, na=False)].iloc[0:1]
         
         if not m_rank.empty:
+            # --- BUSCA DO MOTIVO REAL ---
+            motivo_top = "Não informado"
+            if not df_subjects.empty:
+                # Colunas padrão da API BCB: 'InstituicaoFinanceira', 'Assunto', 'QuantidadeReclamacoes'
+                c_sub_inst = next((c for c in df_subjects.columns if 'instituicao' in c.lower()), None)
+                c_assunto = next((c for c in df_subjects.columns if 'assunto' in c.lower()), None)
+                
+                if c_sub_inst and c_assunto:
+                    # Filtra assuntos do banco específico
+                    m_subs = df_subjects[df_subjects[c_sub_inst].str.contains(termo_busca, case=False, na=False)]
+                    if not m_subs.empty:
+                        # Pega o primeiro da lista (o BCB já ordena por frequência na API)
+                        motivo_top = m_subs[c_assunto].iloc[0]
+
             filtro_news = df_news[df_news['bank_clean'].str.contains(key, na=False)]
-            
-            # Se a coluna de respondidas existir, usa o dado real. Se não, fallback 1.3x.
             val_proc = limpar_valor_bcb(m_rank[c_proc].values[0])
             val_resp = limpar_valor_bcb(m_rank[c_resp].values[0]) if c_resp else (val_proc * 1.3)
 
@@ -61,6 +78,7 @@ def executar_gold():
                 'total_clientes': limpar_valor_bcb(m_rank[c_cli].values[0]),
                 'recl_procedentes': val_proc,
                 'total_respondidas': val_resp,
+                'principal_motivo': motivo_top, # Inserindo o dado real aqui
                 'periodo': f"{df_rank['trimestre'].iloc[0]}T/{df_rank['ano'].iloc[0]}"
             })
 

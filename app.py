@@ -135,12 +135,13 @@ if df is not None:
     df_matrix['total_clientes_m'] = df_matrix['total_clientes'] / 1e6
 
     st.dataframe(
-        df_matrix[['bank', 'indice_bcb', 'taxa_procedencia', 'total_clientes_m']], 
+        df_matrix[['bank', 'principal_motivo', 'indice_bcb', 'taxa_procedencia', 'total_clientes_m']], 
         column_config={
             "bank": "Instituição",
-            "indice_bcb": st.column_config.NumberColumn("Índice BCB", format="%.2f", help="Índice oficial do Ranking de Reclamações."),
-            "taxa_procedencia": st.column_config.NumberColumn("Taxa Procedência", format="%.2f%%", help="Percentual de reclamações consideradas válidas pelo BCB."),
-            "total_clientes_m": st.column_config.NumberColumn("Total Clientes", format="%.2fM", help="Base de clientes em milhões.")
+            "principal_motivo": st.column_config.TextColumn("Principal Motivo (BCB)", help="Assunto com maior volume de reclamações no trimestre."),
+            "indice_bcb": st.column_config.NumberColumn("Índice BCB", format="%.2f"),
+            "taxa_procedencia": st.column_config.NumberColumn("Taxa Procedência", format="%.2f%%"),
+            "total_clientes_m": st.column_config.NumberColumn("Total Clientes", format="%.2fM")
         },
         width='stretch', hide_index=True
     )
