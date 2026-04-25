@@ -3,7 +3,24 @@ import pandas as pd
 import plotly.express as px
 import os
 
+# 1. Configurações de Interface
 st.set_page_config(page_title="Voz do Cliente | Monitor de Reputação", layout="wide", page_icon="🛡️")
+
+# Restauro do visual de "Caixas" para os KPIs com CSS fixo
+st.markdown("""
+    <style>
+    div[data-testid="stMetric"] {
+        background-color: #1e1e1e;
+        padding: 15px 20px;
+        border-radius: 10px;
+        border: 1px solid #333;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.title("🗣️ Voz do Cliente | Monitor de Reputação Bancária")
+st.caption("Engenharia de Dados (BCB/Consumidor.gov) | Arquitetura Medalhão 2026.")
 
 BANK_COLORS = {
     "Itaú": "#EC7000", "Bradesco": "#C8102E", "Santander": "#FF0000", 
@@ -16,7 +33,8 @@ def carregar_dados():
     path = "data/gold/fact_finvoc_summary.csv"
     if os.path.exists(path):
         df = pd.read_csv(path)
-        for col in ['indice_bcb', 'total_clientes', 'qtd_noticias_recentes', 'recl_procedentes', 'total_respondidas']:
+        cols = ['indice_bcb', 'total_clientes', 'recl_procedentes', 'total_respondidas', 'qtd_noticias_recentes']
+        for col in cols:
             df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
         df['taxa_procedencia'] = (df['recl_procedentes'] / df['total_respondidas'] * 100).fillna(0)
         return df
@@ -25,21 +43,21 @@ def carregar_dados():
 df = carregar_dados()
 
 if df is not None:
-    st.title("🗣️ Voz do Cliente | Monitor de Reputação Bancária")
     st.info(f"📊 **Dados de Referência:** {df['periodo'].iloc[0]}")
     
     bancos = st.sidebar.multiselect("Filtrar:", options=df['bank'].unique(), default=df['bank'].unique())
     df_p = df[df['bank'].isin(bancos)]
 
-    # KPIs
+    # 4. KPIs Principais com fundo restaurado
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Bancos", len(df_p))
+    k1.metric("Bancos Analisados", len(df_p))
     k2.metric("Exposição (Notícias)", int(df_p['qtd_noticias_recentes'].sum()))
     k3.metric("Média Índice BCB", f"{df_p['indice_bcb'].mean():.2f}")
     k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M")
 
     st.divider()
 
+    # Gráficos
     c1, c2 = st.columns(2)
     with c1:
         fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
@@ -49,7 +67,6 @@ if df is not None:
         st.plotly_chart(fig_news, width='stretch')
         
     with c2:
-        # Gráfico de Linha do Índice BCB (Agora com dados populados)
         fig_bcb = px.line(df_p.sort_values('indice_bcb', ascending=False), 
                           x='bank', y='indice_bcb', markers=True, 
                           template="plotly_dark", title="Índice de Reclamações (BCB)")
@@ -64,7 +81,6 @@ if df is not None:
                          template="plotly_dark", title="Market Share (Contas Ativas)")
         st.plotly_chart(fig_pie, width='stretch')
     with c4:
-        # ORDENAÇÃO: Do pior (maior taxa) para o melhor
         fig_proc = px.bar(df_p.sort_values('taxa_procedencia', ascending=False), 
                           x='bank', y='taxa_procedencia', 
                           color='bank', color_discrete_map=BANK_COLORS, 
@@ -72,19 +88,25 @@ if df is not None:
                           title="Taxa de Procedência (%) - Ranking de Eficiência")
         st.plotly_chart(fig_proc, width='stretch')
 
-    # Matriz com formatação profissional (M e %) e motivo oculto
+    # 7. Matriz de Diagnóstico com Tratamento de Casas Decimais
     st.subheader("⚠️ Matriz de Diagnóstico VOC")
+    
+    # Tratamento para exibição em Milhões na tabela
+    df_matrix = df_p.copy()
+    df_matrix['total_clientes_m'] = df_matrix['total_clientes'] / 1e6
+
     st.dataframe(
-        df_p[['bank', 'indice_bcb', 'taxa_procedencia', 'total_clientes']], 
+        df_matrix[['bank', 'indice_bcb', 'taxa_procedencia', 'total_clientes_m']], 
         column_config={
             "bank": "Instituição",
             "indice_bcb": st.column_config.NumberColumn("Índice BCB", format="%.2f"),
             "taxa_procedencia": st.column_config.NumberColumn("Taxa Procedência", format="%.2f%%"),
-            "total_clientes": st.column_config.NumberColumn("Total Clientes", format="%.1fM")
+            "total_clientes_m": st.column_config.NumberColumn("Total Clientes", format="%.2fM")
         },
         width='stretch', hide_index=True
     )
 
+    # Explorador de Notícias
     st.divider()
     st.subheader("🔍 Explorador de Notícias")
     news_path = "data/silver/stg_noticias.parquet"

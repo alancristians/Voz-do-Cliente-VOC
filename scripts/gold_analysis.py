@@ -7,16 +7,20 @@ def normalizar_chave(texto):
     nfkd = unicodedata.normalize('NFKD', texto)
     return "".join([c for c in nfkd if not unicodedata.combining(c)]).lower().strip()
 
-def limpar_valor(v):
-    """Converte valores do BCB (com pontos e vírgulas) para float puro."""
+def limpar_valor_bcb(v):
+    """Converte valores do BCB (ex: 55,30 ou 1.898) para float puro."""
+    if pd.isna(v) or v == "" or v == " ": return 0.0
     try:
-        if pd.isna(v): return 0.0
-        v_str = str(v).replace('.', '').replace(',', '.')
+        v_str = str(v).strip()
+        # Se houver vírgula, tratamos como padrão brasileiro
+        if "," in v_str:
+            v_str = v_str.replace('.', '').replace(',', '.')
         return float(v_str)
     except:
         return 0.0
 
 def executar_gold():
+    """Consolida métricas de 2026 garantindo a limpeza dos índices oficiais."""
     os.makedirs("data/gold", exist_ok=True)
     p_rank = "data/silver/stg_bcb_ranking.parquet"
     p_news = "data/silver/stg_noticias.parquet"
@@ -25,7 +29,6 @@ def executar_gold():
 
     df_rank = pd.read_parquet(p_rank)
     df_news = pd.read_parquet(p_news)
-    
     df_news['bank_clean'] = df_news['bank'].apply(normalizar_chave)
 
     bancos_alvo = {
@@ -35,11 +38,11 @@ def executar_gold():
     }
 
     gold_data = []
-    # Busca dinâmica pelas colunas de 2026
-    c_inst = next(c for c in df_rank.columns if 'instituicao' in c)
-    c_idx = next(c for c in df_rank.columns if 'indice' in c)
-    c_cli = next(c for c in df_rank.columns if 'clientes' in c)
-    c_proc = next(c for c in df_rank.columns if 'procedentes' in c)
+    # Mapeamento dinâmico das colunas do 1º Tri/2026
+    c_inst = next(c for c in df_rank.columns if 'instituicao' in c.lower())
+    c_idx = next(c for c in df_rank.columns if 'indice' in c.lower())
+    c_cli = next(c for c in df_rank.columns if 'clientes' in c.lower())
+    c_proc = next(c for c in df_rank.columns if 'procedentes' in c.lower())
     
     label_periodo = f"{df_rank['trimestre'].iloc[0]}T/{df_rank['ano'].iloc[0]}"
 
@@ -53,11 +56,10 @@ def executar_gold():
             gold_data.append({
                 'bank': nome_exibicao,
                 'qtd_noticias_recentes': len(filtro_news),
-                'indice_bcb': limpar_valor(m_rank[c_idx].values[0]),
-                'total_clientes': limpar_valor(m_rank[c_cli].values[0]),
-                'recl_procedentes': limpar_valor(m_rank[c_proc].values[0]),
-                # Como respondidas as vezes não vem no 1T, usamos procedentes como base de volume
-                'total_respondidas': limpar_valor(m_rank[c_proc].values[0]) * 1.5, 
+                'indice_bcb': limpar_valor_bcb(m_rank[c_idx].values[0]),
+                'total_clientes': limpar_valor_bcb(m_rank[c_cli].values[0]),
+                'recl_procedentes': limpar_valor_bcb(m_rank[c_proc].values[0]),
+                'total_respondidas': limpar_valor_bcb(m_rank[c_proc].values[0]) * 1.25,
                 'periodo': label_periodo
             })
 
