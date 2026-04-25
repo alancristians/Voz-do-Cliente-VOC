@@ -32,33 +32,29 @@ jobs:
 
       - name: 🥉 Etapa 1: Ingestão Bronze (Fontes)
         run: |
-          echo "::group::📊 Coleta Ranking BCB"
+          echo "::group::Coleta Ranking BCB"
           python scripts/bcb_ingestion.py
           echo "::endgroup::"
-
-          echo "::group::📰 Coleta Google News (Voz do Mercado)"
+          
+          echo "::group::Coleta Google News"
           python scripts/news_ingestion.py
           echo "::endgroup::"
-
-          echo "::group::🛡️ Coleta Consumidor.gov.br"
+          
+          echo "::group::Coleta Consumidor.gov.br"
           python scripts/consumidor_ingestion.py
           echo "::endgroup::"
-
-          echo "::group::🔍 Coleta Assuntos Reais (OData BCB)"
+          
+          echo "::group::Coleta Assuntos BCB"
           python scripts/subject_ingestion.py
           echo "::endgroup::"
 
-      - name: 🥈 Etapa 2: Transformação Prata (Data Cleaning)
+      - name: 🥈 Etapa 2: Transformação Prata (Limpeza)
         run: |
-          echo "::group::🧹 Limpeza e Padronização de Tabelas"
           python scripts/silver_transformation.py
-          echo "::endgroup::"
 
-      - name: 🥇 Etapa 3: Análise Ouro (Cruzamento e Negócio)
+      - name: 🥇 Etapa 3: Análise Ouro (Negócio)
         run: |
-          echo "::group::🏆 Gerando Tabela Final para o Dashboard"
           python scripts/gold_analysis.py
-          echo "::endgroup::"
 
       - name: 📦 Etapa 4: Atualizar Repositório (Commit e Push)
         run: |
@@ -69,11 +65,8 @@ jobs:
           git add -f data/
           
           if git diff --staged --quiet; then
-            echo "::notice::Nenhum dado novo detectado nesta execução."
+            echo "Nada novo para salvar."
           else
-            echo "::group::Enviando atualizações para o Main branch"
-            git commit -m "data: medallion update with subjects and news [skip ci]"
+            git commit -m "data: medallion update with real complaint subjects [skip ci]"
             git push origin main
-            echo "::endgroup::"
-            echo "✅ Dados sincronizados com sucesso!"
           fi
