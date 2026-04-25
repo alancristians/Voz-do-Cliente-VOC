@@ -30,20 +30,37 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🥉 Ingestão Bronze (Fontes)
+      - name: 🥉 Etapa 1: Ingestão Bronze (Fontes)
         run: |
+          echo "::group::📊 Coleta Ranking BCB"
           python scripts/bcb_ingestion.py
+          echo "::endgroup::"
+
+          echo "::group::📰 Coleta Google News (Voz do Mercado)"
           python scripts/news_ingestion.py
+          echo "::endgroup::"
+
+          echo "::group::🛡️ Coleta Consumidor.gov.br"
           python scripts/consumidor_ingestion.py
+          echo "::endgroup::"
+
+          echo "::group::🔍 Coleta Assuntos Reais (OData BCB)"
           python scripts/subject_ingestion.py
+          echo "::endgroup::"
 
-      - name: 🥈 Transformação Prata (Limpeza)
-        run: python scripts/silver_transformation.py
+      - name: 🥈 Etapa 2: Transformação Prata (Data Cleaning)
+        run: |
+          echo "::group::🧹 Limpeza e Padronização de Tabelas"
+          python scripts/silver_transformation.py
+          echo "::endgroup::"
 
-      - name: 🥇 Análise Ouro (Negócio)
-        run: python scripts/gold_analysis.py
+      - name: 🥇 Etapa 3: Análise Ouro (Cruzamento e Negócio)
+        run: |
+          echo "::group::🏆 Gerando Tabela Final para o Dashboard"
+          python scripts/gold_analysis.py
+          echo "::endgroup::"
 
-      - name: 📦 Atualizar Repositório (Dados e Dash)
+      - name: 📦 Etapa 4: Atualizar Repositório (Commit e Push)
         run: |
           git config --global user.name 'Alan (FinVoC Bot)'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -52,8 +69,11 @@ jobs:
           git add -f data/
           
           if git diff --staged --quiet; then
-            echo "Nada novo para salvar."
+            echo "::notice::Nenhum dado novo detectado nesta execução."
           else
-            git commit -m "data: medallion update with real complaint subjects [skip ci]"
+            echo "::group::Enviando atualizações para o Main branch"
+            git commit -m "data: medallion update with subjects and news [skip ci]"
             git push origin main
+            echo "::endgroup::"
+            echo "✅ Dados sincronizados com sucesso!"
           fi

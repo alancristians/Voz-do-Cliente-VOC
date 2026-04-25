@@ -23,18 +23,19 @@ def executar_gold():
     p_rank = "data/silver/stg_bcb_ranking.parquet"
     p_news = "data/silver/stg_noticias.parquet"
     
-    # Busca o arquivo de assuntos mais recente na Bronze
-    subject_files = glob.glob("data/bronze/bcb_assuntos_*.parquet")
+    # BUSCA DINÂMICA: Pega o arquivo de assuntos mais recente (2026_1 ou 2025_4)
+    subject_files = sorted(glob.glob("data/bronze/bcb_assuntos_*.parquet"))
     p_subjects = subject_files[-1] if subject_files else None
     
     if not os.path.exists(p_rank) or not os.path.exists(p_news):
-        print("⚠️ Arquivos necessários não encontrados.")
+        print("⚠️ Arquivos base (Ranking ou Notícias) não encontrados.")
         return
 
     df_rank = pd.read_parquet(p_rank)
     df_news = pd.read_parquet(p_news)
     df_subjects = pd.read_parquet(p_subjects) if p_subjects else pd.DataFrame()
     
+    # LÓGICA DE NOTÍCIAS (PRESERVADA E BLINDADA)
     df_news['bank_clean'] = df_news['bank'].apply(normalizar_chave)
 
     bancos_alvo = {
@@ -55,7 +56,7 @@ def executar_gold():
         m_rank = df_rank[df_rank[c_inst].str.contains(termo_busca, case=False, na=False)].iloc[0:1]
         
         if not m_rank.empty:
-            # --- BUSCA DO MOTIVO REAL ---
+            # --- BUSCA DO MOTIVO REAL (DENTRO DOS ASSUNTOS DISPONÍVEIS) ---
             motivo_top = "Não informado no período"
             if not df_subjects.empty:
                 c_sub_inst = next((c for c in df_subjects.columns if 'instituicao' in c.lower()), None)
@@ -64,15 +65,18 @@ def executar_gold():
                 if c_sub_inst and c_assunto:
                     m_subs = df_subjects[df_subjects[c_sub_inst].str.contains(termo_busca, case=False, na=False)]
                     if not m_subs.empty:
+                        # O BCB já manda o mais frequente no topo
                         motivo_top = m_subs[c_assunto].iloc[0]
 
+            # CONTAGEM DE NOTÍCIAS (EXATAMENTE COMO VOCÊ QUER)
             filtro_news = df_news[df_news['bank_clean'].str.contains(key, na=False)]
+            
             val_proc = limpar_valor_bcb(m_rank[c_proc].values[0])
             val_resp = limpar_valor_bcb(m_rank[c_resp].values[0]) if c_resp else (val_proc * 1.3)
 
             gold_data.append({
                 'bank': nome_exibicao,
-                'qtd_noticias_recentes': len(filtro_news),
+                'qtd_noticias_recentes': len(filtro_news), # <--- SEU VOLUME ESTÁ AQUI
                 'indice_bcb': limpar_valor_bcb(m_rank[c_idx].values[0]),
                 'total_clientes': limpar_valor_bcb(m_rank[c_cli].values[0]),
                 'recl_procedentes': val_proc,
@@ -81,8 +85,9 @@ def executar_gold():
                 'periodo': f"{df_rank['trimestre'].iloc[0]}T/{df_rank['ano'].iloc[0]}"
             })
 
+    # Salvamento garantindo decimal como ponto
     pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False, decimal='.')
-    print("✅ Camada Ouro gerada com motivos reais.")
+    print(f"✅ Camada Ouro gerada com {len(gold_data)} bancos.")
 
 if __name__ == "__main__":
     executar_gold()
