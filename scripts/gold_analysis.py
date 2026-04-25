@@ -1,92 +1,82 @@
 import pandas as pd
 import os
-import glob
 import unicodedata
 
 def normalizar(texto):
-    """
-    Normaliza strings para match de dados: remove acentos e padroniza caixa.
-    """
     if not isinstance(texto, str): return ""
     nfkd = unicodedata.normalize('NFKD', texto)
     return "".join([c for c in nfkd if not unicodedata.combining(c)]).lower().strip()
 
-def limpar_numero(valor):
-    """
-    Converte strings numéricas formatadas para float64.
-    """
-    if pd.isna(valor) or valor == "" or valor == " ": return 0.0
-    if isinstance(valor, str):
-        valor = valor.replace('.', '').replace(',', '.')
-    try:
-        return float(valor)
-    except:
-        return 0.0
+def limpar_num(v):
+    try: return float(str(v).replace('.', '').replace(',', '.'))
+    except: return 0.0
 
-def run_gold_analysis():
+def executar_gold():
     """
-    Gera a camada gold consolidando métricas do BCB, Consumidor.gov e volume de notícias.
+    Consolida métricas de ranking, volume de notícias e o principal motivo de reclamação (BCB).
     """
     os.makedirs("data/gold", exist_ok=True)
     
-    arquivos_bcb = glob.glob("data/bronze/reclamacoes_bcb*.parquet")
-    if not arquivos_bcb: return
+    # Verificação de dependências
+    p_rank = "data/silver/stg_bcb_ranking.parquet"
+    p_assu = "data/silver/stg_bcb_assuntos.parquet"
+    p_news = "data/silver/stg_noticias.parquet"
+    
+    if not all(os.path.exists(p) for p in [p_rank, p_assu, p_news]): return
 
-    df_bcb = pd.read_parquet(sorted(arquivos_bcb)[-1])
+    df_rank = pd.read_parquet(p_rank)
+    df_assu = pd.read_parquet(p_assu)
+    df_news = pd.read_parquet(p_news)
     df_cons = pd.read_parquet("data/bronze/reclamacoes_consumidor.parquet")
-    df_news = pd.read_parquet("data/silver/stg_noticias.parquet")
-    
-    news_summary = df_news.groupby('bank').size().reset_index(name='qtd_noticias')
 
-    cols_orig = {normalizar(c): c for c in df_bcb.columns}
-    c_inst = next((v for k, v in cols_orig.items() if 'instituicao' in k), None)
-    c_idx = next((v for k, v in cols_orig.items() if 'indice' in k), None)
-    c_cli = next((v for k, v in cols_orig.items() if 'clientes' in k), None)
-    c_proc = next((v for k, v in cols_orig.items() if 'procedentes' in k), None)
-    c_resp = next((v for k, v in cols_orig.items() if 'respondidas' in k), None)
-    
-    c_ano = next((v for k, v in cols_orig.items() if 'ano' in k), "2026")
-    c_tri = next((v for k, v in cols_orig.items() if 'trimestre' in k), "1º")
-    label_periodo = f"{df_bcb[c_tri].iloc[0]} Trimestre / {df_bcb[c_ano].iloc[0]}"
+    # Mapeamento dinâmico de colunas do ranking 2026
+    c_inst = next(c for c in df_rank.columns if 'instituicao' in c)
+    c_idx = next(c for c in df_rank.columns if 'indice' in c)
+    c_cli = next(c for c in df_rank.columns if 'clientes' in c)
+    c_proc = next(c for c in df_rank.columns if 'procedentes' in c)
+    c_resp = next(c for c in df_rank.columns if 'respondidas' in c)
+    label_periodo = f"{df_rank['trimestre'].iloc[0]} Trimestre / {df_rank['ano'].iloc[0]}"
+
+    # Identifica o Top 1 Assunto por Instituição no dataset do BCB
+    # Colunas comuns: 'instituicao_financeira' e 'assunto'
+    df_top_assunto = df_assu.sort_values('quantidade', ascending=False).drop_duplicates('instituicao_financeira')
 
     synonyms = {
-        "itau": "itau", 
-        "bradesco": "bradesco", 
-        "santander": "santander",
-        "banco do brasil": "banco do brasil", 
-        "nubank": "nu ", 
-        "caixa": "caixa economica",
-        "c6": "c6",
-        "btg": "btg pactual",
-        "picpay": "picpay",
-        "inter": "inter",
-        "neon": "neon",
-        "mercado pago": "mercado pago",
-        "pagseguro": "pagseguro"
+        "itau": "itau", "bradesco": "bradesco", "santander": "santander",
+        "banco do brasil": "banco do brasil", "nubank": "nu ", "caixa": "caixa economica",
+        "c6": "c6", "btg": "btg pactual", "picpay": "picpay", "inter": "inter"
     }
 
     gold_data = []
-    for _, row_news in news_summary.iterrows():
-        bank_name = row_news['bank']
-        termo = synonyms.get(normalizar(bank_name), normalizar(bank_name))
-        
-        match_bcb = df_bcb[df_bcb[c_inst].str.contains(termo, case=False, na=False)].iloc[0:1]
-        match_cons = df_cons[df_cons["banco"].str.contains(termo, case=False, na=False)]
-        top_status = match_cons['status'].value_counts().idxmax() if not match_cons.empty else "Normal"
+    # Agrupamento por banco nas notícias
+    news_counts = df_news.groupby('bank').size().to_dict()
 
-        if not match_bcb.empty:
+    for bank_alias, search_term in synonyms.items():
+        # Cruzamento Ranking
+        m_rank = df_rank[df_rank[c_inst].str.contains(search_term, case=False, na=False)].iloc[0:1]
+        # Cruzamento Assunto BCB
+        m_assu = df_top_assunto[df_top_assunto['instituicao_financeira'].str.contains(search_term, case=False, na=False)]
+        # Cruzamento Consumidor.gov
+        m_cons = df_cons[df_cons["banco"].str.contains(search_term, case=False, na=False)]
+        
+        if not m_rank.empty:
+            # Prioriza o motivo do BCB, senão usa o do Consumidor.gov
+            motivo = m_assu['assunto'].values[0] if not m_assu.empty else (
+                m_cons['status'].value_counts().idxmax() if not m_cons.empty else "Divergência Cadastral"
+            )
+
             gold_data.append({
-                'bank': bank_name,
-                'qtd_noticias_recentes': row_news['qtd_noticias'],
-                'indice_bcb': limpar_numero(match_bcb[c_idx].values[0]),
-                'total_clientes': limpar_numero(match_bcb[c_cli].values[0]),
-                'recl_procedentes': limpar_numero(match_bcb[c_proc].values[0]),
-                'total_respondidas': limpar_numero(match_bcb[c_resp].values[0]),
-                'principal_motivo': top_status,
+                'bank': bank_alias.capitalize(),
+                'qtd_noticias_recentes': news_counts.get(bank_alias, 0),
+                'indice_bcb': limpar_num(m_rank[c_idx].values[0]),
+                'total_clientes': limpar_num(m_rank[c_cli].values[0]),
+                'recl_procedentes': limpar_num(m_rank[c_proc].values[0]),
+                'total_respondidas': limpar_num(m_rank[c_resp].values[0]),
+                'principal_motivo': motivo,
                 'periodo': label_periodo
             })
 
     pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False)
 
 if __name__ == "__main__":
-    run_gold_analysis()
+    executar_gold()
