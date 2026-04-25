@@ -6,7 +6,7 @@ import os
 # 1. Configurações de Interface
 st.set_page_config(page_title="Voz do Cliente | Monitor de Reputação", layout="wide", page_icon="🛡️")
 
-# 2. CSS para os KPIs (As "Caixas" que você gosta)
+# 2. CSS para os KPIs (Visual de "Caixas" restaurado)
 st.markdown("""
     <style>
     div[data-testid="stMetric"] {
@@ -34,6 +34,7 @@ def carregar_dados():
     path = "data/gold/fact_finvoc_summary.csv"
     if os.path.exists(path):
         df = pd.read_csv(path)
+        # Garante tratamento de decimais e limpeza de dados
         cols = ['indice_bcb', 'total_clientes', 'recl_procedentes', 'total_respondidas', 'qtd_noticias_recentes']
         for col in cols:
             if df[col].dtype == 'object':
@@ -48,7 +49,7 @@ df = carregar_dados()
 if df is not None:
     st.info(f"📊 **Dados de Referência:** {df['periodo'].iloc[0]}")
     
-    # 4. SIDEBAR - Filtro Organizado e Footer
+    # 4. SIDEBAR - Filtro e Rodapé (Alan Cristian 2026)
     st.sidebar.header("⚙️ Configurações")
     with st.sidebar.expander("🏦 Filtrar Instituições", expanded=True):
         todos_bancos = df['bank'].unique().tolist()
@@ -67,16 +68,16 @@ if df is not None:
     
     df_p = df[df['bank'].isin(selected_banks)]
 
-    # 5. KPIs com Tooltips
+    # 5. KPIs de Topo com Tooltips
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Bancos Analisados", len(df_p), help="Quantidade de instituições filtradas.")
-    k2.metric("Exposição (Notícias)", int(df_p['qtd_noticias_recentes'].sum()), help="Soma total de menções no Google News.")
-    k3.metric("Média Índice BCB", f"{df_p['indice_bcb'].mean():.2f}", help="Média do ranking de reclamações do BCB.")
-    k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", help="Soma de relacionamentos bancários ativos.")
+    k1.metric("Bancos Analisados", len(df_p), help="Quantidade de bancos filtrados.")
+    k2.metric("Exposição (Notícias)", int(df_p['qtd_noticias_recentes'].sum()), help="Total de menções capturadas no período.")
+    k3.metric("Média Índice BCB", f"{df_p['indice_bcb'].mean():.2f}", help="Média do ranking de reclamações.")
+    k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", help="Soma de contas ativas no mercado.")
 
     st.divider()
 
-    # 6. GRÁFICOS (Performance e Reclamações)
+    # 6. GRÁFICOS (Voz do Mercado e BCB)
     c1, c2 = st.columns(2)
     with c1:
         fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
@@ -93,7 +94,7 @@ if df is not None:
 
     st.divider()
 
-    # 7. GRÁFICOS (Market Share e Eficiência)
+    # 7. GRÁFICOS (Participação e Eficiência)
     c3, c4 = st.columns(2)
     with c3:
         fig_pie = px.pie(df_p, values='total_clientes', names='bank', hole=.4, 
@@ -108,39 +109,37 @@ if df is not None:
                           title="Taxa de Procedência (%) - Eficiência de Resolução")
         st.plotly_chart(fig_proc, width='stretch')
 
-    # 8. MATRIZ DE DIAGNÓSTICO (A Tabela Central)
+    # 8. MATRIZ DE DIAGNÓSTICO (RETORNO AO ORIGINAL)
     st.subheader("⚠️ Matriz de Diagnóstico VOC")
     df_matrix = df_p.copy()
     df_matrix['total_clientes_m'] = df_matrix['total_clientes'] / 1e6
 
     st.dataframe(
-        df_matrix[['bank', 'principal_motivo', 'indice_bcb', 'taxa_procedencia', 'total_clientes_m']], 
+        df_matrix[['bank', 'indice_bcb', 'taxa_procedencia', 'total_clientes_m']], 
         column_config={
             "bank": "Instituição",
-            "principal_motivo": st.column_config.TextColumn("Principal Motivo (BCB)"),
-            "indice_bcb": st.column_config.NumberColumn("Índice BCB", format="%.2f"),
-            "taxa_procedencia": st.column_config.NumberColumn("Taxa Procedência", format="%.2f%%"),
-            "total_clientes_m": st.column_config.NumberColumn("Total Clientes", format="%.2fM")
+            "indice_bcb": st.column_config.NumberColumn("Índice BCB", format="%.2f", help="Índice oficial de reclamações."),
+            "taxa_procedencia": st.column_config.NumberColumn("Taxa Procedência", format="%.2f%%", help="Reclamações procedentes/respondidas."),
+            "total_clientes_m": st.column_config.NumberColumn("Total Clientes", format="%.2fM", help="Clientes em milhões.")
         },
         width='stretch', hide_index=True
     )
 
-    # 9. EXPLORADOR DE NOTÍCIAS (Busca de Notícias - ESTÁ AQUI!)
+    # 9. EXPLORADOR DE NOTÍCIAS
     st.divider()
     st.subheader("🔍 Explorador de Notícias")
     news_path = "data/silver/stg_noticias.parquet"
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
-        search = st.text_input("Filtrar notícias por termo (ex: Fraude, Lucro, Pix):")
+        search = st.text_input("Filtrar notícias por termo:")
         if search:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
         st.dataframe(df_news, width='stretch', hide_index=True)
-
 else:
-    st.error("❌ Dados não encontrados na camada Gold.")
+    st.error("❌ Dados não encontrados.")
 
-# 10. RODAPÉ DA SIDEBAR (O selo FinVoC - ESTÁ AQUI!)
+# 10. RODAPÉ SIDEBAR (Selo Original)
 st.sidebar.markdown("---")
 st.sidebar.caption("🛡️ **FinVoC 2.0**")
 st.sidebar.caption("Sistema de Monitoramento de Reputação")
