@@ -30,7 +30,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🥉 Etapa 1: Ingestão Bronze (Fontes)
+      - name: "🥉 Etapa 1: Ingestão Bronze (Fontes)"
         run: |
           echo "::group::Coleta Ranking BCB"
           python scripts/bcb_ingestion.py
@@ -48,15 +48,15 @@ jobs:
           python scripts/subject_ingestion.py
           echo "::endgroup::"
 
-      - name: 🥈 Etapa 2: Transformação Prata (Limpeza)
+      - name: "🥈 Etapa 2: Transformação Prata (Limpeza)"
         run: |
           python scripts/silver_transformation.py
 
-      - name: 🥇 Etapa 3: Análise Ouro (Negócio)
+      - name: "🥇 Etapa 3: Análise Ouro (Negócio)"
         run: |
           python scripts/gold_analysis.py
 
-      - name: 📦 Etapa 4: Atualizar Repositório (Commit e Push)
+      - name: "📦 Etapa 4: Atualizar Repositório (Commit e Push)"
         run: |
           git config --global user.name 'Alan (FinVoC Bot)'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
