@@ -27,7 +27,9 @@ def executar_gold():
     subject_files = glob.glob("data/bronze/bcb_assuntos_*.parquet")
     p_subjects = subject_files[-1] if subject_files else None
     
-    if not os.path.exists(p_rank) or not os.path.exists(p_news): return
+    if not os.path.exists(p_rank) or not os.path.exists(p_news):
+        print("⚠️ Arquivos necessários não encontrados.")
+        return
 
     df_rank = pd.read_parquet(p_rank)
     df_news = pd.read_parquet(p_news)
@@ -54,17 +56,14 @@ def executar_gold():
         
         if not m_rank.empty:
             # --- BUSCA DO MOTIVO REAL ---
-            motivo_top = "Não informado"
+            motivo_top = "Não informado no período"
             if not df_subjects.empty:
-                # Colunas padrão da API BCB: 'InstituicaoFinanceira', 'Assunto', 'QuantidadeReclamacoes'
                 c_sub_inst = next((c for c in df_subjects.columns if 'instituicao' in c.lower()), None)
                 c_assunto = next((c for c in df_subjects.columns if 'assunto' in c.lower()), None)
                 
                 if c_sub_inst and c_assunto:
-                    # Filtra assuntos do banco específico
                     m_subs = df_subjects[df_subjects[c_sub_inst].str.contains(termo_busca, case=False, na=False)]
                     if not m_subs.empty:
-                        # Pega o primeiro da lista (o BCB já ordena por frequência na API)
                         motivo_top = m_subs[c_assunto].iloc[0]
 
             filtro_news = df_news[df_news['bank_clean'].str.contains(key, na=False)]
@@ -78,11 +77,12 @@ def executar_gold():
                 'total_clientes': limpar_valor_bcb(m_rank[c_cli].values[0]),
                 'recl_procedentes': val_proc,
                 'total_respondidas': val_resp,
-                'principal_motivo': motivo_top, # Inserindo o dado real aqui
+                'principal_motivo': motivo_top,
                 'periodo': f"{df_rank['trimestre'].iloc[0]}T/{df_rank['ano'].iloc[0]}"
             })
 
     pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False, decimal='.')
+    print("✅ Camada Ouro gerada com motivos reais.")
 
 if __name__ == "__main__":
     executar_gold()

@@ -35,6 +35,7 @@ jobs:
           python scripts/bcb_ingestion.py
           python scripts/news_ingestion.py
           python scripts/consumidor_ingestion.py
+          python scripts/subject_ingestion.py
 
       - name: 🥈 Transformação Prata (Limpeza)
         run: python scripts/silver_transformation.py
@@ -53,6 +54,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "Nada novo para salvar."
           else
-            git commit -m "data: daily medallion update [skip ci]"
+            git commit -m "data: medallion update with real complaint subjects [skip ci]"
             git push origin main
           fi
