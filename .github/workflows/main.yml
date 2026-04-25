@@ -3,7 +3,7 @@ name: FinVoC Daily Update
 on:
   schedule:
     - cron: '0 0 * * *'  # Agendamento: Todo dia à meia-noite (UTC)
-  workflow_dispatch:      # Permite rodar manualmente pelo site
+  workflow_dispatch:      # Permite rodar manualmente
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -37,8 +37,6 @@ jobs:
           python scripts/consumidor_ingestion.py
 
       - name: 🥈 Transformação Prata (Limpeza)
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # 🔑 Injeta a chave aqui
         run: python scripts/silver_transformation.py
 
       - name: 🥇 Análise Ouro (Negócio)

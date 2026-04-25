@@ -1,10 +1,7 @@
-streamlit
 pandas
-plotly
-requests
 pyarrow
-feedparser
-beautifulsoup4
-openpyxl
-google-genai
 fastparquet
+requests
+streamlit
+python-dotenv
+plotly
