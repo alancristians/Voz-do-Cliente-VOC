@@ -1,36 +1,41 @@
-# 🗣️ FinVoC: Voz do Cliente & Mercado
+# 🗣️ FinVoC: Voz do Cliente & Reputação Bancária
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge.svg)](https://voz-do-cliente-voc-2026.streamlit.app/)
 
-O **FinVoC** é uma plataforma de inteligência de dados que cruza a **exposição midiática** de grandes bancos brasileiros com os indicadores oficiais de satisfação do Banco Central do Brasil (BCB).
+O **FinVoC** (Financial Voice of Customer) é uma plataforma de inteligência de dados de alta performance que correlaciona a **exposição mediática** dos principais players do setor financeiro brasileiro com os indicadores oficiais de reclamações do Banco Central do Brasil (BCB).
 
-O projeto automatiza a coleta, o tratamento e a visualização de dados, permitindo uma análise 360º entre o que a mídia reporta e o que o regulador registra em tempo real.
+O projeto evoluiu em **2026** para um modelo de processamento determinístico, eliminando gargalos de APIs externas e focando na profundidade dos dados estruturados, incluindo agora o detalhamento de **assuntos e irregularidades**.
 
-## 🏗️ Arquitetura de Dados
-O pipeline foi desenhado seguindo as melhores práticas de Engenharia de Dados (Arquitetura Medalhão):
-* **Bronze (Raw):** Ingestão de dados brutos via Google News RSS e rankings do BCB.
-* **Silver (Clean):** Limpeza, tipagem e reconciliação de nomes de instituições via *Fuzzy Matching*.
-* **Gold (Business):** Tabelas fato consolidadas para consumo do dashboard, garantindo performance e clareza.
+## 🏗️ Arquitetura Medalhão (Data Pipeline)
+O pipeline foi redesenhado para garantir **100% de disponibilidade** e latência zero:
+* **Bronze (Raw):** Ingestão automatizada de RSS feeds (News) e datasets RDR do BCB (Ranking Geral e Ranking de Assuntos por Objeto).
+* **Silver (Clean):** Normalização de esquemas, tratamento de caracteres especiais (UTF-8/Latin-1) e padronização de instituições financeiras.
+* **Gold (Business):** Consolidação de métricas cruzadas, gerando uma visão 360º que integra volume de notícias, market share e eficiência de resolução.
 
-## 🛠️ Tecnologias Utilizadas
+## 🛠️ Tecnologias e Padrões
 * **Linguagem:** Python 3.12
-* **Processamento:** Pandas
-* **Visualização:** Streamlit e Plotly
-* **CI/CD:** GitHub Actions com agendamento diário (Cron: `0 0 * * *`)
+* **Engine de Dados:** Pandas & PyArrow (Processamento via Parquet para máxima performance).
+* **Visualização:** Streamlit e Plotly (Dashboard interativo com identidade visual customizada).
+* **CI/CD:** GitHub Actions com execução programada e persistência de dados no repositório.
 
-## 📊 Como Interpretar os Indicadores
-O dashboard utiliza o **Índice de Reclamações do BCB**:
-* **Cálculo**: (Reclamações Procedentes / Total de Clientes) * 1.000.000.
-* **Exemplo**: O índice de **45.13** do Itaú indica aprox. 45 reclamações para cada 1 milhão de clientes.
-* **Regra**: Quanto menor o índice, melhor a eficiência operacional e satisfação do cliente.
+## 📊 Metodologia e Indicadores
+O monitor utiliza métricas oficiais para classificar as instituições:
+
+1. **Índice de Reclamações (BCB):**
+   $$\text{Índice} = \left( \frac{\text{Reclamações Procedentes}}{\text{Total de Clientes}} \right) \times 1.000.000$$
+
+2. **Taxa de Procedência (Eficácia):**
+   $$\text{Taxa \%} = \left( \frac{\text{Reclamações Procedentes}}{\text{Total Respondidas}} \right) \times 100$$
+   *Indica a capacidade do banco em resolver conflitos sem a necessidade de intervenção do regulador.*
+
+3. **Top Assuntos (VOC Qualitativo):** Identificação automática do principal motivo de insatisfação (ex: Pix, Cartão de Crédito, Atendimento) por instituição.
 
 ---
 
-## 👨‍💻 Contato e Autor
+## 👨‍💻 Autor
 **Alan Cristian Oliveira Freire da Silva**
-* 📧 **E-mail:** [alancristiansg@gmail.com](mailto:alancristiansg@gmail.com)
-* 🔗 **LinkedIn:** [alancristians](https://www.linkedin.com/in/alancristians/)
-* 🎓 Pós-graduando em Engenharia de Dados e Big Data - Poli-USP
+* 🎓 Pós-graduando em Engenharia de Dados e Big Data - **PECE Poli-USP**
+* 🔗 [LinkedIn](https://www.linkedin.com/in/alancristians/) | 📧 [E-mail](mailto:alancristiansg@gmail.com)
 
 ---
-🚀 *Curiosidade: Meu nome está em Marte, gravado no rover Perseverance da NASA: [Ver Certificado](https://mars.nasa.gov/layout/embed/send-your-name/mars2020/certificate/?cn=54438721578)*
+🚀 *Factum: Meu nome está em Marte no rover Perseverance da NASA (2020).*
