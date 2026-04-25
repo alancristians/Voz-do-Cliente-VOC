@@ -5,7 +5,7 @@
 ---
 
 ## 🌐 Acesse o Dashboard
-👉 **[Clique aqui para visualizar o FinVoC 2.0 no Streamlit](https://seu-app.streamlit.app)** *(Substitua o link acima pela sua URL oficial)*
+👉 **[Clique aqui para visualizar o FinVoC 2.0 no Streamlit](https://voz-do-cliente-voc-2026.streamlit.app/)**
 
 ---
 
