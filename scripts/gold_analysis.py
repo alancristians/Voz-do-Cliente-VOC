@@ -8,11 +8,9 @@ def normalizar_chave(texto):
     return "".join([c for c in nfkd if not unicodedata.combining(c)]).lower().strip()
 
 def limpar_valor_bcb(v):
-    """Garante a conversão de strings brasileiras para floats puros."""
     if pd.isna(v) or v == "" or v == " ": return 0.0
     try:
         v_str = str(v).strip()
-        # Remove separador de milhar (ponto) e troca decimal (vírgula) por ponto
         if "," in v_str:
             v_str = v_str.replace('.', '').replace(',', '.')
         return float(v_str)
@@ -32,15 +30,18 @@ def executar_gold():
 
     bancos_alvo = {
         "itau": "Itaú", "bradesco": "Bradesco", "santander": "Santander",
-        "banco do brasil": "Banco do Brasil", "nubank": "Nubank", "caixa": "Caixa",
-        "c6": "C6", "btg": "BTG Pactual", "picpay": "PicPay", "inter": "Inter"
+        "nubank": "Nubank", "caixa": "Caixa", "c6": "C6", 
+        "btg": "BTG Pactual", "picpay": "PicPay", "inter": "Inter"
     }
 
     gold_data = []
+    # Mapeamento dinâmico das colunas reais do arquivo de 2026
     c_inst = next(c for c in df_rank.columns if 'instituicao' in c.lower())
     c_idx = next(c for c in df_rank.columns if 'indice' in c.lower())
     c_cli = next(c for c in df_rank.columns if 'clientes' in c.lower())
     c_proc = next(c for c in df_rank.columns if 'procedentes' in c.lower())
+    # LOCALIZAÇÃO DA COLUNA REAL DE RESPONDIDAS
+    c_resp = next((c for c in df_rank.columns if 'respondidas' in c.lower()), None)
     
     for key, nome_exibicao in bancos_alvo.items():
         termo_busca = "nu " if key == "nubank" else key
@@ -49,17 +50,20 @@ def executar_gold():
         if not m_rank.empty:
             filtro_news = df_news[df_news['bank_clean'].str.contains(key, na=False)]
             
+            # Se a coluna de respondidas existir, usa o dado real. Se não, fallback 1.3x.
+            val_proc = limpar_valor_bcb(m_rank[c_proc].values[0])
+            val_resp = limpar_valor_bcb(m_rank[c_resp].values[0]) if c_resp else (val_proc * 1.3)
+
             gold_data.append({
                 'bank': nome_exibicao,
                 'qtd_noticias_recentes': len(filtro_news),
                 'indice_bcb': limpar_valor_bcb(m_rank[c_idx].values[0]),
                 'total_clientes': limpar_valor_bcb(m_rank[c_cli].values[0]),
-                'recl_procedentes': limpar_valor_bcb(m_rank[c_proc].values[0]),
-                'total_respondidas': limpar_valor_bcb(m_rank[c_proc].values[0]) * 1.3,
+                'recl_procedentes': val_proc,
+                'total_respondidas': val_resp,
                 'periodo': f"{df_rank['trimestre'].iloc[0]}T/{df_rank['ano'].iloc[0]}"
             })
 
-    # FORÇAMOS O DECIMAL COMO PONTO NO SALVAMENTO
     pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False, decimal='.')
 
 if __name__ == "__main__":
