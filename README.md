@@ -1,41 +1,32 @@
-# 🗣️ FinVoC: Voz do Cliente & Reputação Bancária
+# 🛡️ FinVoC 2.0 - Monitor de Reputação Bancária
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge.svg)](https://voz-do-cliente-voc-2026.streamlit.app/)
+**FinVoC (Financial Voice of Customer)** é um ecossistema de Engenharia de Dados desenvolvido para monitorar a reputação das principais instituições financeiras no Brasil. O projeto utiliza uma **Arquitetura Medalhão (Bronze, Silver e Gold)** para processar dados oficiais do Banco Central e menções na mídia em tempo real.
 
-O **FinVoC** (Financial Voice of Customer) é uma plataforma de inteligência de dados de alta performance que correlaciona a **exposição mediática** dos principais players do setor financeiro brasileiro com os indicadores oficiais de reclamações do Banco Central do Brasil (BCB).
+## 🚀 Funcionalidades Atuais
+* **KPIs de Desempenho:** Visão consolidada de bancos analisados, exposição na mídia, média de índice de reclamações e total de contas ativas.
+* **Voz do Mercado:** Monitoramento dinâmico via Google News para capturar a exposição de cada marca.
+* **Market Share (BCB):** Comparativo de volume de clientes entre os grandes bancos e os principais players digitais (C6, Nubank, Inter, etc).
+* **Matriz de Diagnóstico:** Tabela técnica para análise de eficiência (Taxa de Procedência) e Índice BCB por instituição.
+* **Explorador de Notícias:** Ferramenta de busca integrada para análise qualitativa de menções recentes.
 
-O projeto evoluiu em **2026** para um modelo de processamento determinístico, eliminando gargalos de APIs externas e focando na profundidade dos dados estruturados, incluindo agora o detalhamento de **assuntos e irregularidades**.
+## 🏗️ Arquitetura de Dados (Medallion)
+O pipeline é automatizado via **GitHub Actions** e segue o fluxo:
 
-## 🏗️ Arquitetura Medalhão (Data Pipeline)
-O pipeline foi redesenhado para garantir **100% de disponibilidade** e latência zero:
-* **Bronze (Raw):** Ingestão automatizada de RSS feeds (News) e datasets RDR do BCB (Ranking Geral e Ranking de Assuntos por Objeto).
-* **Silver (Clean):** Normalização de esquemas, tratamento de caracteres especiais (UTF-8/Latin-1) e padronização de instituições financeiras.
-* **Gold (Business):** Consolidação de métricas cruzadas, gerando uma visão 360º que integra volume de notícias, market share e eficiência de resolução.
+1.  **🥉 Camada Bronze:** Coleta de dados brutos do Ranking de Reclamações (BCB) e Google News (Parquet).
+2.  **🥈 Camada Silver:** Limpeza, padronização de nomes de instituições e tratamento de tipagem de dados.
+3.  **🥇 Camada Gold:** Enriquecimento e cruzamento de bases para geração do arquivo `fact_finvoc_summary.csv` que alimenta o dashboard.
 
-## 🛠️ Tecnologias e Padrões
-* **Linguagem:** Python 3.12
-* **Engine de Dados:** Pandas & PyArrow (Processamento via Parquet para máxima performance).
-* **Visualização:** Streamlit e Plotly (Dashboard interativo com identidade visual customizada).
-* **CI/CD:** GitHub Actions com execução programada e persistência de dados no repositório.
+## 🛠️ Stack Tecnológica
+* **Linguagem:** Python 3.11
+* **Dashboard:** Streamlit
+* **Processamento:** Pandas
+* **Visualização:** Plotly Express
+* **Automação:** GitHub Actions (Workflow CI/CD)
 
-## 📊 Metodologia e Indicadores
-O monitor utiliza métricas oficiais para classificar as instituições:
-
-1. **Índice de Reclamações (BCB):**
-   $$\text{Índice} = \left( \frac{\text{Reclamações Procedentes}}{\text{Total de Clientes}} \right) \times 1.000.000$$
-
-2. **Taxa de Procedência (Eficácia):**
-   $$\text{Taxa \%} = \left( \frac{\text{Reclamações Procedentes}}{\text{Total Respondidas}} \right) \times 100$$
-   *Indica a capacidade do banco em resolver conflitos sem a necessidade de intervenção do regulador.*
-
-3. **Top Assuntos (VOC Qualitativo):** Identificação automática do principal motivo de insatisfação (ex: Pix, Cartão de Crédito, Atendimento) por instituição.
+## 📊 Status do Projeto (Abril/2026)
+* **Dados de Referência:** 1º Trimestre de 2026.
+* **Instituições Monitoradas:** Itaú, Bradesco, Santander, Banco do Brasil, Caixa, Nubank, C6 Bank, BTG Pactual, Inter e PicPay.
 
 ---
-
-## 👨‍💻 Autor
-**Alan Cristian Oliveira Freire da Silva**
-* 🎓 Pós-graduando em Engenharia de Dados e Big Data - **PECE Poli-USP**
-* 🔗 [LinkedIn](https://www.linkedin.com/in/alancristians/) | 📧 [E-mail](mailto:alancristiansg@gmail.com)
-
----
-🚀 *Factum: Meu nome está em Marte no rover Perseverance da NASA (2020).*
+**Desenvolvido por:** Alan Cristian Oliveira Freire da Silva  
+**Projeto Pessoal de Engenharia de Dados** 
