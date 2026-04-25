@@ -49,8 +49,21 @@ def run_gold_analysis():
     c_tri = next((v for k, v in cols_orig.items() if 'trimestre' in k), "1º")
     label_periodo = f"{df_bcb[c_tri].iloc[0]} Trimestre / {df_bcb[c_ano].iloc[0]}"
 
-    synonyms = {"itau": "itau", "bradesco": "bradesco", "santander": "santander",
-                "banco do brasil": "banco do brasil", "nubank": "nu ", "caixa": "caixa economica"}
+    synonyms = {
+        "itau": "itau", 
+        "bradesco": "bradesco", 
+        "santander": "santander",
+        "banco do brasil": "banco do brasil", 
+        "nubank": "nu ", 
+        "caixa": "caixa economica",
+        "c6": "c6",
+        "btg": "btg pactual",
+        "picpay": "picpay",
+        "inter": "inter",
+        "neon": "neon",
+        "mercado pago": "mercado pago",
+        "pagseguro": "pagseguro"
+    }
 
     gold_data = []
     for _, row_news in news_summary.iterrows():
