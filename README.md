@@ -2,6 +2,13 @@
 
 **FinVoC (Financial Voice of Customer)** é um ecossistema de Engenharia de Dados desenvolvido para monitorar a reputação das principais instituições financeiras no Brasil. O projeto utiliza uma **Arquitetura Medalhão (Bronze, Silver e Gold)** para processar dados oficiais do Banco Central e menções na mídia em tempo real.
 
+---
+
+## 🌐 Acesse o Dashboard
+👉 **[Clique aqui para visualizar o FinVoC 2.0 no Streamlit](https://seu-app.streamlit.app)** *(Substitua o link acima pela sua URL oficial)*
+
+---
+
 ## 🚀 Funcionalidades Atuais
 * **KPIs de Desempenho:** Visão consolidada de bancos analisados, exposição na mídia, média de índice de reclamações e total de contas ativas.
 * **Voz do Mercado:** Monitoramento dinâmico via Google News para capturar a exposição de cada marca.
