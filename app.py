@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import os
 
-# 1. Configurações de Interface
+# 1. Configurações de Interface (Padrão Poli-USP)
 st.set_page_config(page_title="Voz do Cliente | Monitor de Reputação", layout="wide", page_icon="🛡️")
 
 st.markdown("""
@@ -15,23 +15,27 @@ st.markdown("""
 st.title("🗣️ Voz do Cliente | Monitor de Reputação Bancária")
 st.caption("Engenharia de Dados (BCB/Consumidor.gov) | Arquitetura Medalhão.")
 
-# 2. Identidade Visual (C6: Preto Carbon | BTG: Azul Marinho Oficial)
+# 2. Identidade Visual Única (C6 Carbon e BTG Azul Marinho)
 BANK_COLORS = {
-    "Itau": "#EC7000", "Itaú": "#EC7000", "Bradesco": "#C8102E", 
-    "Santander": "#FF0000", "Nubank": "#820AD1", "Banco do Brasil": "#F8D117", 
+    "Itaú": "#EC7000", 
+    "Bradesco": "#C8102E", 
+    "Santander": "#FF0000", 
+    "Nubank": "#820AD1", 
+    "Banco do Brasil": "#F8D117", 
     "Caixa": "#005CA9", 
-    "C6": "#111111",      # Cinza quase preto do C6
-    "Btg": "#001C3D",     # Azul Marinho oficial do BTG Pactual
-    "Picpay": "#21C25E", "Inter": "#FF7A00"
+    "C6": "#111111",          # Preto Carbon
+    "BTG Pactual": "#001C3D", # Azul Marinho
+    "PicPay": "#21C25E", 
+    "Inter": "#FF7A00"
 }
 
-# 3. Tratamento de Dados com Resiliência Numérica
+# 3. Carregamento de Dados com Resiliência
 @st.cache_data
 def carregar_dados():
     path = "data/gold/fact_finvoc_summary.csv"
     if os.path.exists(path):
         df = pd.read_csv(path)
-        # Força conversão de todas as métricas para evitar 'zeros' nos gráficos
+        # Conversão numérica crítica para as barras de notícias aparecerem
         cols = ['indice_bcb', 'total_clientes', 'recl_procedentes', 'total_respondidas', 'qtd_noticias_recentes']
         for col in cols:
             if col in df.columns:
@@ -44,35 +48,33 @@ def carregar_dados():
 df = carregar_dados()
 
 if df is not None:
-    periodo_ref = df['periodo'].iloc[0] if 'periodo' in df.columns else "1º Tri / 2026"
-    st.info(f"📊 **Dados de Referência:** {periodo_ref}")
+    st.info(f"📊 **Dados de Referência:** {df['periodo'].iloc[0]}")
     
+    # Barra Lateral
     bancos = st.sidebar.multiselect("Filtrar Instituições:", options=df['bank'].unique(), default=df['bank'].unique())
     df_p = df[df['bank'].isin(bancos)]
 
-    # 4. KPIs Principais
+    # 4. Bloco de KPIs (4 Colunas)
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Bancos Analisados", len(df_p))
     k2.metric("Exposição (Notícias)", int(df_p['qtd_noticias_recentes'].sum()))
     k3.metric("Média Eficiência", f"{df_p['taxa_procedencia'].mean():.2f}%")
-    # Ajuste: Rótulo mais realista para o volume de contas
     k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", 
-              help="Soma de relacionamentos bancários ativos. O valor supera a população pois cada cidadão possui múltiplas contas.")
+              help="Soma de relacionamentos bancários ativos. Supera a população pois cada cidadão possui múltiplas contas.")
 
     st.divider()
 
-    # 5. Performance: Notícias vs Reclamações
+    # 5. Primeiro Bloco de Gráficos: Notícias vs Reclamações
     c1, c2 = st.columns(2)
     with c1:
-        # Gráfico de Volume de Notícias
-        fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes', ascending=False), 
-                          x='bank', y='qtd_noticias_recentes', color='bank',
-                          color_discrete_map=BANK_COLORS, template="plotly_dark", 
-                          title="Volume de Notícias na Mídia")
+        # Gráfico Horizontal: Resolve nomes longos e visibilidade das barras
+        fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
+                          y='bank', x='qtd_noticias_recentes', orientation='h',
+                          color='bank', color_discrete_map=BANK_COLORS, 
+                          template="plotly_dark", title="Volume de Notícias na Mídia")
         st.plotly_chart(fig_news, width='stretch')
         
     with c2:
-        # Gráfico de Reclamações
         fig_bcb = px.line(df_p.sort_values('indice_bcb', ascending=False), 
                           x='bank', y='indice_bcb', markers=True, 
                           template="plotly_dark", title="Índice de Reclamações (BCB)")
@@ -80,10 +82,9 @@ if df is not None:
 
     st.divider()
 
-    # 6. Escala e Eficácia
+    # 6. Segundo Bloco de Gráficos: Escala e Eficácia
     c3, c4 = st.columns(2)
     with c3:
-        # Market Share (Contas)
         fig_pie = px.pie(df_p, values='total_clientes', names='bank', hole=.4, 
                          color='bank', color_discrete_map=BANK_COLORS, 
                          template="plotly_dark", title="Market Share (Contas Ativas)")
@@ -96,27 +97,25 @@ if df is not None:
                           title="Taxa de Procedência (%)")
         st.plotly_chart(fig_proc, width='stretch')
 
-    # 7. Matriz de Diagnóstico (Correção do Erro de Width)
+    # 7. Matriz de Diagnóstico (Tabela)
     st.subheader("⚠️ Matriz de Diagnóstico VOC")
-    # Corrigido width=None para width='stretch'
     st.dataframe(df_p[['bank', 'principal_motivo', 'indice_bcb', 'taxa_procedencia', 'total_clientes']], 
                  width='stretch', hide_index=True)
 
-    # 8. Explorador de Notícias
+    # 8. Explorador de Notícias (Bloco de Busca)
     st.divider()
     st.subheader("🔍 Explorador de Notícias")
     news_path = "data/silver/stg_noticias.parquet"
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
-        search = st.text_input("Filtrar por termo (ex: Pix, Lucro, Fraude):")
+        search = st.text_input("Filtrar por termo (ex: Pix, Fraude, Lucro):")
         if search:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
         st.dataframe(df_news, column_config={"link": st.column_config.LinkColumn("Fonte")}, 
                      width='stretch', hide_index=True)
-
 else:
-    st.error("❌ Dados não encontrados.")
+    st.error("❌ Dados da camada Gold não encontrados.")
 
 st.sidebar.markdown("---")
 st.sidebar.caption("FinVoC 2.0 | Sistema de Monitoramento")
