@@ -235,16 +235,24 @@ if df is not None:
     st.divider()
     st.subheader(f"🔍 Explorador de Notícias")
     news_path = "data/silver/stg_noticias.parquet"
+    
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
+        
+        # Ordenação para garantir que as mais recentes fiquem no topo
+        df_news = df_news.sort_values('published', ascending=False)
+        
         search = st.text_input("Busca textual nas manchetes:", placeholder="Ex: C6 Bank, Reclamação, App...")
         
         if search:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
         
+        # Limita a exibição para as 100 primeiras (ajuda na usabilidade do scroll)
+        df_display = df_news.head(100)
+        
         st.dataframe(
-            df_news,
+            df_display,
             column_config={
                 "link": st.column_config.LinkColumn(
                     "link", 
@@ -254,7 +262,12 @@ if df is not None:
                 "title": "title",
                 "published": "published"
             },
+            use_container_width=True, # Faz a tabela ocupar a largura total
+            hide_index=True           # ESTA LINHA OCULTA O INDEX (COLUNA NUMÉRICA)
         )
+        
+        if not df_display.empty:
+            st.caption(f"Exibindo as {len(df_display)} notícias mais relevantes/recentes.")
     else:
         st.error("❌ Erro na carga dos dados das camadas Gold/Silver.")
 
