@@ -5,27 +5,6 @@ import os
 import pytz
 from datetime import datetime
 
-# Injeta CSS para aumentar a largura da barra de rolagem (scrollbar)
-st.markdown("""
-    <style>
-    /* Estiliza a barra de rolagem em navegadores WebKit (Chrome, Safari, Edge) */
-    ::-webkit-scrollbar {
-        width: 12px; /* Aumenta a largura da barra vertical */
-        height: 12px; /* Aumenta a largura da barra horizontal */
-    }
-    ::-webkit-scrollbar-track {
-        background: #1e1e1e; /* Cor do fundo da barra (combinando com o dark mode) */
-    }
-    ::-webkit-scrollbar-thumb {
-        background: #888; /* Cor da barrinha que a gente arrasta */
-        border-radius: 6px; /* Deixa as bordas arredondadas */
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: #555; /* Cor quando passa o mouse */
-    }
-    </style>
-""", unsafe_allow_html=True)
-
 # 1. CONFIGURAÇÕES DE INTERFACE
 # Definição do layout e metadados da página
 st.set_page_config(page_title="Voz do Cliente | Monitor de Reputação", layout="wide", page_icon="🛡️")
@@ -277,7 +256,7 @@ if df is not None:
             },
             width='stretch', 
             hide_index=True,
-            height=400 # <Aumenta a área visual e o scroll)
+            height=500 # <Aumenta a área visual e o scroll)
         )
     else:
         st.error("❌ Erro na carga dos dados das camadas Gold/Silver.")
