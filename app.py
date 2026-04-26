@@ -118,38 +118,41 @@ if df is not None:
     c1, c2 = st.columns(2)
     with c1:
         news_path = "data/silver/stg_noticias.parquet"
+        
         if os.path.exists(news_path):
-            # 1. Carrega os dados detalhados da Silver
+            # 1. Carrega os dados da Silver
             df_raw_news = pd.read_parquet(news_path)
             
-            # 2. Tratamento de data e filtro de 30 dias
+            # 2. Filtro de 30 dias
             df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce')
-            # Filtra apenas o que for dos últimos 30 dias em relação a hoje
-            limite_30d = pd.Timestamp.now(tz='UTC') - pd.Timedelta(days=30)
-            df_filtered = df_raw_news[df_raw_news['published_dt'] >= limite_30d.replace(tzinfo=None)]
+            limite_30d = pd.Timestamp.now().replace(hour=0, minute=0, second=0, microsecond=0) - pd.Timedelta(days=30)
+            df_filtered = df_raw_news[df_raw_news['published_dt'].dt.tz_localize(None) >= limite_30d]
             
-            # 3. Faz a nova contagem por banco
+            # 3. Contagem por banco
             df_counts = df_filtered.groupby('bank').size().reset_index(name='vol_30d')
             
-            # 4. Ordenação para o gráfico
-            df_counts = df_counts.sort_values('vol_30d', ascending=True)
+            # 4. Novo Gráfico: Treemap
+            fig_news = px.treemap(
+                df_counts, 
+                path=[px.Constant("Share of Voice"), 'bank'], 
+                values='vol_30d',
+                color='bank', 
+                color_discrete_map=BANK_COLORS,
+                template="plotly_dark",
+                title="Share of Voice (Últimos 30 dias)"
+            )
             
-            # 5. Gera o gráfico com o volume real dos últimos 30 dias
-            fig_news = px.bar(df_counts, 
-                              y='bank', x='vol_30d', 
-                              orientation='h',
-                              color='bank', color_discrete_map=BANK_COLORS, 
-                              text_auto=True,
-                              template="plotly_dark", 
-                              title="Volume de Notícias (Últimos 30 dias)")
+            # Força a exibição da legenda que você solicitou
+            fig_news.update_layout(showlegend=True)
+            fig_news.update_traces(textinfo="label+value")
             
             st.plotly_chart(fig_news, use_container_width=True)
         else:
-            # Fallback caso o parquet não exista (usa o dado da Gold)
+            # Caso o arquivo não exista, mantém o gráfico antigo como fallback
             fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
                               y='bank', x='qtd_noticias_recentes', orientation='h',
                               color='bank', color_discrete_map=BANK_COLORS, 
-                              template="plotly_dark", title="Volume de Notícias (Total)")
+                              template="plotly_dark", title="Volume de Notícias na Mídia")
             st.plotly_chart(fig_news, use_container_width=True)
         
     with c2:
