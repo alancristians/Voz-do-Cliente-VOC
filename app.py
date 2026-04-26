@@ -248,8 +248,8 @@ if df is not None:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
         
-        # Limita a exibição para as 100 primeiras (ajuda na usabilidade do scroll)
-        df_display = df_news.head(100)
+        # Limita a exibição para as 200 primeiras (ajuda na usabilidade do scroll)
+        df_display = df_news.head(200)
         
         st.dataframe(
             df_display,
