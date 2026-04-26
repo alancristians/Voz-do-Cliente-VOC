@@ -139,13 +139,13 @@ if df is not None:
             # 2. Contagem por banco
             df_counts = df_filtered.groupby('bank').size().reset_index(name='vol_30d')
             
-            # 3. Gráfico Treemap com textos em Português
+            # 3. Gráfico Treemap - Ajustado para remover o "Volume Total"
             fig_news = px.treemap(
                 df_counts, 
-                path=[px.Constant("Volume Total"), 'bank'], # Texto em PT-BR
+                path=['bank'], # Removido o nível Constant para eliminar o fundo verde
                 values='vol_30d',
                 color='bank', 
-                color_discrete_map=BANK_COLORS, # Garante as cores do seu dicionário
+                color_discrete_map=BANK_COLORS, 
                 template="plotly_dark",
                 title="Volume de Notícias na Mídia (Últimos 30 dias)"
             )
@@ -155,19 +155,16 @@ if df is not None:
                 showlegend=True,
                 legend_title_text="Instituição",
                 margin=dict(t=35, l=0, r=0, b=0),
-                paper_bgcolor='rgba(0,0,0,0)', # Fundo transparente
+                paper_bgcolor='rgba(0,0,0,0)', 
                 plot_bgcolor='rgba(0,0,0,0)'
             )
             
             fig_news.update_traces(
                 textinfo="label+value",
                 hovertemplate='<b>%{label}</b><br>Notícias: %{value}',
-                
-                # AQUI ESTÁ O AJUSTE PARA MATAR O VERDE:
-                marker_colorscale='Greys', # Faz o nível pai ignorar o colorido
-                root=dict(color='#111111'), # Garante o fundo quase preto
+                # Define a borda fina e garante que não haja escala de cinza/verde
                 marker=dict(
-                    line=dict(width=1, color='#333333') # Borda cinza escura fina
+                    line=dict(width=1, color='#333333')
                 )
             )
             
