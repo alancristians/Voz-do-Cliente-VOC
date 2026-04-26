@@ -120,7 +120,7 @@ if df is not None:
         fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
                           y='bank', x='qtd_noticias_recentes', orientation='h',
                           color='bank', color_discrete_map=BANK_COLORS, 
-                          template="plotly_dark", title=f"Volume de Notícias na Mídia (até {data_atualizacao})")
+                          template="plotly_dark", title=f"Volume de Notícias na Mídia")
         st.plotly_chart(fig_news, use_container_width=True)
         
     with c2:
