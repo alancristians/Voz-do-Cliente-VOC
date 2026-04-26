@@ -42,7 +42,7 @@ def run_news_ingestion():
             response = requests.get(rss_url, headers=headers, timeout=20)
             feed = feedparser.parse(response.content)
             
-            for entry in feed.entries[:50]: # Limite de 10 notícias por banco (Bronze Layer)
+            for entry in feed.entries[:40]: # Limite de 40 notícias por banco (Bronze Layer)
                 all_news.append({
                     'bank': bank_label, # Chave de ligação com as outras camadas
                     'title': entry.title,
