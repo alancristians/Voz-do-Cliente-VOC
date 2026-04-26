@@ -147,7 +147,7 @@ if df is not None:
         st.plotly_chart(fig_proc, use_container_width=True)
 
     # 9. MATRIZ DE DIAGNÓSTICO (Tabela Fato)
-    st.subheader(f"⚠️ Matriz de Diagnóstico VOC (Consolidado: {data_atualizacao})")
+    st.subheader(f"⚠️ Matriz de Diagnóstico VOC")
     df_matrix = df_p.copy()
     df_matrix['total_clientes_m'] = df_matrix['total_clientes'] / 1e6
 
@@ -164,7 +164,7 @@ if df is not None:
 
     # 10. EXPLORADOR DE DADOS (Silver Layer)
     st.divider()
-    st.subheader(f"🔍 Explorador de Notícias (Capturadas até {data_atualizacao})")
+    st.subheader(f"🔍 Explorador de Notícias")
     news_path = "data/silver/stg_noticias.parquet"
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
