@@ -139,10 +139,10 @@ if df is not None:
             # 2. Contagem por banco
             df_counts = df_filtered.groupby('bank').size().reset_index(name='vol_30d')
             
-            # 3. Gráfico Treemap - Ajustado para remover o "Volume Total"
+            # 3. Gráfico Treemap
             fig_news = px.treemap(
                 df_counts, 
-                path=['bank'], # Removido o nível Constant para eliminar o fundo verde
+                path=['bank'],
                 values='vol_30d',
                 color='bank', 
                 color_discrete_map=BANK_COLORS, 
@@ -162,7 +162,8 @@ if df is not None:
             fig_news.update_traces(
                 textinfo="label+value",
                 hovertemplate='<b>%{label}</b><br>Notícias: %{value}',
-                # Define a borda fina e garante que não haja escala de cinza/verde
+                # PADRONIZAÇÃO DO TEXTO EM BRANCO
+                textfont=dict(color="white", size=14),
                 marker=dict(
                     line=dict(width=1, color='#333333')
                 )
@@ -170,7 +171,7 @@ if df is not None:
             
             st.plotly_chart(fig_news, use_container_width=True)
         else:
-            # Fallback (caso o arquivo falte)
+            # Fallback
             fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
                               y='bank', x='qtd_noticias_recentes', orientation='h',
                               color='bank', color_discrete_map=BANK_COLORS, 
