@@ -41,9 +41,18 @@ st.caption('“Só existe um chefe: o cliente. Ele pode demitir todos na empresa
 # 3. IDENTIDADE VISUAL E CORES INSTITUCIONAIS
 # Mapeamento de cores para consistência visual entre gráficos
 BANK_COLORS = {
-    "Itaú": "#EC7000", "Bradesco": "#C8102E", "Santander": "#FF0000", 
-    "Nubank": "#820AD1", "Banco do Brasil": "#F8D117", "Caixa": "#005CA9", 
-    "C6": "#353434", "BTG Pactual": "#001C3D", "PicPay": "#21C25E", "Inter": "#FF7A00"
+    "Itaú": "#EC7000", 
+    "Bradesco": "#C8102E", 
+    "Santander": "#FF0000", 
+    "Nubank": "#820AD1", 
+    "Banco do Brasil": "#F8D117", 
+    "Caixa": "#005CA9", 
+    "C6": "#353434", 
+    "BTG Pactual": "#001C3D", 
+    "PicPay": "#21C25E", 
+    "Inter": "#FF7A00",
+    "Mercado Pago": "#00AEEF",  
+    "Neon": "#00E5FF"           
 }
 
 @st.cache_data
@@ -120,35 +129,46 @@ if df is not None:
         news_path = "data/silver/stg_noticias.parquet"
         
         if os.path.exists(news_path):
-            # 1. Carrega os dados da Silver
             df_raw_news = pd.read_parquet(news_path)
             
-            # 2. Filtro de 30 dias
+            # 1. Filtro de 30 dias (Português e Lógica)
             df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce')
             limite_30d = pd.Timestamp.now().replace(hour=0, minute=0, second=0, microsecond=0) - pd.Timedelta(days=30)
             df_filtered = df_raw_news[df_raw_news['published_dt'].dt.tz_localize(None) >= limite_30d]
             
-            # 3. Contagem por banco
+            # 2. Contagem por banco
             df_counts = df_filtered.groupby('bank').size().reset_index(name='vol_30d')
             
-            # 4. Novo Gráfico: Treemap
+            # 3. Gráfico Treemap com textos em Português
             fig_news = px.treemap(
                 df_counts, 
-                path=[px.Constant("Share of Voice"), 'bank'], 
+                path=[px.Constant("Volume Total"), 'bank'], # Texto em PT-BR
                 values='vol_30d',
                 color='bank', 
-                color_discrete_map=BANK_COLORS,
+                color_discrete_map=BANK_COLORS, # Garante as cores do seu dicionário
                 template="plotly_dark",
-                title="Share of Voice (Últimos 30 dias)"
+                title="Volume de Notícias na Mídia (Últimos 30 dias)"
             )
             
-            # Força a exibição da legenda que você solicitou
-            fig_news.update_layout(showlegend=True)
-            fig_news.update_traces(textinfo="label+value")
+            # 4. Ajuste das legendas e rótulos
+            fig_news.update_layout(
+                showlegend=True,
+                legend_title_text="Instituição",
+                treemapcolorway=["#111"], # Define uma cor base escura se necessário
+                margin=dict(t=35, l=0, r=0, b=0),
+                paper_bgcolor='rgba(0,0,0,0)', # Fundo transparente
+                plot_bgcolor='rgba(0,0,0,0)'
+            )
+            
+            fig_news.update_traces(
+                textinfo="label+value",
+                hovertemplate='<b>%{label}</b><br>Notícias: %{value}',
+                marker=dict(line=dict(width=1, color='#444')), # Borda cinza escuro fina
+            )
             
             st.plotly_chart(fig_news, use_container_width=True)
         else:
-            # Caso o arquivo não exista, mantém o gráfico antigo como fallback
+            # Fallback (caso o arquivo falte)
             fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
                               y='bank', x='qtd_noticias_recentes', orientation='h',
                               color='bank', color_discrete_map=BANK_COLORS, 
