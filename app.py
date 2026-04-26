@@ -254,9 +254,6 @@ if df is not None:
                 "title": "title",
                 "published": "published"
             },
-            width='stretch', 
-            hide_index=True,
-            height=500 # <Aumenta a área visual e o scroll)
         )
     else:
         st.error("❌ Erro na carga dos dados das camadas Gold/Silver.")
