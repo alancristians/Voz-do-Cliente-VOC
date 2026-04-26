@@ -154,7 +154,6 @@ if df is not None:
             fig_news.update_layout(
                 showlegend=True,
                 legend_title_text="Instituição",
-                treemapcolorway=["#111"], # Define uma cor base escura se necessário
                 margin=dict(t=35, l=0, r=0, b=0),
                 paper_bgcolor='rgba(0,0,0,0)', # Fundo transparente
                 plot_bgcolor='rgba(0,0,0,0)'
@@ -163,7 +162,13 @@ if df is not None:
             fig_news.update_traces(
                 textinfo="label+value",
                 hovertemplate='<b>%{label}</b><br>Notícias: %{value}',
-                marker=dict(line=dict(width=1, color='#444')), # Borda cinza escuro fina
+                
+                # AQUI ESTÁ O AJUSTE PARA MATAR O VERDE:
+                marker_colorscale='Greys', # Faz o nível pai ignorar o colorido
+                root=dict(color='#111111'), # Garante o fundo quase preto
+                marker=dict(
+                    line=dict(width=1, color='#333333') # Borda cinza escura fina
+                )
             )
             
             st.plotly_chart(fig_news, use_container_width=True)
