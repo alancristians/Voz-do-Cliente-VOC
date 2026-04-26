@@ -131,7 +131,7 @@ if df is not None:
         if os.path.exists(news_path):
             df_raw_news = pd.read_parquet(news_path)
             
-            # FILTRO DE REATIVIDADE
+            # FILTRO DE REATIVIDADE (Inserido)
             df_raw_news = df_raw_news[df_raw_news['bank'].isin(selected_banks)]
             
             # 1. Filtro de 30 dias (Português e Lógica)
@@ -237,7 +237,7 @@ if df is not None:
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
 
-        # FILTRO DE REATIVIDADE
+        # FILTRO DE REATIVIDADE (Inserido)
         df_news = df_news[df_news['bank'].isin(selected_banks)]
         
         search = st.text_input("Busca textual nas manchetes:", placeholder="Ex: C6 Bank, Reclamação, App...")
@@ -260,6 +260,11 @@ if df is not None:
             use_container_width=True, 
             hide_index=True
         )
+        
+        # RESTAURADO: Legenda informativa
+        if not df_news.empty:
+            st.caption(f"Exibindo as {len(df_news)} notícias mais relevantes/recentes.")
+            
     else:
         st.error("❌ Erro na carga dos dados das camadas Gold/Silver.")
 
