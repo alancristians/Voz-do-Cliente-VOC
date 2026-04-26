@@ -172,7 +172,20 @@ if df is not None:
         if search:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
-        st.dataframe(df_news, width='stretch', hide_index=True)
+        st.dataframe(
+        df_news,
+        column_config={
+            "link": st.column_config.LinkColumn(
+                "link", # Título da coluna
+                help="Clique para abrir a notícia original",
+                validate=r"^https?://"
+            ),
+            "title": "title",
+            "published": "published"
+        },
+        width='stretch', 
+        hide_index=True
+    )
 else:
     st.error("❌ Erro na carga dos dados das camadas Gold/Silver.")
 
