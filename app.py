@@ -2,12 +2,15 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import os
+import pytz
 from datetime import datetime
 
-# 1. Configurações de Interface
+# 1. CONFIGURAÇÕES DE INTERFACE
+# Definição do layout e metadados da página
 st.set_page_config(page_title="Voz do Cliente | Monitor de Reputação", layout="wide", page_icon="🛡️")
 
-# 2. CSS para os KPIs e Rodapé Customizado
+# 2. ESTILIZAÇÃO CUSTOMIZADA (CSS)
+# Customização de métricas e rodapé para alinhamento com a identidade visual do projeto
 st.markdown("""
     <style>
     div[data-testid="stMetric"] {
@@ -35,7 +38,8 @@ st.markdown("""
 st.title("🗣️ Voz do Cliente | Monitor de Reputação Bancária")
 st.caption("Engenharia de Dados (BCB) | Arquitetura Medalhão 2026.")
 
-# 3. Identidade Visual Carbon C6 e Azul BTG
+# 3. IDENTIDADE VISUAL E CORES INSTITUCIONAIS
+# Mapeamento de cores para consistência visual entre gráficos
 BANK_COLORS = {
     "Itaú": "#EC7000", "Bradesco": "#C8102E", "Santander": "#FF0000", 
     "Nubank": "#820AD1", "Banco do Brasil": "#F8D117", "Caixa": "#005CA9", 
@@ -44,33 +48,45 @@ BANK_COLORS = {
 
 @st.cache_data
 def carregar_dados():
+    """
+    Realiza a leitura dos dados processados nas camadas Silver e Gold.
+    Aplica tratamento de tipos e conversão de fuso horário para a data de atualização.
+    """
     path = "data/gold/fact_finvoc_summary.csv"
     news_path = "data/silver/stg_noticias.parquet"
     
-    # Captura data de atualização do arquivo
+    # Captura data de atualização do sistema via metadados do arquivo (Ajuste de Timezone UTC -> SP)
     last_update = "---"
     if os.path.exists(news_path):
         ts = os.path.getmtime(news_path)
-        last_update = datetime.fromtimestamp(ts).strftime('%d/%m/%Y')
+        utc_dt = datetime.fromtimestamp(ts, tz=pytz.utc)
+        sp_tz = pytz.timezone('America/Sao_Paulo')
+        last_update = utc_dt.astimezone(sp_tz).strftime('%d/%m/%Y')
 
     if os.path.exists(path):
         df = pd.read_csv(path)
+        
+        # Data Cleaning: Padronização de tipos numéricos e tratamento de decimais
         cols = ['indice_bcb', 'total_clientes', 'recl_procedentes', 'total_respondidas', 'qtd_noticias_recentes']
         for col in cols:
             if df[col].dtype == 'object':
                 df[col] = df[col].str.replace(',', '.')
             df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+            
+        # Feature Engineering: Cálculo de taxa de eficiência de resolução
         df['taxa_procedencia'] = (df['recl_procedentes'] / df['total_respondidas'] * 100).fillna(0)
         return df, last_update
+    
     return None, last_update
 
+# Inicialização da carga de dados
 df, data_atualizacao = carregar_dados()
 
 if df is not None:
-    # Sinalização de Frequência e Atualização
+    # 4. DASHBOARD HEADER - Status do Pipeline
     st.info(f"📊 **Dados de Referência:** {df['periodo'].iloc[0]} | 🔄 **Atualização Diária:** Última carga em {data_atualizacao}")
     
-    # 4. SIDEBAR - Filtro e Rodapé
+    # 5. SIDEBAR - Governança de Filtros
     st.sidebar.header("⚙️ Configurações")
     with st.sidebar.expander("🏦 Filtrar Instituições", expanded=True):
         todos_bancos = df['bank'].unique().tolist()
@@ -89,33 +105,33 @@ if df is not None:
     
     df_p = df[df['bank'].isin(selected_banks)]
 
-    # 5. KPIs de Topo
+    # 6. CAMADA DE MÉTRICAS (KPIs)
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Bancos Analisados", len(df_p), help="Quantidade de bancos filtrados.")
-    k2.metric("Exposição (Notícias)", int(df_p['qtd_noticias_recentes'].sum()), help="Total de menções capturadas no período.")
-    k3.metric("Média Índice BCB", f"{df_p['indice_bcb'].mean():.2f}", help="Média do ranking de reclamações.")
-    k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", help="Soma de contas ativas no mercado.")
+    k1.metric("Bancos Analisados", len(df_p), help="Quantidade de bancos no filtro atual.")
+    k2.metric("Exposição (Notícias)", int(df_p['qtd_noticias_recentes'].sum()), help="Total de menções capturadas via Google News.")
+    k3.metric("Média Índice BCB", f"{df_p['indice_bcb'].mean():.2f}", help="Média do ranking oficial de reclamações.")
+    k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", help="Volume total de clientes ativos.")
 
     st.divider()
 
-    # 6. GRÁFICOS (Voz do Mercado e BCB)
+    # 7. VISUALIZAÇÕES - Camada de Notícias e Reclamações
     c1, c2 = st.columns(2)
     with c1:
         fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
                           y='bank', x='qtd_noticias_recentes', orientation='h',
                           color='bank', color_discrete_map=BANK_COLORS, 
-                          template="plotly_dark", title=f"Volume de Notícias (até {data_atualizacao})")
+                          template="plotly_dark", title=f"Volume de Notícias na Mídia (até {data_atualizacao})")
         st.plotly_chart(fig_news, use_container_width=True)
         
     with c2:
         fig_bcb = px.line(df_p.sort_values('indice_bcb', ascending=False), 
                           x='bank', y='indice_bcb', markers=True, 
-                          template="plotly_dark", title="Índice de Reclamações (BCB)")
+                          template="plotly_dark", title="Índice de Reclamações (Ranking BCB)")
         st.plotly_chart(fig_bcb, use_container_width=True)
 
     st.divider()
 
-    # 7. GRÁFICOS (Participação e Eficiência)
+    # 8. VISUALIZAÇÕES - Market Share e Eficiência Operacional
     c3, c4 = st.columns(2)
     with c3:
         fig_pie = px.pie(df_p, values='total_clientes', names='bank', hole=.4, 
@@ -130,8 +146,8 @@ if df is not None:
                           title="Taxa de Procedência (%) - Eficiência de Resolução")
         st.plotly_chart(fig_proc, use_container_width=True)
 
-    # 8. MATRIZ DE DIAGNÓSTICO
-    st.subheader(f"⚠️ Matriz de Diagnóstico VOC (Atualizado: {data_atualizacao})")
+    # 9. MATRIZ DE DIAGNÓSTICO (Tabela Fato)
+    st.subheader(f"⚠️ Matriz de Diagnóstico VOC (Consolidado: {data_atualizacao})")
     df_matrix = df_p.copy()
     df_matrix['total_clientes_m'] = df_matrix['total_clientes'] / 1e6
 
@@ -146,30 +162,30 @@ if df is not None:
         width='stretch', hide_index=True
     )
 
-    # 9. EXPLORADOR DE NOTÍCIAS
+    # 10. EXPLORADOR DE DADOS (Silver Layer)
     st.divider()
     st.subheader(f"🔍 Explorador de Notícias (Capturadas até {data_atualizacao})")
     news_path = "data/silver/stg_noticias.parquet"
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
-        search = st.text_input("Filtrar notícias por termo:", placeholder="Ex: C6 Bank, Reclamação, App...")
+        search = st.text_input("Busca textual nas manchetes:", placeholder="Ex: C6 Bank, Reclamação, App...")
         if search:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
         st.dataframe(df_news, width='stretch', hide_index=True)
 else:
-    st.error("❌ Dados não encontrados.")
+    st.error("❌ Erro na carga dos dados das camadas Gold/Silver.")
 
-# 10. RODAPÉ FINAL (Identidade e LinkedIn)
+# 11. FOOTER - Identidade Profissional
 st.markdown(f"""
     <div class="main-footer">
         Desenvolvido e sustentado por <b>Alan Cristian</b> | 
-        <a href="https://www.linkedin.com/in/alancristians/" target="_blank">Conectar no LinkedIn</a><br>
+        <a href="https://www.linkedin.com/in/alancristians/" target="_blank">LinkedIn</a><br>
         <i>"Feito é melhor que perfeito"</i>
     </div>
 """, unsafe_allow_html=True)
 
-# 11. SIDEBAR (Selo Original)
+# 12. SIDEBAR - Selo de Qualidade e Versão
 st.sidebar.markdown("---")
-st.sidebar.caption(f"📅 **Última atualização:** {data_atualizacao}")
+st.sidebar.caption(f"📅 **Sincronização:** {data_atualizacao}")
 st.sidebar.caption("Engenharia de Dados | Alan Cristian 2026")
