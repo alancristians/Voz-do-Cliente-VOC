@@ -117,11 +117,40 @@ if df is not None:
     # 7. VISUALIZAÇÕES - Camada de Notícias e Reclamações
     c1, c2 = st.columns(2)
     with c1:
-        fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
-                          y='bank', x='qtd_noticias_recentes', orientation='h',
-                          color='bank', color_discrete_map=BANK_COLORS, 
-                          template="plotly_dark", title=f"Volume de Notícias na Mídia")
-        st.plotly_chart(fig_news, use_container_width=True)
+        news_path = "data/silver/stg_noticias.parquet"
+        if os.path.exists(news_path):
+            # 1. Carrega os dados detalhados da Silver
+            df_raw_news = pd.read_parquet(news_path)
+            
+            # 2. Tratamento de data e filtro de 30 dias
+            df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce')
+            # Filtra apenas o que for dos últimos 30 dias em relação a hoje
+            limite_30d = pd.Timestamp.now(tz='UTC') - pd.Timedelta(days=30)
+            df_filtered = df_raw_news[df_raw_news['published_dt'] >= limite_30d.replace(tzinfo=None)]
+            
+            # 3. Faz a nova contagem por banco
+            df_counts = df_filtered.groupby('bank').size().reset_index(name='vol_30d')
+            
+            # 4. Ordenação para o gráfico
+            df_counts = df_counts.sort_values('vol_30d', ascending=True)
+            
+            # 5. Gera o gráfico com o volume real dos últimos 30 dias
+            fig_news = px.bar(df_counts, 
+                              y='bank', x='vol_30d', 
+                              orientation='h',
+                              color='bank', color_discrete_map=BANK_COLORS, 
+                              text_auto=True,
+                              template="plotly_dark", 
+                              title="Volume de Notícias (Últimos 30 dias)")
+            
+            st.plotly_chart(fig_news, use_container_width=True)
+        else:
+            # Fallback caso o parquet não exista (usa o dado da Gold)
+            fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
+                              y='bank', x='qtd_noticias_recentes', orientation='h',
+                              color='bank', color_discrete_map=BANK_COLORS, 
+                              template="plotly_dark", title="Volume de Notícias (Total)")
+            st.plotly_chart(fig_news, use_container_width=True)
         
     with c2:
         fig_bcb = px.line(df_p.sort_values('indice_bcb', ascending=False), 
