@@ -36,7 +36,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("🗣️ Voz do Cliente | Monitor de Reputação Bancária")
-st.caption("Engenharia de Dados (BCB) | Arquitetura Medalhão 2026.")
+st.caption('“Só existe um chefe: o cliente. Ele pode demitir todos na empresa gastando seu dinheiro em outro lugar.” – Sam Walton')
 
 # 3. IDENTIDADE VISUAL E CORES INSTITUCIONAIS
 # Mapeamento de cores para consistência visual entre gráficos
