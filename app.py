@@ -238,25 +238,28 @@ if df is not None:
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
         search = st.text_input("Busca textual nas manchetes:", placeholder="Ex: C6 Bank, Reclamação, App...")
+        
         if search:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
+        
         st.dataframe(
-        df_news,
-        column_config={
-            "link": st.column_config.LinkColumn(
-                "link", # Título da coluna
-                help="Clique para abrir a notícia original",
-                validate=r"^https?://"
-            ),
-            "title": "title",
-            "published": "published"
-        },
-        width='stretch', 
-        hide_index=True
-    )
-else:
-    st.error("❌ Erro na carga dos dados das camadas Gold/Silver.")
+            df_news,
+            column_config={
+                "link": st.column_config.LinkColumn(
+                    "link", 
+                    help="Clique para abrir a notícia original",
+                    validate=r"^https?://"
+                ),
+                "title": "title",
+                "published": "published"
+            },
+            width='stretch', 
+            hide_index=True,
+            height=600 # <--- ADICIONE ESTA LINHA AQUI (Aumenta a área visual e o scroll)
+        )
+    else:
+        st.error("❌ Erro na carga dos dados das camadas Gold/Silver.")
 
 # 11. FOOTER - Identidade Profissional
 st.markdown(f"""
