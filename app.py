@@ -7,7 +7,7 @@ from datetime import datetime
 
 # 1. CONFIGURAÇÕES DE INTERFACE
 # Definição do layout e metadados da página
-st.set_page_config(page_title="Voz do Cliente | Monitor de Reputação", layout="wide", page_icon="🛡️")
+st.set_page_config(page_title="Voz do Cliente | Monitor de Experiência", layout="wide", page_icon="🛡️")
 
 # 2. ESTILIZAÇÃO CUSTOMIZADA (CSS)
 # Customização de métricas e rodapé para alinhamento com a identidade visual do projeto
@@ -35,7 +35,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("🗣️ Voz do Cliente | Monitor de Reputação Bancária")
+st.title("🗣️ Voz do Cliente | Monitor de Experiência Bancária")
 st.caption('“Só existe um chefe: o cliente. Ele pode demitir todos na empresa gastando seu dinheiro em outro lugar.” – Sam Walton')
 
 # 3. IDENTIDADE VISUAL E CORES INSTITUCIONAIS

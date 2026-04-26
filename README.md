@@ -1,6 +1,6 @@
-# 🛡️ FinVoC 2.0 - Monitor de Reputação Bancária
+# 🛡️ FinVoC 2.0 - Voz do Cliente | Monitor de Experiência Bancária
 
-**FinVoC (Financial Voice of Customer)** é um ecossistema de Engenharia de Dados desenvolvido para monitorar a reputação das principais instituições financeiras no Brasil. O projeto utiliza uma **Arquitetura Medalhão (Bronze, Silver e Gold)** para processar dados oficiais do Banco Central e menções na mídia em tempo real.
+**FinVoC (Financial Voice of Customer)** é um ecossistema de Engenharia de Dados desenvolvido para monitorar a experiencia dos clientes das principais instituições financeiras no Brasil. O projeto utiliza uma **Arquitetura Medalhão (Bronze, Silver e Gold)** para processar dados oficiais do Banco Central e menções na mídia em tempo real.
 
 ---
 
