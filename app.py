@@ -117,17 +117,10 @@ if df is not None:
     # 7. VISUALIZAÇÕES - Camada de Notícias e Reclamações
     c1, c2 = st.columns(2)
     with c1:
-        fig_news = px.treemap(df_p, 
-                              path=[px.Constant("Bancos"), 'bank'], 
-                              values='qtd_noticias_recentes',
-                              color='bank', 
-                              color_discrete_map=BANK_COLORS,
-                              template="plotly_dark",
-                              title=f"Volume de Notícias na Mídia")
-        
-        # Ajuste para mostrar nome do banco e o número dentro do bloco
-        fig_news.update_traces(textinfo="label+value")
-        
+        fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
+                          y='bank', x='qtd_noticias_recentes', orientation='h',
+                          color='bank', color_discrete_map=BANK_COLORS, 
+                          template="plotly_dark", title=f"Volume de Notícias na Mídia")
         st.plotly_chart(fig_news, use_container_width=True)
         
     with c2:
