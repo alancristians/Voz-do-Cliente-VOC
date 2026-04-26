@@ -131,7 +131,7 @@ if df is not None:
         if os.path.exists(news_path):
             df_raw_news = pd.read_parquet(news_path)
             
-            # FILTRO DE BANCOS SELECIONADOS NA SIDEBAR
+            # FILTRO DE REATIVIDADE
             df_raw_news = df_raw_news[df_raw_news['bank'].isin(selected_banks)]
             
             # 1. Filtro de 30 dias (Português e Lógica)
@@ -142,10 +142,10 @@ if df is not None:
             # 2. Contagem por banco
             df_counts = df_filtered.groupby('bank').size().reset_index(name='vol_30d')
             
-            # 3. Gráfico Treemap - Ajustado para remover o "Volume Total"
+            # 3. Gráfico Treemap
             fig_news = px.treemap(
                 df_counts, 
-                path=['bank'], 
+                path=['bank'],
                 values='vol_30d',
                 color='bank', 
                 color_discrete_map=BANK_COLORS, 
@@ -173,7 +173,6 @@ if df is not None:
             
             st.plotly_chart(fig_news, use_container_width=True)
         else:
-            # Fallback (caso o arquivo falte)
             fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
                               y='bank', x='qtd_noticias_recentes', orientation='h',
                               color='bank', color_discrete_map=BANK_COLORS, 
@@ -196,23 +195,20 @@ if df is not None:
                          template="plotly_dark", title="Market Share (Contas Ativas)")
         st.plotly_chart(fig_pie, use_container_width=True)
     with c4:
-        # Mudamos para ascending=True para o melhor (menor taxa) aparecer primeiro
         df_proc_sorted = df_p.sort_values('taxa_procedencia', ascending=True)
         
         fig_proc = px.bar(df_proc_sorted, 
                           x='bank', y='taxa_procedencia', 
                           color='bank', color_discrete_map=BANK_COLORS, 
                           text_auto='.2f', template="plotly_dark", 
-                          # Título com subtítulo explicativo
                           title="Taxa de Procedência (%)<br><sup>Menor valor indica melhor eficiência operacional</sup>")
         
-        # Ajustes de design para clareza total
         fig_proc.update_traces(textposition='outside')
         fig_proc.update_layout(
             showlegend=False,
             yaxis_title="Índice de Reclamações Procedentes",
             xaxis_title="",
-            margin=dict(t=60) # Espaço para o subtítulo
+            margin=dict(t=60)
         )
         
         st.plotly_chart(fig_proc, use_container_width=True)
@@ -241,11 +237,8 @@ if df is not None:
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
 
-        # FILTRO DE BANCOS SELECIONADOS NA SIDEBAR
+        # FILTRO DE REATIVIDADE
         df_news = df_news[df_news['bank'].isin(selected_banks)]
-        
-        # Ordenação para garantir que as mais recentes fiquem no topo
-        df_news = df_news.sort_values('published', ascending=False)
         
         search = st.text_input("Busca textual nas manchetes:", placeholder="Ex: C6 Bank, Reclamação, App...")
         
@@ -253,11 +246,8 @@ if df is not None:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
         
-        # Limita a exibição para as 20 notícias (ajuda na usabilidade do scroll)
-        df_display = df_news.head(20)
-        
         st.dataframe(
-            df_display,
+            df_news,
             column_config={
                 "link": st.column_config.LinkColumn(
                     "link", 
@@ -267,12 +257,9 @@ if df is not None:
                 "title": "title",
                 "published": "published"
             },
-            width='stretch', 
+            use_container_width=True, 
             hide_index=True
         )
-        
-        if not df_display.empty:
-            st.caption(f"Exibindo as {len(df_display)} notícias mais relevantes/recentes.")
     else:
         st.error("❌ Erro na carga dos dados das camadas Gold/Silver.")
 
