@@ -131,6 +131,9 @@ if df is not None:
         if os.path.exists(news_path):
             df_raw_news = pd.read_parquet(news_path)
             
+            # FILTRO DE BANCOS SELECIONADOS NA SIDEBAR
+            df_raw_news = df_raw_news[df_raw_news['bank'].isin(selected_banks)]
+            
             # 1. Filtro de 30 dias (Português e Lógica)
             df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce')
             limite_30d = pd.Timestamp.now().replace(hour=0, minute=0, second=0, microsecond=0) - pd.Timedelta(days=30)
@@ -142,7 +145,7 @@ if df is not None:
             # 3. Gráfico Treemap - Ajustado para remover o "Volume Total"
             fig_news = px.treemap(
                 df_counts, 
-                path=['bank'], # Removido o nível Constant para eliminar o fundo verde
+                path=['bank'], 
                 values='vol_30d',
                 color='bank', 
                 color_discrete_map=BANK_COLORS, 
@@ -162,8 +165,7 @@ if df is not None:
             fig_news.update_traces(
                 textinfo="label+value",
                 hovertemplate='<b>%{label}</b><br>Notícias: %{value}',
-                # Define a borda fina e garante que não haja escala de cinza/verde
-                textfont=dict(size=14),
+                textfont=dict(size=14, color="white"),
                 marker=dict(
                     line=dict(width=1, color='#333333')
                 )
@@ -180,8 +182,8 @@ if df is not None:
         
     with c2:
         fig_bcb = px.line(df_p.sort_values('indice_bcb', ascending=False), 
-                          x='bank', y='indice_bcb', markers=True, 
-                          template="plotly_dark", title="Índice de Reclamações (Ranking BCB)")
+                         x='bank', y='indice_bcb', markers=True, 
+                         template="plotly_dark", title="Índice de Reclamações (Ranking BCB)")
         st.plotly_chart(fig_bcb, use_container_width=True)
 
     st.divider()
@@ -238,6 +240,9 @@ if df is not None:
     
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
+
+        # FILTRO DE BANCOS SELECIONADOS NA SIDEBAR
+        df_news = df_news[df_news['bank'].isin(selected_banks)]
         
         # Ordenação para garantir que as mais recentes fiquem no topo
         df_news = df_news.sort_values('published', ascending=False)
@@ -248,8 +253,8 @@ if df is not None:
             mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
             df_news = df_news[mask]
         
-        # Limita a exibição para as 200 primeiras (ajuda na usabilidade do scroll)
-        df_display = df_news.head(200)
+        # Limita a exibição para as 20 notícias (ajuda na usabilidade do scroll)
+        df_display = df_news.head(20)
         
         st.dataframe(
             df_display,
@@ -262,8 +267,8 @@ if df is not None:
                 "title": "title",
                 "published": "published"
             },
-            use_container_width=True, # Faz a tabela ocupar a largura total
-            hide_index=True           # ESTA LINHA OCULTA O INDEX (COLUNA NUMÉRICA)
+            width='stretch', 
+            hide_index=True
         )
         
         if not df_display.empty:
