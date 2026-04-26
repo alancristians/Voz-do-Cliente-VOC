@@ -194,11 +194,25 @@ if df is not None:
                          template="plotly_dark", title="Market Share (Contas Ativas)")
         st.plotly_chart(fig_pie, use_container_width=True)
     with c4:
-        fig_proc = px.bar(df_p.sort_values('taxa_procedencia', ascending=False), 
+        # Mudamos para ascending=True para o melhor (menor taxa) aparecer primeiro
+        df_proc_sorted = df_p.sort_values('taxa_procedencia', ascending=True)
+        
+        fig_proc = px.bar(df_proc_sorted, 
                           x='bank', y='taxa_procedencia', 
                           color='bank', color_discrete_map=BANK_COLORS, 
                           text_auto='.2f', template="plotly_dark", 
-                          title="Taxa de Procedência (%) - Eficiência de Resolução")
+                          # Título com subtítulo explicativo
+                          title="Taxa de Procedência (%)<br><sup>Menor valor indica melhor eficiência operacional</sup>")
+        
+        # Ajustes de design para clareza total
+        fig_proc.update_traces(textposition='outside')
+        fig_proc.update_layout(
+            showlegend=False,
+            yaxis_title="Índice de Reclamações Procedentes",
+            xaxis_title="",
+            margin=dict(t=60) # Espaço para o subtítulo
+        )
+        
         st.plotly_chart(fig_proc, use_container_width=True)
 
     # 9. MATRIZ DE DIAGNÓSTICO (Tabela Fato)
