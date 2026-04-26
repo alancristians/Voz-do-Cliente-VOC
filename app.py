@@ -180,9 +180,28 @@ if df is not None:
             st.plotly_chart(fig_news, use_container_width=True)
         
     with c2:
+        # Gera o gráfico de linha base
         fig_bcb = px.line(df_p.sort_values('indice_bcb', ascending=False), 
                          x='bank', y='indice_bcb', markers=True, 
                          template="plotly_dark", title="Índice de Reclamações (Ranking BCB)")
+        
+        # --- ADICIONE ESTAS LINHAS ABAIXO PARA PERSONALIZAR ---
+        
+        fig_bcb.update_traces(
+            line_color='white',                # <--- TRAVA A COR DA LINHA COMO BRANCA
+            mode='lines+markers+text',         # <--- ATIVA RÓTULOS DE DADOS NAS BOLINHAS
+            text=df_p['indice_bcb'],           # <--- DEFINE O VALOR DO TEXTO COMO O KPI
+            textposition='top center',          # <--- POSICIONA O NÚMERO ACIMA DA BOLINHA
+            textfont=dict(color='white', size=12) # <--- DEFINE COR E TAMANHO DO NÚMERO
+        )
+        
+        # Ajuste extra para garantir espaço para os números no topo
+        fig_bcb.update_layout(
+            yaxis=dict(range=[0, df_p['indice_bcb'].max() * 1.15]) # Dá 15% de respiro no topo
+        )
+        
+        # -------------------------------------------------------
+        
         st.plotly_chart(fig_bcb, use_container_width=True)
 
     st.divider()
