@@ -180,27 +180,23 @@ if df is not None:
             st.plotly_chart(fig_news, use_container_width=True)
         
     with c2:
-        # 1. Ordenamos o DataFrame primeiro para garantir que a linha e o texto usem a mesma sequência
+        # ordenação para o gráfico fazer sentido
         df_sorted_bcb = df_p.sort_values('indice_bcb', ascending=False)
         
-        # 2. Criamos o gráfico usando o DataFrame já ordenado
         fig_bcb = px.line(df_sorted_bcb, 
                          x='bank', y='indice_bcb', markers=True, 
                          template="plotly_dark", title="Índice de Reclamações (Ranking BCB)")
         
-        # 3. Aplicamos a personalização usando a mesma fonte de dados (df_sorted_bcb)
+        #linha para branca, sem números
         fig_bcb.update_traces(
             line_color='white',
-            mode='lines+markers+text',
-            text=df_sorted_bcb['indice_bcb'],  # <--- Agora o texto segue a ordenação correta
-            textposition='top center',
-            textfont=dict(color='white', size=12)
+            mode='lines+markers'  # <-- apenas linha e bolinha
         )
         
         fig_bcb.update_layout(
-            yaxis=dict(range=[0, df_sorted_bcb['indice_bcb'].max() * 1.2]), # Aumentei um pouco o respiro no topo
             xaxis_title="",
-            yaxis_title="Índice"
+            yaxis_title="Índice",
+            margin=dict(t=40) 
         )
         
         st.plotly_chart(fig_bcb, use_container_width=True)
