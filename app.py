@@ -296,4 +296,5 @@ st.markdown(f"""
 # 12. SIDEBAR - Selo de Qualidade e Versão
 st.sidebar.markdown("---")
 st.sidebar.caption(f"📅 **Sincronização:** {data_atualizacao}")
-st.sidebar.caption("Versão 1.3 | Alan Cristian | Engenharia de Dados (BCB)")
+st.sidebar.markdown("[🔗 Ranking de Reclamações (BCB)](https://www.bcb.gov.br/meubc/rankingreclamacoes)")
+st.sidebar.caption("Alan Cristian | Engenharia de Dados (BCB)")
