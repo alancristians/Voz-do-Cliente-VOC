@@ -63,6 +63,7 @@ def carregar_dados():
     """
     path = "data/gold/fact_finvoc_summary.csv"
     news_path = "data/silver/stg_noticias.parquet"
+    hist_path = "data/silver/hist_reclamacoes_bcb.csv"
     
     # Captura data de atualização do sistema via metadados do arquivo (Ajuste de Timezone UTC -> SP)
     last_update = "---"
@@ -72,6 +73,7 @@ def carregar_dados():
         sp_tz = pytz.timezone('America/Sao_Paulo')
         last_update = utc_dt.astimezone(sp_tz).strftime('%d/%m/%Y')
 
+    df = None
     if os.path.exists(path):
         df = pd.read_csv(path)
         
@@ -84,12 +86,34 @@ def carregar_dados():
             
         # Feature Engineering: Cálculo de taxa de eficiência de resolução
         df['taxa_procedencia'] = (df['recl_procedentes'] / df['total_respondidas'] * 100).fillna(0)
-        return df, last_update
     
-    return None, last_update
+    # Ajuste para carregar o histórico com tradução de nomes (Necessário para o join com 2026)
+    df_hist = pd.DataFrame()
+    if os.path.exists(hist_path):
+        df_hist = pd.read_csv(hist_path, sep=';', encoding='latin-1')
+        df_hist['bank'] = df_hist['bank'].str.strip()
+        
+        # Mapa de nomes baseado no seu CSV (Garante que "ITAU (conglomerado)" case com "Itaú")
+        mapa_nomes = {
+            "ITAU (conglomerado)": "Itaú",
+            "BRADESCO (conglomerado)": "Bradesco",
+            "SANTANDER (conglomerado)": "Santander",
+            "NU PAGAMENTOS (conglomerado)": "Nubank",
+            "BB (conglomerado)": "Banco do Brasil",
+            "CAIXA ECONMICA FEDERAL (conglomerado)": "Caixa",
+            "BANCO C6 (conglomerado)": "C6",
+            "BTG PACTUAL/BANCO PAN (conglomerado)": "BTG Pactual",
+            "PICPAY (conglomerado)": "PicPay",
+            "INTER (conglomerado)": "Inter",
+            "MERCADO PAGO IP (conglomerado)": "Mercado Pago",
+            "NEON PAGAMENTOS IP (conglomerado)": "Neon"
+        }
+        df_hist['bank'] = df_hist['bank'].replace(mapa_nomes)
+        
+    return df, last_update, df_hist
 
 # Inicialização da carga de dados
-df, data_atualizacao = carregar_dados()
+df, data_atualizacao, df_hist = carregar_dados()
 
 if df is not None:
     # 4. DASHBOARD HEADER - Status do Pipeline
@@ -127,171 +151,83 @@ if df is not None:
     c1, c2 = st.columns(2)
     with c1:
         news_path = "data/silver/stg_noticias.parquet"
-        
-        # 1. Título e Subtítulo via Streamlit (Mantendo a informação dos 30 dias)
         st.subheader("Volume de Notícias na Mídia")
         st.caption("Dados referentes aos últimos 30 dias")
         
         if os.path.exists(news_path):
             df_raw_news = pd.read_parquet(news_path)
-            
-            # FILTRO DE REATIVIDADE
             df_raw_news = df_raw_news[df_raw_news['bank'].isin(selected_banks)]
-            
-            # 1. Filtro de 30 dias
             df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce')
             limite_30d = pd.Timestamp.now().replace(hour=0, minute=0, second=0, microsecond=0) - pd.Timedelta(days=30)
             df_filtered = df_raw_news[df_raw_news['published_dt'].dt.tz_localize(None) >= limite_30d]
-            
-            # 2. Contagem por banco
             df_counts = df_filtered.groupby('bank').size().reset_index(name='vol_30d')
             
-            # 3. Gráfico Treemap (Título interno removido)
-            fig_news = px.treemap(
-                df_counts, 
-                path=['bank'],
-                values='vol_30d',
-                color='bank', 
-                color_discrete_map=BANK_COLORS, 
-                template="plotly_dark"
-            )
-            
-            # 4. Ajuste das legendas e rótulos
-            fig_news.update_layout(
-                showlegend=True,
-                legend_title_text="Instituição",
-                margin=dict(t=10, l=0, r=0, b=0), # Margem reduzida para t=10
-                paper_bgcolor='rgba(0,0,0,0)', 
-                plot_bgcolor='rgba(0,0,0,0)'
-            )
-            
-            fig_news.update_traces(
-                textinfo="label+value",
-                hovertemplate='<b>%{label}</b><br>Notícias: %{value}',
-                textfont=dict(size=14, color="white"),
-                marker=dict(line=dict(width=1, color='#333333'))
-            )
-            
-            # Renderização com config de hover e trava de scroll
-            st.plotly_chart(
-                fig_news, 
-                use_container_width=True,
-                config={'displayModeBar': 'hover', 'scrollZoom': False}
-            )
-            
+            fig_news = px.treemap(df_counts, path=['bank'], values='vol_30d', color='bank', 
+                                  color_discrete_map=BANK_COLORS, template="plotly_dark")
+            fig_news.update_layout(showlegend=True, legend_title_text="Instituição", margin=dict(t=10, l=0, r=0, b=0), paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+            fig_news.update_traces(textinfo="label+value", hovertemplate='<b>%{label}</b><br>Notícias: %{value}', textfont=dict(size=14, color="white"), marker=dict(line=dict(width=1, color='#333333')))
+            st.plotly_chart(fig_news, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
         else:
-            # Caso o arquivo não exista: Gráfico de Barras
-            fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
-                              y='bank', x='qtd_noticias_recentes', orientation='h',
-                              color='bank', color_discrete_map=BANK_COLORS, 
-                              template="plotly_dark")
-            
+            fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), y='bank', x='qtd_noticias_recentes', orientation='h', color='bank', color_discrete_map=BANK_COLORS, template="plotly_dark")
             fig_news.update_layout(margin=dict(t=10, l=0, r=0, b=0))
-            
-            st.plotly_chart(
-                fig_news, 
-                use_container_width=True,
-                config={'displayModeBar': 'hover', 'scrollZoom': False}
-            )
+            st.plotly_chart(fig_news, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
         
     with c2:
-        # ordenação para o gráfico fazer sentido
         df_sorted_bcb = df_p.sort_values('indice_bcb', ascending=False)
-        
-        # 1. Título e Subtítulo via Streamlit
         st.subheader("Índice de Reclamações")
         st.caption("Ranking oficial do Banco Central (BCB)")
-        
-        # 2. Gráfico (removido o parâmetro title daqui)
-        fig_bcb = px.line(df_sorted_bcb, 
-                          x='bank', y='indice_bcb', markers=True, 
-                          template="plotly_dark")
-        
-        # Linha branca, sem números no gráfico para não poluir
-        fig_bcb.update_traces(
-            line_color='white',
-            mode='lines+markers'
-        )
-        
-        fig_bcb.update_layout(
-            xaxis_title="",
-            yaxis_title="Índice",
-            margin=dict(t=10, b=0, l=0, r=0) # Margem superior reduzida
-        )
-        
-        # 3. Renderização com config para mobile
-        st.plotly_chart(
-            fig_bcb, 
-            use_container_width=True,
-            config={
-                'displayModeBar': 'hover', 
-                'scrollZoom': False
-            }
-        )
+        fig_bcb = px.line(df_sorted_bcb, x='bank', y='indice_bcb', markers=True, template="plotly_dark")
+        fig_bcb.update_traces(line_color='white', mode='lines+markers')
+        fig_bcb.update_layout(xaxis_title="", yaxis_title="Índice", margin=dict(t=10, b=0, l=0, r=0))
+        st.plotly_chart(fig_bcb, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
 
     st.divider()
 
     # 8. VISUALIZAÇÕES - Market Share e Eficiência Operacional
     c3, c4 = st.columns(2)
     with c3:
-        # 1. Título e Subtítulo via Streamlit
         st.subheader("Market Share")
         st.caption("Distribuição por volume de contas ativas")
-        
-        # 2. Gráfico de Rosca (removido o parâmetro title daqui)
-        fig_pie = px.pie(df_p, 
-                         values='total_clientes', 
-                         names='bank', 
-                         hole=.4, 
-                         color='bank', 
-                         color_discrete_map=BANK_COLORS, 
-                         template="plotly_dark")
-        
-        # Ajuste de margens para centralizar e aproximar do título
-        fig_pie.update_layout(
-            margin=dict(t=20, b=20, l=0, r=0),
-            showlegend=True # Mantendo a legenda para facilitar a leitura no mobile
-        )
-        
-        # 3. Renderização com a configuração de UX mobile
-        st.plotly_chart(
-            fig_pie, 
-            use_container_width=True, 
-            config={
-                'displayModeBar': 'hover', 
-                'scrollZoom': False
-            }
-        )
+        fig_pie = px.pie(df_p, values='total_clientes', names='bank', hole=.4, color='bank', color_discrete_map=BANK_COLORS, template="plotly_dark")
+        fig_pie.update_layout(margin=dict(t=20, b=20, l=0, r=0), showlegend=True)
+        st.plotly_chart(fig_pie, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
     with c4:
         df_proc_sorted = df_p.sort_values('taxa_procedencia', ascending=True)
-        
-        # 1. Título e Subtítulo via Streamlit (fora da área de conflito do gráfico)
         st.subheader("Taxa de Procedência (%)")
         st.caption("Menor valor indica melhor eficiência operacional")
-        
-        # 2. Configuração do Gráfico (sem o parâmetro title)
-        fig_proc = px.bar(df_proc_sorted, 
-                          x='bank', y='taxa_procedencia', 
-                          color='bank', color_discrete_map=BANK_COLORS, 
-                          text_auto='.2f', template="plotly_dark")
-        
+        fig_proc = px.bar(df_proc_sorted, x='bank', y='taxa_procedencia', color='bank', color_discrete_map=BANK_COLORS, text_auto='.2f', template="plotly_dark")
         fig_proc.update_traces(textposition='outside')
-        fig_proc.update_layout(
-            showlegend=False,
-            yaxis_title="Índice de Reclamações Procedentes",
-            xaxis_title="",
-            margin=dict(t=20, b=0, l=0, r=0) # Margem reduzida para ficar colado no texto acima
-        )
-        
-        # 3. Renderização com a config de 'hover'
-        st.plotly_chart(
-            fig_proc, 
-            use_container_width=True, 
-            config={
-                'displayModeBar': 'hover', 
-                'scrollZoom': False
-            }
-        )
+        fig_proc.update_layout(showlegend=False, yaxis_title="Índice", xaxis_title="", margin=dict(t=20, b=0, l=0, r=0))
+        st.plotly_chart(fig_proc, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
+
+    # --- NOVO BLOCO: ANÁLISE DE TENDÊNCIA HISTÓRICA (HOJE vs Q4/2025) ---
+    with st.expander("📈 Evolução e Tendência Histórica (2025)", expanded=True):
+        if not df_hist.empty:
+            df_hist_filtered = df_hist[df_hist['bank'].isin(selected_banks)]
+            if not df_hist_filtered.empty:
+                # Métricas comparando Atual (2026) vs Ontem (Q4 2025)
+                cols_met = st.columns(len(selected_banks[:4]))
+                for i, b in enumerate(selected_banks[:4]):
+                    with cols_met[i]:
+                        # Valor 2026 (Hoje)
+                        va = df_p[df_p['bank'] == b]['indice_bcb'].values[0]
+                        
+                        # Dados 2025 (Ontem)
+                        bd = df_hist_filtered[df_hist_filtered['bank'] == b].sort_values('ordem_cronologica')
+                        if not bd.empty:
+                            vn = bd.iloc[-1]['indice_bcb'] # Pega o dado mais recente de 2025 (Q4)
+                            delta_pct = ((va - vn) / vn * 100) if vn != 0 else 0
+                            st.metric(label=b, value=f"{va:.2f}", delta=f"{delta_pct:.1f}% vs Q4", delta_color="inverse")
+                
+                st.write("---")
+                # Gráfico de Linha Temporal
+                fig_ev = px.line(df_hist_filtered.sort_values('ordem_cronologica'), x='periodo', y='indice_bcb', color='bank', markers=True, template="plotly_dark", color_discrete_map=BANK_COLORS)
+                fig_ev.update_layout(margin=dict(t=20, b=0, l=0, r=0), xaxis_title="Trimestre", yaxis_title="Índice BCB")
+                st.plotly_chart(fig_ev, use_container_width=True, config={'displayModeBar': 'hover'})
+            else:
+                st.info("⚠️ Selecione os bancos no filtro lateral para ver a evolução histórica.")
+        else:
+            st.warning("⚠️ Arquivo histórico de 2025 não encontrado.")
 
     # 9. MATRIZ DE DIAGNÓSTICO (Tabela Fato)
     st.subheader(f"⚠️ Matriz de Diagnóstico VOC")
@@ -306,7 +242,7 @@ if df is not None:
             "taxa_procedencia": st.column_config.NumberColumn("Taxa Procedência", format="%.2f%%"),
             "total_clientes_m": st.column_config.NumberColumn("Total Clientes", format="%.2fM")
         },
-        width='stretch', hide_index=True
+        use_container_width=True, hide_index=True
     )
 
     # 10. EXPLORADOR DE DADOS (Silver Layer)
@@ -316,10 +252,7 @@ if df is not None:
     
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
-
-        # FILTRO DE REATIVIDADE (Inserido)
         df_news = df_news[df_news['bank'].isin(selected_banks)]
-        
         search = st.text_input("Busca textual nas manchetes:", placeholder="Ex: C6 Bank, Reclamação, App...")
         
         if search:
@@ -329,24 +262,17 @@ if df is not None:
         st.dataframe(
             df_news,
             column_config={
-                "link": st.column_config.LinkColumn(
-                    "link", 
-                    help="Clique para abrir a notícia original",
-                    validate=r"^https?://"
-                ),
+                "link": st.column_config.LinkColumn("link", help="Clique para abrir a notícia original", validate=r"^https?://"),
                 "title": "title",
                 "published": "published"
             },
             use_container_width=True, 
             hide_index=True
         )
-        
-        # RESTAURADO: Legenda informativa
         if not df_news.empty:
             st.caption(f"Exibindo as {len(df_news)} notícias mais relevantes/recentes.")
-            
     else:
-        st.error("❌ Erro na carga dos dados das camadas Gold/Silver.")
+        st.error("❌ Erro na carga dos dados.")
 
 # 11. FOOTER - Identidade Profissional
 st.markdown(f"""
