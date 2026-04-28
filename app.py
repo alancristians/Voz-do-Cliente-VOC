@@ -213,20 +213,25 @@ if df is not None:
     with c4:
         df_proc_sorted = df_p.sort_values('taxa_procedencia', ascending=True)
         
+        # 1. Título e Subtítulo via Streamlit (fora da área de conflito do gráfico)
+        st.subheader("Taxa de Procedência (%)")
+        st.caption("Menor valor indica melhor eficiência operacional")
+        
+        # 2. Configuração do Gráfico (sem o parâmetro title)
         fig_proc = px.bar(df_proc_sorted, 
                           x='bank', y='taxa_procedencia', 
                           color='bank', color_discrete_map=BANK_COLORS, 
-                          text_auto='.2f', template="plotly_dark", 
-                          title="Taxa de Procedência (%)<br><sup>Menor valor indica melhor eficiência operacional</sup>")
+                          text_auto='.2f', template="plotly_dark")
         
         fig_proc.update_traces(textposition='outside')
         fig_proc.update_layout(
             showlegend=False,
             yaxis_title="Índice de Reclamações Procedentes",
             xaxis_title="",
-            margin=dict(t=60)
+            margin=dict(t=20, b=0, l=0, r=0) # Margem reduzida para ficar colado no texto acima
         )
         
+        # 3. Renderização com a config de 'hover'
         st.plotly_chart(
             fig_proc, 
             use_container_width=True, 
