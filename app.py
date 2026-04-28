@@ -227,7 +227,14 @@ if df is not None:
             margin=dict(t=60)
         )
         
-        st.plotly_chart(fig_proc, use_container_width=True)
+        st.plotly_chart(
+            fig_proc, 
+            use_container_width=True, 
+            config={
+                'displayModeBar': 'hover', 
+                'scrollZoom': False
+            }
+        )
 
     # 9. MATRIZ DE DIAGNÓSTICO (Tabela Fato)
     st.subheader(f"⚠️ Matriz de Diagnóstico VOC")
