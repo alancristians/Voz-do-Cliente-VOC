@@ -234,10 +234,34 @@ if df is not None:
     # 8. VISUALIZAÇÕES - Market Share e Eficiência Operacional
     c3, c4 = st.columns(2)
     with c3:
-        fig_pie = px.pie(df_p, values='total_clientes', names='bank', hole=.4, 
-                         color='bank', color_discrete_map=BANK_COLORS, 
-                         template="plotly_dark", title="Market Share (Contas Ativas)")
-        st.plotly_chart(fig_pie, use_container_width=True)
+        # 1. Título e Subtítulo via Streamlit
+        st.subheader("Market Share")
+        st.caption("Distribuição por volume de contas ativas")
+        
+        # 2. Gráfico de Rosca (removido o parâmetro title daqui)
+        fig_pie = px.pie(df_p, 
+                         values='total_clientes', 
+                         names='bank', 
+                         hole=.4, 
+                         color='bank', 
+                         color_discrete_map=BANK_COLORS, 
+                         template="plotly_dark")
+        
+        # Ajuste de margens para centralizar e aproximar do título
+        fig_pie.update_layout(
+            margin=dict(t=20, b=20, l=0, r=0),
+            showlegend=True # Mantendo a legenda para facilitar a leitura no mobile
+        )
+        
+        # 3. Renderização com a configuração de UX mobile
+        st.plotly_chart(
+            fig_pie, 
+            use_container_width=True, 
+            config={
+                'displayModeBar': 'hover', 
+                'scrollZoom': False
+            }
+        )
     with c4:
         df_proc_sorted = df_p.sort_values('taxa_procedencia', ascending=True)
         
