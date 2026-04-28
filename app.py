@@ -128,13 +128,17 @@ if df is not None:
     with c1:
         news_path = "data/silver/stg_noticias.parquet"
         
+        # 1. Título e Subtítulo via Streamlit (Mantendo a informação dos 30 dias)
+        st.subheader("Volume de Notícias na Mídia")
+        st.caption("Dados referentes aos últimos 30 dias")
+        
         if os.path.exists(news_path):
             df_raw_news = pd.read_parquet(news_path)
             
-            # FILTRO DE REATIVIDADE (Inserido)
+            # FILTRO DE REATIVIDADE
             df_raw_news = df_raw_news[df_raw_news['bank'].isin(selected_banks)]
             
-            # 1. Filtro de 30 dias (Português e Lógica)
+            # 1. Filtro de 30 dias
             df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce')
             limite_30d = pd.Timestamp.now().replace(hour=0, minute=0, second=0, microsecond=0) - pd.Timedelta(days=30)
             df_filtered = df_raw_news[df_raw_news['published_dt'].dt.tz_localize(None) >= limite_30d]
@@ -142,22 +146,21 @@ if df is not None:
             # 2. Contagem por banco
             df_counts = df_filtered.groupby('bank').size().reset_index(name='vol_30d')
             
-            # 3. Gráfico Treemap
+            # 3. Gráfico Treemap (Título interno removido)
             fig_news = px.treemap(
                 df_counts, 
                 path=['bank'],
                 values='vol_30d',
                 color='bank', 
                 color_discrete_map=BANK_COLORS, 
-                template="plotly_dark",
-                title="Volume de Notícias na Mídia (Últimos 30 dias)"
+                template="plotly_dark"
             )
             
             # 4. Ajuste das legendas e rótulos
             fig_news.update_layout(
                 showlegend=True,
                 legend_title_text="Instituição",
-                margin=dict(t=35, l=0, r=0, b=0),
+                margin=dict(t=10, l=0, r=0, b=0), # Margem reduzida para t=10
                 paper_bgcolor='rgba(0,0,0,0)', 
                 plot_bgcolor='rgba(0,0,0,0)'
             )
@@ -166,18 +169,30 @@ if df is not None:
                 textinfo="label+value",
                 hovertemplate='<b>%{label}</b><br>Notícias: %{value}',
                 textfont=dict(size=14, color="white"),
-                marker=dict(
-                    line=dict(width=1, color='#333333')
-                )
+                marker=dict(line=dict(width=1, color='#333333'))
             )
             
-            st.plotly_chart(fig_news, use_container_width=True)
+            # Renderização com config de hover e trava de scroll
+            st.plotly_chart(
+                fig_news, 
+                use_container_width=True,
+                config={'displayModeBar': 'hover', 'scrollZoom': False}
+            )
+            
         else:
+            # Caso o arquivo não exista: Gráfico de Barras
             fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), 
                               y='bank', x='qtd_noticias_recentes', orientation='h',
                               color='bank', color_discrete_map=BANK_COLORS, 
-                              template="plotly_dark", title="Volume de Notícias na Mídia")
-            st.plotly_chart(fig_news, use_container_width=True)
+                              template="plotly_dark")
+            
+            fig_news.update_layout(margin=dict(t=10, l=0, r=0, b=0))
+            
+            st.plotly_chart(
+                fig_news, 
+                use_container_width=True,
+                config={'displayModeBar': 'hover', 'scrollZoom': False}
+            )
         
     with c2:
         # ordenação para o gráfico fazer sentido
