@@ -198,23 +198,36 @@ if df is not None:
         # ordenação para o gráfico fazer sentido
         df_sorted_bcb = df_p.sort_values('indice_bcb', ascending=False)
         
-        fig_bcb = px.line(df_sorted_bcb, 
-                         x='bank', y='indice_bcb', markers=True, 
-                         template="plotly_dark", title="Índice de Reclamações (Ranking BCB)")
+        # 1. Título e Subtítulo via Streamlit
+        st.subheader("Índice de Reclamações")
+        st.caption("Ranking oficial do Banco Central (BCB)")
         
-        #linha para branca, sem números
+        # 2. Gráfico (removido o parâmetro title daqui)
+        fig_bcb = px.line(df_sorted_bcb, 
+                          x='bank', y='indice_bcb', markers=True, 
+                          template="plotly_dark")
+        
+        # Linha branca, sem números no gráfico para não poluir
         fig_bcb.update_traces(
             line_color='white',
-            mode='lines+markers'  # <-- apenas linha e bolinha
+            mode='lines+markers'
         )
         
         fig_bcb.update_layout(
             xaxis_title="",
             yaxis_title="Índice",
-            margin=dict(t=40) 
+            margin=dict(t=10, b=0, l=0, r=0) # Margem superior reduzida
         )
         
-        st.plotly_chart(fig_bcb, use_container_width=True)
+        # 3. Renderização com config para mobile
+        st.plotly_chart(
+            fig_bcb, 
+            use_container_width=True,
+            config={
+                'displayModeBar': 'hover', 
+                'scrollZoom': False
+            }
+        )
 
     st.divider()
 
