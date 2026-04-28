@@ -143,7 +143,7 @@ if df is not None:
     k1.metric("Bancos Analisados", len(df_p), help="Quantidade de bancos no filtro atual.")
     k2.metric("Exposição (Notícias)", int(df_p['qtd_noticias_recentes'].sum()), help="Total de menções capturadas via Google News.")
     k3.metric("Média Índice BCB", f"{df_p['indice_bcb'].mean():.2f}", help="Média do ranking oficial de reclamações.")
-    k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", help="Volume total de clientes ativos.")
+    k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", help="Representa o total de CPFs e CNPJs com relacionamento ativo em cada instituição, conforme base de dados do Banco Central.")
 
     st.divider()
 
