@@ -177,9 +177,47 @@ if df is not None:
         df_sorted_bcb = df_p.sort_values('indice_bcb', ascending=False)
         st.subheader("Índice de Reclamações")
         st.caption("Ranking oficial do Banco Central (BCB)")
-        fig_bcb = px.line(df_sorted_bcb, x='bank', y='indice_bcb', markers=True, template="plotly_dark")
-        fig_bcb.update_traces(line_color='white', mode='lines+markers')
-        fig_bcb.update_layout(xaxis_title="", yaxis_title="Índice", margin=dict(t=10, b=0, l=0, r=0))
+
+        # 1. Calculamos a média do setor
+        media_setor = df_sorted_bcb['indice_bcb'].mean()
+
+        # 2. Criamos o gráfico de dispersão corrigido
+        # Removemos o text_auto e usamos 'text' para passar os valores
+        fig_bcb = px.scatter(
+            df_sorted_bcb, 
+            x='bank', 
+            y='indice_bcb', 
+            color='bank', 
+            color_discrete_map=BANK_COLORS,
+            text=df_sorted_bcb['indice_bcb'].map('{:.2f}'.format), # Formata o texto aqui
+            template="plotly_dark"
+        )
+
+        # 3. Adicionamos a Linha de Média
+        fig_bcb.add_hline(
+            y=media_setor, 
+            line_dash="dash", 
+            line_color="rgba(255, 255, 255, 0.5)", 
+            annotation_text=f"Média: {media_setor:.2f}", 
+            annotation_position="top right"
+        )
+
+        # 4. Ajustes de Estilo (Aqui ativamos a exibição do texto)
+        fig_bcb.update_traces(
+            mode='markers+text', # Força exibir o marcador E o texto
+            marker=dict(size=14, line=dict(width=1, color='white')),
+            textposition='top center'
+        )
+        
+        fig_bcb.update_layout(
+            xaxis_title="", 
+            yaxis_title="Índice BCB", 
+            showlegend=False,
+            margin=dict(t=30, b=0, l=0, r=0),
+            xaxis=dict(showgrid=True, gridcolor='#333'),
+            yaxis=dict(showgrid=True, gridcolor='#333')
+        )
+        
         st.plotly_chart(fig_bcb, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
 
     st.divider()
