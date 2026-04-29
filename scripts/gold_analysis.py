@@ -2,6 +2,9 @@ import pandas as pd
 import os
 import unicodedata
 import glob
+from datetime import datetime
+import pytz
+
 
 def normalizar_chave(texto):
     if not isinstance(texto, str): return ""
@@ -17,6 +20,15 @@ def limpar_valor_bcb(v):
         return float(v_str)
     except:
         return 0.0
+
+def salvar_timestamp():
+    """Gera o carimbo de data/hora exato da execução do pipeline"""
+    os.makedirs("data/gold", exist_ok=True)
+    sp_tz = pytz.timezone('America/Sao_Paulo')
+    agora = datetime.now(sp_tz).strftime('%d/%m/%Y %H:%M')
+    with open("data/gold/last_update.txt", "w") as f:
+        f.write(agora)
+    print(f"✅ Timestamp de atualização salvo: {agora}")
 
 def executar_gold():
     os.makedirs("data/gold", exist_ok=True)
@@ -35,7 +47,7 @@ def executar_gold():
     df_news = pd.read_parquet(p_news)
     df_subjects = pd.read_parquet(p_subjects) if p_subjects else pd.DataFrame()
     
-    # LÓGICA DE NOTÍCIAS (PRESERVADA E BLINDADA)
+    # LÓGICA DE NOTÍCIAS
     df_news['bank_clean'] = df_news['bank'].apply(normalizar_chave)
 
     bancos_alvo = {
@@ -68,7 +80,7 @@ def executar_gold():
                         # O BCB já manda o mais frequente no topo
                         motivo_top = m_subs[c_assunto].iloc[0]
 
-            # CONTAGEM DE NOTÍCIAS (EXATAMENTE COMO VOCÊ QUER)
+            # CONTAGEM DE NOTÍCIAS
             filtro_news = df_news[df_news['bank_clean'].str.contains(key, na=False)]
             
             val_proc = limpar_valor_bcb(m_rank[c_proc].values[0])
@@ -76,7 +88,7 @@ def executar_gold():
 
             gold_data.append({
                 'bank': nome_exibicao,
-                'qtd_noticias_recentes': len(filtro_news), # <--- SEU VOLUME ESTÁ AQUI
+                'qtd_noticias_recentes': len(filtro_news), # <--- VOLUME ESTÁ AQUI
                 'indice_bcb': limpar_valor_bcb(m_rank[c_idx].values[0]),
                 'total_clientes': limpar_valor_bcb(m_rank[c_cli].values[0]),
                 'recl_procedentes': val_proc,
@@ -88,6 +100,11 @@ def executar_gold():
     # Salvamento garantindo decimal como ponto
     pd.DataFrame(gold_data).to_csv("data/gold/fact_finvoc_summary.csv", index=False, decimal='.')
     print(f"✅ Camada Ouro gerada com {len(gold_data)} bancos.")
+
+        
+    # Chama a função de timestamp ao final do processo
+    salvar_timestamp()
+
 
 if __name__ == "__main__":
     executar_gold()

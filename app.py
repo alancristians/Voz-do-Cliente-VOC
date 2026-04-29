@@ -59,19 +59,20 @@ BANK_COLORS = {
 def carregar_dados():
     """
     Realiza a leitura dos dados processados nas camadas Silver e Gold.
-    Aplica tratamento de tipos e conversão de fuso horário para a data de atualização.
+    Aplica tratamento de tipos e leitura do timestamp de atualização.
     """
     path = "data/gold/fact_finvoc_summary.csv"
     news_path = "data/silver/stg_noticias.parquet"
     hist_path = "data/silver/hist_reclamacoes_bcb.csv"
+    last_update_path = "data/gold/last_update.txt"
+
     
-    # Captura data de atualização do sistema via metadados do arquivo (Ajuste de Timezone UTC -> SP)
+    # AJUSTE: Captura data de atualização via arquivo de controle (TXT)
     last_update = "---"
-    if os.path.exists(news_path):
-        ts = os.path.getmtime(news_path)
-        utc_dt = datetime.fromtimestamp(ts, tz=pytz.utc)
-        sp_tz = pytz.timezone('America/Sao_Paulo')
-        last_update = utc_dt.astimezone(sp_tz).strftime('%d/%m/%Y')
+    if os.path.exists(last_update_path):
+        with open(last_update_path, "r") as f:
+            last_update = f.read().strip()
+
 
     df = None
     if os.path.exists(path):
