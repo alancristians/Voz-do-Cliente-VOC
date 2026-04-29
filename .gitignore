@@ -1,12 +1,27 @@
-# Dados (o robô vai gerar os dele na nuvem)
+# === Dados e Artefactos ===
+# Bloqueia a pasta data e formatos de dados por padrão
 data/
 *.csv
 *.parquet
 
-# Python
+# EXCEPÇÃO: Força o Git a permitir este ficheiro específico para o Dashboard
+!data/silver/stg_assuntos_ranking.csv
+
+# === Python ===
 __pycache__/
+*.py[cod]
+*$py.class
 venv/
 .env
 
-# VS Code
+# === Ambientes e IDEs ===
 .vscode/
+.idea/
+.streamlit/
+
+# === Logs e Debug ===
+*.log
+error_debug.png
+debug_final.png
+erro_v5.png
+debug_screenshot.png
