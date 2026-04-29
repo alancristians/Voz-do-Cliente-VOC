@@ -65,56 +65,57 @@ def carregar_dados():
     news_path = "data/silver/stg_noticias.parquet"
     hist_path = "data/silver/hist_reclamacoes_bcb.csv"
     last_update_path = "data/gold/last_update.txt"
+    assuntos_path = "data/silver/stg_assuntos_ranking.csv"
 
-    
-    # AJUSTE: Captura data de atualização via arquivo de controle (TXT)
+    # Captura data de atualização via arquivo de controle (TXT)
     last_update = "---"
     if os.path.exists(last_update_path):
         with open(last_update_path, "r") as f:
             last_update = f.read().strip()
 
-
     df = None
     if os.path.exists(path):
         df = pd.read_csv(path)
-        
-        # Data Cleaning: Padronização de tipos numéricos e tratamento de decimais
         cols = ['indice_bcb', 'total_clientes', 'recl_procedentes', 'total_respondidas', 'qtd_noticias_recentes']
         for col in cols:
             if df[col].dtype == 'object':
                 df[col] = df[col].str.replace(',', '.')
             df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
-            
-        # Feature Engineering: Cálculo de taxa de eficiência de resolução
         df['taxa_procedencia'] = (df['recl_procedentes'] / df['total_respondidas'] * 100).fillna(0)
     
-    # Ajuste para carregar o histórico com tradução de nomes (Necessário para o join com 2026)
+    # Mapa de nomes para padronização
+    mapa_nomes = {
+        "ITAU (conglomerado)": "Itaú",
+        "BRADESCO (conglomerado)": "Bradesco",
+        "SANTANDER (conglomerado)": "Santander",
+        "NU PAGAMENTOS (conglomerado)": "Nubank",
+        "BB (conglomerado)": "Banco do Brasil",
+        "CAIXA ECONMICA FEDERAL (conglomerado)": "Caixa",
+        "BANCO C6 (conglomerado)": "C6",
+        "BTG PACTUAL/BANCO PAN (conglomerado)": "BTG Pactual",
+        "PICPAY (conglomerado)": "PicPay",
+        "INTER (conglomerado)": "Inter",
+        "MERCADO PAGO IP (conglomerado)": "Mercado Pago",
+        "NEON PAGAMENTOS IP (conglomerado)": "Neon"
+    }
+
     df_hist = pd.DataFrame()
     if os.path.exists(hist_path):
         df_hist = pd.read_csv(hist_path, sep=';', encoding='latin-1')
-        df_hist['bank'] = df_hist['bank'].str.strip()
+        df_hist['bank'] = df_hist['bank'].str.strip().replace(mapa_nomes)
+
+    df_assuntos = pd.DataFrame()
+    if os.path.exists(assuntos_path):
+        df_assuntos = pd.read_csv(assuntos_path)
+        if not df_assuntos.empty:
+            # Limpa colunas e padroniza nomes
+            df_assuntos.columns = [c.strip() for c in df_assuntos.columns]
+            df_assuntos['Instituição financeira'] = df_assuntos['Instituição financeira'].str.strip().replace(mapa_nomes)
         
-        # Mapa de nomes baseado no seu CSV (Garante que "ITAU (conglomerado)" case com "Itaú")
-        mapa_nomes = {
-            "ITAU (conglomerado)": "Itaú",
-            "BRADESCO (conglomerado)": "Bradesco",
-            "SANTANDER (conglomerado)": "Santander",
-            "NU PAGAMENTOS (conglomerado)": "Nubank",
-            "BB (conglomerado)": "Banco do Brasil",
-            "CAIXA ECONMICA FEDERAL (conglomerado)": "Caixa",
-            "BANCO C6 (conglomerado)": "C6",
-            "BTG PACTUAL/BANCO PAN (conglomerado)": "BTG Pactual",
-            "PICPAY (conglomerado)": "PicPay",
-            "INTER (conglomerado)": "Inter",
-            "MERCADO PAGO IP (conglomerado)": "Mercado Pago",
-            "NEON PAGAMENTOS IP (conglomerado)": "Neon"
-        }
-        df_hist['bank'] = df_hist['bank'].replace(mapa_nomes)
-        
-    return df, last_update, df_hist
+    return df, last_update, df_hist, df_assuntos
 
 # Inicialização da carga de dados
-df, data_atualizacao, df_hist = carregar_dados()
+df, data_atualizacao, df_hist, df_assuntos = carregar_dados()
 
 if df is not None:
     # 4. DASHBOARD HEADER - Status do Pipeline
@@ -144,7 +145,41 @@ if df is not None:
     k1.metric("Bancos Analisados", len(df_p), help="Quantidade de bancos no filtro atual.")
     k2.metric("Exposição (Notícias)", int(df_p['qtd_noticias_recentes'].sum()), help="Total de menções capturadas via Google News.")
     k3.metric("Média Índice BCB", f"{df_p['indice_bcb'].mean():.2f}", help="Média do ranking oficial de reclamações.")
-    k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", help="Representa o total de CPFs e CNPJs com relacionamento ativo em cada instituição, conforme base de dados do Banco Central.")
+    k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", help="Representa o total de CPFs e CNPJs com relacionamento ativo em cada instituição.")
+
+    st.divider()
+
+    # --- NOVO BLOCO: DETALHAMENTO DE MOTIVOS POR BANCO (LISTA DINÂMICA) ---
+    st.subheader("🎯 Detalhamento de Reclamações por Banco")
+    st.caption("Filtro automático aplicado com base nas instituições selecionadas na barra lateral esquerda.")
+
+    if not df_assuntos.empty:
+        col_inst = 'Instituição financeira'
+        col_motivo = 'Irregularidade'
+        col_qtd = 'Quantidade de reclamações procedentes'
+
+        # Filtragem dinâmica baseada na sidebar
+        df_assuntos_f = df_assuntos[df_assuntos[col_inst].isin(selected_banks)]
+        df_final_lista = df_assuntos_f.sort_values(by=col_qtd, ascending=False)
+
+        st.dataframe(
+            df_final_lista[[col_inst, col_motivo, col_qtd]],
+            column_config={
+                col_inst: st.column_config.TextColumn("Banco", width="small"),
+                col_motivo: st.column_config.TextColumn("Motivo da Reclamação", width="large"),
+                col_qtd: st.column_config.ProgressColumn(
+                    "Volume",
+                    help="Quantidade de reclamações procedentes",
+                    format="%d",
+                    min_value=0,
+                    max_value=int(df_assuntos[col_qtd].max()) if not df_assuntos.empty else 100
+                ),
+            },
+            hide_index=True,
+            use_container_width=True
+        )
+    else:
+        st.info("💡 Execute o script de ingestão para visualizar o detalhamento de motivos.")
 
     st.divider()
 
@@ -160,8 +195,8 @@ if df is not None:
             df_raw_news = df_raw_news[df_raw_news['bank'].isin(selected_banks)]
             df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce')
             limite_30d = pd.Timestamp.now().replace(hour=0, minute=0, second=0, microsecond=0) - pd.Timedelta(days=30)
-            df_filtered = df_raw_news[df_raw_news['published_dt'].dt.tz_localize(None) >= limite_30d]
-            df_counts = df_filtered.groupby('bank').size().reset_index(name='vol_30d')
+            df_filtered_news = df_raw_news[df_raw_news['published_dt'].dt.tz_localize(None) >= limite_30d]
+            df_counts = df_filtered_news.groupby('bank').size().reset_index(name='vol_30d')
             
             fig_news = px.treemap(df_counts, path=['bank'], values='vol_30d', color='bank', 
                                   color_discrete_map=BANK_COLORS, template="plotly_dark")
@@ -178,22 +213,18 @@ if df is not None:
         st.subheader("Índice de Reclamações")
         st.caption("Ranking oficial do Banco Central (BCB)")
 
-        # 1. Calculamos a média do setor
         media_setor = df_sorted_bcb['indice_bcb'].mean()
 
-        # 2. Criamos o gráfico de dispersão corrigido
-        # Removemos o text_auto e usamos 'text' para passar os valores
         fig_bcb = px.scatter(
             df_sorted_bcb, 
             x='bank', 
             y='indice_bcb', 
             color='bank', 
             color_discrete_map=BANK_COLORS,
-            text=df_sorted_bcb['indice_bcb'].map('{:.2f}'.format), # Formata o texto aqui
+            text=df_sorted_bcb['indice_bcb'].map('{:.2f}'.format),
             template="plotly_dark"
         )
 
-        # 3. Adicionamos a Linha de Média
         fig_bcb.add_hline(
             y=media_setor, 
             line_dash="dash", 
@@ -202,9 +233,8 @@ if df is not None:
             annotation_position="top right"
         )
 
-        # 4. Ajustes de Estilo (Aqui ativamos a exibição do texto)
         fig_bcb.update_traces(
-            mode='markers+text', # Força exibir o marcador E o texto
+            mode='markers+text',
             marker=dict(size=14, line=dict(width=1, color='white')),
             textposition='top center'
         )
@@ -239,27 +269,22 @@ if df is not None:
         fig_proc.update_layout(showlegend=False, yaxis_title="Índice", xaxis_title="", margin=dict(t=20, b=0, l=0, r=0))
         st.plotly_chart(fig_proc, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
 
-    # --- NOVO BLOCO: ANÁLISE DE TENDÊNCIA HISTÓRICA (HOJE vs Q4/2025) ---
+    # --- BLOCO: ANÁLISE DE TENDÊNCIA HISTÓRICA (HOJE vs Q4/2025) ---
     with st.expander("📈 Evolução e Tendência Histórica (2025)", expanded=True):
         if not df_hist.empty:
             df_hist_filtered = df_hist[df_hist['bank'].isin(selected_banks)]
             if not df_hist_filtered.empty:
-                # Métricas comparando Atual (2026) vs Ontem (Q4 2025)
                 cols_met = st.columns(len(selected_banks[:4]))
                 for i, b in enumerate(selected_banks[:4]):
                     with cols_met[i]:
-                        # Valor 2026 (Hoje)
                         va = df_p[df_p['bank'] == b]['indice_bcb'].values[0]
-                        
-                        # Dados 2025 (Ontem)
                         bd = df_hist_filtered[df_hist_filtered['bank'] == b].sort_values('ordem_cronologica')
                         if not bd.empty:
-                            vn = bd.iloc[-1]['indice_bcb'] # Pega o dado mais recente de 2025 (Q4)
+                            vn = bd.iloc[-1]['indice_bcb']
                             delta_pct = ((va - vn) / vn * 100) if vn != 0 else 0
                             st.metric(label=b, value=f"{va:.2f}", delta=f"{delta_pct:.1f}% vs Q4", delta_color="inverse")
                 
                 st.write("---")
-                # Gráfico de Linha Temporal
                 fig_ev = px.line(df_hist_filtered.sort_values('ordem_cronologica'), x='periodo', y='indice_bcb', color='bank', markers=True, template="plotly_dark", color_discrete_map=BANK_COLORS)
                 fig_ev.update_layout(margin=dict(t=20, b=0, l=0, r=0), xaxis_title="Trimestre", yaxis_title="Índice BCB")
                 st.plotly_chart(fig_ev, use_container_width=True, config={'displayModeBar': 'hover'})
@@ -308,8 +333,6 @@ if df is not None:
             use_container_width=True, 
             hide_index=True
         )
-        if not df_news.empty:
-            st.caption(f"Exibindo as {len(df_news)} notícias mais relevantes/recentes.")
     else:
         st.error("❌ Erro na carga dos dados.")
 
