@@ -44,9 +44,9 @@ jobs:
           python scripts/consumidor_ingestion.py
           echo "::endgroup::"
           
-          echo "::group::Coleta Assuntos BCB"
-          python scripts/subject_ingestion.py
-          echo "::endgroup::"
+        #echo "::group::Coleta Assuntos BCB"
+        #python scripts/subject_ingestion.py
+        #echo "::endgroup::"
 
       - name: "🥈 Etapa 2: Transformação Prata (Limpeza)"
         run: |
