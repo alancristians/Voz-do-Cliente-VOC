@@ -188,7 +188,7 @@ if df is not None:
     with c1:
         news_path = "data/silver/stg_noticias.parquet"
         st.subheader("Volume de Notícias na Mídia")
-        st.caption("Dados referentes aos últimos 30 dias")
+        st.caption("Dados referentes aos dias do mês atual")
         
         if os.path.exists(news_path):
             df_raw_news = pd.read_parquet(news_path)
