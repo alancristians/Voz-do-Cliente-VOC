@@ -333,6 +333,10 @@ if df is not None:
             use_container_width=True, 
             hide_index=True
         )
+
+         # RESTAURADO: Legenda informativa
+        if not df_news.empty:
+            st.caption(f"Exibindo as {len(df_news)} notícias mais relevantes/recentes.")
     else:
         st.error("❌ Erro na carga dos dados.")
 
