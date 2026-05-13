@@ -61,18 +61,17 @@ jobs:
 
       - name: "📦 Etapa 4: Atualizar Repositório (Commit e Push)"
         run: |
-          # Configuração do usuário do Bot para o commit
+          # Configuração do usuário do Bot
           git config --global user.name 'Alan (FinVoC Bot)'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # Garante que as pastas de dados existam
+          # Garante a existência das pastas
           mkdir -p data/bronze data/silver data/gold
           
-          # Adiciona os arquivos gerados (forçando os que estão no .gitignore se necessário)
-          git add -f data/gold/fact_finvoc_summary.csv
-          git add data/bronze/ data/silver/ data/gold/last_update.txt
+          # FORÇA a adição de toda a pasta data, ignorando o .gitignore
+          git add -f data/
           
-          # Verifica se houve mudanças antes de commitar
+          # Verifica se houve mudanças reais antes de subir
           if git diff --staged --quiet; then
             echo "Nada novo para salvar."
           else
