@@ -1,39 +1,44 @@
-# 🛡️ FinVoC 2.0 - Voz do Cliente | Monitor de Experiência Bancária
+# 🛡️ FinVoC 2.0 - Voz do Cliente | Monitor Inteligente de Experiência Bancária
 
-**FinVoC (Financial Voice of Customer)** é um ecossistema de Engenharia de Dados desenvolvido para monitorar a experiencia dos clientes das principais instituições financeiras no Brasil. O projeto utiliza uma **Arquitetura Medalhão (Bronze, Silver e Gold)** para processar dados oficiais do Banco Central e menções na mídia em tempo real.
-
----
-
-## 🌐 Acesse o Dashboard
-👉 **[Clique aqui para visualizar o FinVoC 2.0 no Streamlit](https://voz-do-cliente-voc-2026.streamlit.app/)**
+**FinVoC (Financial Voice of Customer)** é um ecossistema de Engenharia de Dados de ponta a ponta, projetado para monitorar e analisar a reputação das principais instituições financeiras do Brasil. O projeto combina dados oficiais, notícias de mercado e **Inteligência Artificial Generativa** para transformar dados brutos em insights estratégicos para o setor bancário.
 
 ---
 
-## 🚀 Funcionalidades Atuais
-* **KPIs de Desempenho:** Visão consolidada de bancos analisados, exposição na mídia, média de índice de reclamações e total de contas ativas.
-* **Voz do Mercado:** Monitoramento dinâmico via Google News para capturar a exposição de cada marca.
-* **Market Share (BCB):** Comparativo de volume de clientes entre os grandes bancos e os principais players digitais (C6, Nubank, Inter, etc).
-* **Matriz de Diagnóstico:** Tabela técnica para análise de eficiência (Taxa de Procedência) e Índice BCB por instituição.
-* **Explorador de Notícias:** Ferramenta de busca integrada para análise qualitativa de menções recentes.
+## 🌐 Dashboard em Tempo Real
+👉 **[Acesse o Monitor FinVoC 2.0 no Streamlit](https://voz-do-cliente-voc-2026.streamlit.app/)**
+
+---
+
+## ✨ Novidades da Versão 2.0
+* **🧠 Inteligência Artificial (LLM):** Integração com **Llama 3.3 (via Groq API)** para análise automatizada de sentimentos e geração de resumos estratégicos sobre o cenário de cada instituição.
+* **🤖 Automação Total (ETL):** Pipeline 100% automatizado via **GitHub Actions**, com execuções diárias (Cron) para garantir dados sempre atualizados e integridade dos arquivos.
+* **📊 Camada Gold Avançada:** Enriquecimento de dados cruzando o Ranking de Reclamações do BCB com o volume de exposição na mídia (Google News).
+
+## 🚀 Principais Funcionalidades
+* **Resumo Executivo (IA):** Cards inteligentes gerados por LLM que sintetizam o "humor" do mercado para cada player.
+* **KPIs de Desempenho:** Monitoramento de Índice de Reclamações, Taxa de Procedência e Market Share de contas ativas.
+* **Voz do Mercado:** Ingestão dinâmica de notícias focada em menções recentes e tendências de reputação.
+* **Matriz de Diagnóstico:** Comparativo técnico de eficiência entre Bancos Tradicionais e Neobanks (C6, Nubank, Inter, PicPay, etc).
 
 ## 🏗️ Arquitetura de Dados (Medallion)
-O pipeline é automatizado via **GitHub Actions** e segue o fluxo:
+O fluxo de dados segue rigorosamente as melhores práticas de arquitetura de dados moderna:
 
-1.  **🥉 Camada Bronze:** Coleta de dados brutos do Ranking de Reclamações (BCB) e Google News (Parquet).
-2.  **🥈 Camada Silver:** Limpeza, padronização de nomes de instituições e tratamento de tipagem de dados.
-3.  **🥇 Camada Gold:** Enriquecimento e cruzamento de bases para geração do arquivo `fact_finvoc_summary.csv` que alimenta o dashboard.
+1.  **🥉 Camada Bronze:** Ingestão de dados brutos do Ranking BCB, Google News e metadados do Consumidor.gov em formato Parquet/CSV.
+2.  **🥈 Camada Silver:** Limpeza profunda, padronização de nomes de instituições (Fuzzy Matching) e tratamento de tipagem de dados.
+3.  **🥇 Camada Gold:** Cruzamento de bases, enriquecimento via **IA Generativa** e consolidação na `fact_finvoc_summary.csv`, otimizada para consumo analítico.
 
 ## 🛠️ Stack Tecnológica
-* **Linguagem:** Python 3.11
-* **Dashboard:** Streamlit
-* **Processamento:** Pandas
-* **Visualização:** Plotly Express
-* **Automação:** GitHub Actions (Workflow CI/CD)
+* **Linguagem:** Python 3.11+
+* **LLM/IA:** Llama 3.3 (Groq Cloud Inference)
+* **Automação/CI-CD:** GitHub Actions
+* **Processamento:** Pandas & PyArrow
+* **Visualização:** Streamlit & Plotly Express
+* **Armazenamento:** Arquitetura Medalhão (Versionada via Git)
 
-## 📊 Status do Projeto (Abril/2026)
-* **Dados de Referência:** 1º Trimestre de 2026.
+## 📊 Status e Referência
+* **Dados de Referência:** 1º Trimestre de 2026 (Dados oficiais BCB).
 * **Instituições Monitoradas:** Itaú, Bradesco, Santander, Banco do Brasil, Caixa, Nubank, C6 Bank, BTG Pactual, Inter e PicPay.
 
 ---
-**Desenvolvido por:** Alan Cristian Oliveira Freire da Silva  
-**Projeto Pessoal de Engenharia de Dados** 
+**Desenvolvido por:** [Alan Cristian Oliveira Freire da Silva](https://github.com/alancristians)  
+*Projeto Pessoal de Engenharia de Dados*
