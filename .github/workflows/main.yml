@@ -61,17 +61,21 @@ jobs:
 
       - name: "📦 Etapa 4: Atualizar Repositório (Commit e Push)"
         run: |
-          # Configuração do usuário do Bot
+          # 1. Configurações de Identidade
           git config --global user.name 'Alan (FinVoC Bot)'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # Garante a existência das pastas
+          # 2. Silencia o aviso de arquivos ignorados para não poluir o log
+          git config --global advice.addIgnoredFile false
+          
+          # 3. Garante que as pastas existem
           mkdir -p data/bronze data/silver data/gold
           
-          # FORÇA a adição de toda a pasta data, ignorando o .gitignore
+          # 4. A MARRETA: Força a adição de TUDO o que estiver na pasta data
+          # O -f (force) aqui é soberano sobre o .gitignore
           git add -f data/
           
-          # Verifica se houve mudanças reais antes de subir
+          # 5. Verifica se houve mudanças e sobe pro abraço
           if git diff --staged --quiet; then
             echo "Nada novo para salvar."
           else
