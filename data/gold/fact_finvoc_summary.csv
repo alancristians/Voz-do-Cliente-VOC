@@ -1,10 +1,58 @@
-bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo
-Itaú,38,34.12,100863694.0,361.0,27703.0,Não informado no período,1ºT/2026
-Bradesco,36,48.92,110328071.0,348.0,35387.0,Não informado no período,1ºT/2026
-Santander,38,34.49,71632364.0,187.0,24301.0,Não informado no período,1ºT/2026
-Nubank,37,10.65,114737784.0,78.0,31143.0,Não informado no período,1ºT/2026
-Caixa,40,23.12,158194617.0,165.0,21753.0,Não informado no período,1ºT/2026
-C6,40,55.3,34326775.0,371.0,7347.0,Não informado no período,1ºT/2026
-BTG Pactual,40,42.81,27389127.0,239.0,7867.0,Não informado no período,1ºT/2026
-PicPay,40,37.22,68839517.0,514.0,9459.0,Não informado no período,1ºT/2026
-Inter,39,34.86,43178240.0,167.0,8097.0,Não informado no período,1ºT/2026
+bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo,resumo_insight_ia
+Itaú,36,34.12,100863694.0,361.0,27703.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco Itaú**
+
+Aqui estão 3 tópicos curtos sobre as notícias do banco Itaú, focando no sentimento do cliente e temas principais:
+
+1. **Prejuízos e Controvérsias**: O banco Itaú está enfrentando críticas por supostamente mascarar prejuízos em seu balanço, o que pode afetar a confiança dos clientes. Além disso, uma falha no sistema do banco resultou em compras falsas de até R$ 6 mil e zerou o limite de clientes.
+2. **Inovação e Parcerias**: O Itaú está investindo em inovação e parcerias para melhorar a experiência do cliente. Por exemplo, o banco se uniu à Google para combater golpes de falsa central de atendimento e lançou um cartão Black com benefícios como cashback e pontos.
+3. **Expansão e Reconhecimento**: O Itaú está expandindo sua presença no mercado e sendo reconhecido por seu desempenho. O banco liderou a temporada de resultados com lucros bilionários e entrou em um índice de emergentes que guia trilhões no mundo. No entanto, alguns clientes estão questionando o possível fechamento de agências, o que pode afetar a acessibilidade e a satisfação dos clientes."
+Bradesco,38,48.92,110328071.0,348.0,35387.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco Bradesco**
+
+Aqui estão 3 tópicos curtos sobre as notícias do banco Bradesco, focando no sentimento do cliente e temas principais:
+
+1. **Problemas de Atendimento**: O Bradesco está enfrentando problemas de atendimento, com várias notícias relatando falhas no atendimento e medidas cautelares aplicadas pelo Procon em Juiz de Fora. Isso pode afetar negativamente o sentimento do cliente em relação ao banco.
+2. **Lucros Bilionários**: Por outro lado, o Bradesco liderou a temporada de resultados bancários com lucros bilionários, ao lado do Itaú. Isso pode ser visto como um ponto positivo para o banco, mas pode não ser suficiente para compensar os problemas de atendimento.
+3. **Restrições e Proibição**: O Bradesco está proibido de abrir novas contas por 30 dias devido às falhas no atendimento, o que pode afetar a capacidade do banco de atrair novos clientes e manter a satisfação dos clientes existentes."
+Santander,36,34.49,71632364.0,187.0,24301.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do Banco Santander, focando no sentimento do cliente e temas principais:
+
+1. **Aumento da confiança**: A melhoria do 'rating' do Banco Santander Totta pela Fitch e o lucro recorde de R$ 21 bilhões na operação global podem aumentar a confiança dos clientes no banco.
+2. **Mudanças nos serviços**: O Santander está alterando condições de financiamento imobiliário e liberando criptomoedas para todos os seus clientes no Brasil, o que pode ser visto como uma modernização dos serviços e uma resposta às necessidades dos clientes.
+3. **Expansão e contratações**: O banco está ampliando suas contratações, com mais de 780 vagas disponíveis, o que pode ser visto como um sinal de crescimento e investimento no mercado, mas também pode gerar preocupações sobre a qualidade do atendimento ao cliente com a entrada de novos funcionários."
+Nubank,36,10.65,114737784.0,78.0,31143.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do Nubank, focando no sentimento do cliente e temas principais:
+
+1. **Expansão de serviços**: O Nubank está ampliando seus serviços, incluindo a antecipação de recebíveis e capital de giro para PMEs, e a oferta de antecipação de recebíveis de boletos. Isso pode ser visto como uma tentativa de melhorar a experiência do cliente e aumentar a satisfação.
+2. **Desafios e críticas**: No entanto, o Nubank também está enfrentando desafios, como a manutenção de suas margens e a resolução de problemas de segurança, como o caso de uma vítima de golpe que foi condenada a ser indenizada. Isso pode afetar negativamente o sentimento do cliente e a confiança na marca.
+3. **Comunicação e suporte**: O Nubank está trabalhando para melhorar a comunicação e o suporte ao cliente, com guias práticos para falar com atendentes e recuperar PIX enviados à pessoa errada. Além disso, o banco está enviando comunicados importantes sobre mudanças que afetam o dinheiro dos clientes, o que pode ser visto como uma tentativa de manter os clientes informados e seguros."
+Caixa,40,23.12,158194617.0,165.0,21753.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco Caixa**
+
+Aqui estão 3 tópicos curtos sobre as notícias do banco Caixa, focando no sentimento do cliente e temas principais:
+
+1. **Renegociação de Dívidas**: O banco Caixa está oferecendo opções de renegociação de dívidas para estudantes com contratos do Fies, com descontos de até 99%. Isso pode ser um alívio para muitos clientes que estão enfrentando dificuldades financeiras.
+2. **Investigação sobre Poupanças de Escravizados**: O banco Caixa está sendo investigado sobre o destino de poupanças de escravizados, e recentemente localizou 158 contas abertas por escravizados. Isso pode gerar um sentimento de preocupação e indignação entre os clientes e a sociedade em geral.
+3. **Programas de Apoio**: O banco Caixa também está oferecendo programas de apoio, como um programa com até 7 parcelas de R$ 300 para um grupo específico de clientes. Isso pode ser visto como um esforço para ajudar os clientes que estão enfrentando dificuldades financeiras."
+C6,39,55.3,34326775.0,371.0,7347.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco C6**
+
+Aqui estão 3 tópicos curtos sobre as notícias do banco C6, focando no sentimento do cliente e temas principais:
+
+1. **Renegociação de Dívidas**: O banco C6, assim como outros bancos tradicionais e digitais, está abrindo canais para renegociar dívidas, o que pode ser um alívio para os clientes que estão enfrentando dificuldades financeiras.
+2. **Inovação e Tecnologia**: O C6 Bank está investindo em tecnologia e inovação, com eventos como a C6 Tech Week 2026 e a possibilidade de abertura de conta via site, o que pode melhorar a experiência do cliente e tornar os serviços mais acessíveis.
+3. **Desafios e Controvérsias**: No entanto, o banco C6 também está enfrentando desafios e controvérsias, como a interrupção dos planos de emitir bonds e a possibilidade de investigação por possíveis fraudes, o que pode afetar a confiança dos clientes na instituição."
+BTG Pactual,39,42.81,27389127.0,239.0,7867.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do banco BTG Pactual, focando no sentimento do cliente e temas principais:
+
+1. **Crescimento e Rentabilidade**: O BTG Pactual apresentou resultados financeiros impressionantes, com um lucro de R$ 4,8 bilhões no 1º trimestre de 2026, um aumento de 42% em relação ao mesmo período do ano anterior. Isso demonstra a solidez e a capacidade de crescimento do banco.
+2. **Expansão do Crédito Consignado**: A fintech Meu Tudo, do BTG Pactual, está disputando o mercado de crédito consignado com o Pan, sem canibalizar as operações do banco. Isso indica que o BTG Pactual está buscando expandir sua presença no mercado de crédito e oferecer mais opções aos clientes.
+3. **Confiança no Futuro**: O CEO do BTG Pactual prevê que o Banco Pan atingirá a rentabilidade do grupo até 2028, o que demonstra confiança no futuro do banco e na capacidade de alcançar metas ambiciosas. Isso pode contribuir para aumentar a confiança dos clientes e investidores no banco."
+PicPay,40,37.22,68839517.0,514.0,9459.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco PicPay**
+
+Aqui estão 3 tópicos curtos sobre as notícias do banco PicPay, focando no sentimento do cliente e temas principais:
+
+1. **Expansão e Parcerias**: O PicPay está expandindo seus serviços e fazendo parcerias estratégicas, como a compra da Kovr Seguradora e a união com a TIM para oferecer serviços financeiros. Isso pode ser visto como uma oportunidade para os clientes terem mais opções e serviços personalizados.
+2. **Desafios e Investigação**: No entanto, o PicPay também está enfrentando desafios, como a investigação do Cade sobre irregularidades na compra da Kovr e o liderar o ranking de reclamações do Banco Central. Isso pode gerar preocupação entre os clientes sobre a confiabilidade e a transparência do banco.
+3. **Compromisso com os Clientes**: Por outro lado, o PicPay também está demonstrando compromisso com os clientes, como a devolução de cerca de 1 milhão de reais cobrados a título de seguro prestamista e a parceria com a Casa do Patrão para oferecer serviços financeiros personalizados. Isso pode ser visto como um esforço para melhorar a experiência do cliente e reconstruir a confiança."
+Inter,39,34.86,43178240.0,167.0,8097.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco Inter**
+
+Aqui estão 3 tópicos curtos sobre as notícias do Banco Inter, focando no sentimento do cliente e temas principais:
+
+1. **Desempenho Financeiro**: O Banco Inter apresentou resultados positivos, com um ROE acima de 15% e lucro anual recorde no 4T25. Isso sugere que o banco está em uma posição financeira sólida.
+2. **Inovação e Tecnologia**: O Banco Inter está investindo em tecnologia e inovação, com a implementação de IA para colocar o cliente no comando do próprio banco. Isso demonstra um compromisso com a experiência do cliente e a modernização dos serviços bancários.
+3. **Confiança e Crescimento**: Apesar de uma queda inicial, os analistas estão otimistas sobre o futuro do Banco Inter, com previsões de alta de até 70% nas ações. O banco também apresentou uma nova meta de crescimento e rentabilidade, conhecida como ""Regra dos 50"", o que sugere que está preparado para um crescimento sustentável."
