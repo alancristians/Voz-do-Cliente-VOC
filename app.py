@@ -149,7 +149,7 @@ if df is not None:
 
     st.divider()
 
-    # --- NOVO BLOCO: DETALHAMENTO DE MOTIVOS POR BANCO (LISTA DINÂMICA) ---
+    # --- BLOCO: DETALHAMENTO DE MOTIVOS POR BANCO (LISTA DINÂMICA) ---
     st.subheader("🎯 Detalhamento de Reclamações por Banco")
     st.caption("Filtro automático aplicado com base nas instituições selecionadas na barra lateral esquerda.")
 
@@ -309,8 +309,19 @@ if df is not None:
         use_container_width=True, hide_index=True
     )
 
-    # 10. EXPLORADOR DE DADOS (Silver Layer)
     st.divider()
+
+    # --- NOVO BLOCO: INSIGHTS ESTRATÉGICOS DE IA (MOVIDO PARA JUNTO DO EXPLORADOR) ---
+    if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
+        st.subheader("🧠 Insights Estratégicos (IA)")
+        focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks)
+        
+        if focus_bank:
+            resumo = df_p[df_p['bank'] == focus_bank]['resumo_insight_ia'].values[0]
+            st.info(f"**Análise da IA para {focus_bank}:**\n\n{resumo}")
+        st.divider()
+
+    # 10. EXPLORADOR DE DADOS (Silver Layer)
     st.subheader(f"🔍 Explorador de Notícias")
     news_path = "data/silver/stg_noticias.parquet"
     
@@ -334,7 +345,6 @@ if df is not None:
             hide_index=True
         )
 
-         # RESTAURADO: Legenda informativa
         if not df_news.empty:
             st.caption(f"Exibindo as {len(df_news)} notícias mais relevantes/recentes.")
     else:
