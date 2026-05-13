@@ -2,11 +2,13 @@ name: FinVoC Daily Update
 
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    - cron: '0 0 * * *' # Executa diariamente à meia-noite
+  workflow_dispatch: # Permite execução manual pelo botão "Run workflow"
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # Injeta a chave da Groq para que o script Gold consiga gerar os insights de IA
+  GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
 
 permissions:
   contents: write
@@ -14,6 +16,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -25,7 +28,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Instalar bibliotecas
+      - name: 🛠️ Instalar bibliotecas
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -43,30 +46,36 @@ jobs:
           echo "::group::Coleta Consumidor.gov.br"
           python scripts/consumidor_ingestion.py
           echo "::endgroup::"
-          
-        #echo "::group::Coleta Assuntos BCB"
-        #python scripts/subject_ingestion.py
-        #echo "::endgroup::"
 
       - name: "🥈 Etapa 2: Transformação Prata (Limpeza)"
         run: |
+          echo "::group::Processamento Silver"
           python scripts/silver_transformation.py
+          echo "::endgroup::"
 
-      - name: "🥇 Etapa 3: Análise Ouro (Negócio)"
+      - name: "🥇 Etapa 3: Análise Ouro (IA & Negócio)"
         run: |
+          echo "::group::Geração de Insights com Llama 3.3"
           python scripts/gold_analysis.py
+          echo "::endgroup::"
 
       - name: "📦 Etapa 4: Atualizar Repositório (Commit e Push)"
         run: |
+          # Configuração do usuário do Bot para o commit
           git config --global user.name 'Alan (FinVoC Bot)'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
+          # Garante que as pastas de dados existam
           mkdir -p data/bronze data/silver data/gold
-          git add -f data/
           
+          # Adiciona os arquivos gerados (forçando os que estão no .gitignore se necessário)
+          git add -f data/gold/fact_finvoc_summary.csv
+          git add data/bronze/ data/silver/ data/gold/last_update.txt
+          
+          # Verifica se houve mudanças antes de commitar
           if git diff --staged --quiet; then
             echo "Nada novo para salvar."
           else
-            git commit -m "data: medallion update with real complaint subjects [skip ci]"
+            git commit -m "data: medallion update with AI insights [skip ci]"
             git push origin main
           fi
