@@ -1,48 +1,56 @@
 bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo,resumo_insight_ia
-Itaú,34,34.12,100863694.0,361.0,27703.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do banco Itaú, focando no sentimento do cliente e temas principais:
+Itaú,36,34.12,100863694.0,361.0,27703.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco Itaú**
 
-1. **Demissões surpresa**: O Itaú anunciou o fim de um serviço no Brasil, afetando quase 400 trabalhadores, o que pode gerar um sentimento de insegurança e incerteza entre os funcionários e clientes.
-2. **Pagamento de JCP**: O banco aprovou o pagamento de R$ 3,99 bilhões em JCP (Juros sobre Capital Próprio) aos acionistas, o que pode ser visto como uma boa notícia para os investidores, mas pode não ter um impacto direto no sentimento do cliente.
-3. **Impacto no mercado**: O Itaú foi mencionado como um dos motivos para a queda do Ibovespa, junto com a Petrobras e a Ambev, devido a uma notícia fraca sobre o Caged, o que pode gerar um sentimento de preocupação entre os investidores e clientes que acompanham o desempenho do banco no mercado."
-Bradesco,34,48.92,110328071.0,348.0,35387.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos resumindo as notícias do banco Bradesco, focando no sentimento do cliente e temas principais:
+Aqui estão 3 tópicos curtos sobre as notícias do banco Itaú, focando no sentimento do cliente e temas principais:
 
-1. **Instabilidade no Pix**: Clientes estão reclamando de instabilidade na ferramenta de pagamento Pix, o que pode afetar negativamente a experiência do cliente e a confiança no banco.
-2. **Críticas e condenações**: O Bradesco foi condenado a pagar R$ 53 mil a um cliente vítima de golpe e também foi autuado por práticas abusivas contra consumidores no Ceará, o que pode gerar um sentimento negativo entre os clientes.
-3. **Iniciativas positivas**: Por outro lado, o Bradesco está realizando iniciativas positivas, como a abertura de vagas para segmento de alta renda e a realização de palestras e mentorias para mulheres, o que pode melhorar a percepção do banco entre os clientes e a comunidade."
-Santander,38,34.49,71632364.0,187.0,24301.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco Santander**
+1. **Cobranças Indevidas**: O Itaú admitiu cobrar indevidamente seguros por 14 anos e promete ressarcir os clientes. Isso pode gerar um sentimento de desconfiança e insatisfação entre os clientes.
+2. **Multa e Ressarcimento**: O banco está sujeito a uma multa diária de R$ 10 mil se não devolver o dinheiro das cobranças indevidas. Além disso, o Itaú vai pagar R$ 3,99 bilhões a acionistas, o que pode ser visto como uma tentativa de reparar o dano causado.
+3. **Repercussão no Mercado**: As notícias sobre as cobranças indevidas podem afetar a percepção dos investidores e clientes sobre o banco, mas o Itaú BBA considera que a situação não afeta a atratividade das ações na B3. No entanto, o sentimento do cliente pode ser afetado negativamente, o que pode levar a uma perda de confiança no banco."
+Bradesco,30,48.92,110328071.0,348.0,35387.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do Bradesco, focando no sentimento do cliente e temas principais:
 
-Aqui estão 3 tópicos curtos sobre as notícias do banco Santander, focando no sentimento do cliente e temas principais:
+1. **Oportunidades de emprego e crescimento**: O Bradesco está oferecendo vagas de emprego em áreas de tecnologia, negócios e atendimento, o que pode ser visto como uma oportunidade para os clientes que buscam carreiras no setor financeiro.
+2. **Desempenho financeiro e serviços**: O Bradesco apresentou um lucro crescente e está investindo em áreas como tecnologia e atendimento, o que pode melhorar a experiência do cliente. No entanto, houve relatos de instabilidade no Pix, o que pode afetar negativamente o sentimento do cliente.
+3. **Controvérsias e responsabilidade social**: O Bradesco foi condenado a indenizar um cliente e também está envolvido em discussões sobre o alto nível de endividamento no país. Por outro lado, a instituição também está promovendo iniciativas de responsabilidade social, como palestras e mentorias para mulheres em finanças."
+Santander,36,34.49,71632364.0,187.0,24301.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco Santander em 3 Tópicos**
 
-1. **Incorporação da Esfera**: O Santander anunciou a incorporação da Esfera, sua empresa de fidelidade, com o objetivo de simplificar operações e melhorar a experiência do cliente.
-2. **Preparação para mudanças**: O banco pediu que os clientes se preparem para mudanças a partir de 03/06, o que pode gerar expectativa e curiosidade entre os clientes sobre como essas mudanças afetarão seus serviços.
-3. **Oferta de cursos gratuitos**: A plataforma do Santander oferece mais de 1.000 cursos gratuitos online, o que pode ser visto como um benefício adicional para os clientes e uma demonstração do compromisso do banco em investir na educação e desenvolvimento de seus clientes."
-Nubank,36,10.65,114737784.0,78.0,31143.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Nubank em 3 Tópicos**
+1. **Pontuação e Ofertas**: O Santander Rewards ampliou a pontuação para além dos gastos no cartão de crédito, uma medida que pode agradar os clientes. No entanto, o banco deixou de oferecer cartões de crédito American Express, o que pode desapontar alguns clientes.
 
-1. **Dívidas Abusivas**: Vários clientes relataram dívidas que aumentaram exponencialmente devido a juros altos, com casos de dívidas iniciais de R$ 12 mil chegando a R$ 788 mil. Isso gerou grande insatisfação e preocupação entre os clientes.
-2. **Problemas Técnicos**: O Nubank enfrentou problemas com o Pix, com clientes relatando instabilidade e dificuldades em realizar transações. Além disso, o banco lançou um plano de celular para adolescentes, o que pode ser visto como uma tentativa de diversificar seus serviços.
-3. **Falta de Confiança**: As notícias sobre dívidas abusivas e problemas técnicos podem afetar a confiança dos clientes no Nubank. Além disso, a condenação do banco por falha em um golpe de R$ 51 mil no Pix pode aumentar a percepção de que o Nubank não está priorizando a segurança e a satisfação dos clientes."
-Caixa,33,23.12,158194617.0,165.0,21753.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do banco Caixa, focando no sentimento do cliente e temas principais:
+2. **Problemas e Indenizações**: O Santander foi condenado a indenizar um cliente que foi negativado após renegociação de dívida, o que pode afetar a confiança dos clientes na instituição. Além disso, o banco foi notificado por atraso na aposentadoria e pode pagar uma multa de R$ 260 mil.
 
-1. **Concurso Público**: O banco Caixa está estudando a realização de um novo concurso público para técnico bancário, com vagas de nível médio e salário de R$ 5 mil em 2026. Isso pode gerar expectativa positiva entre os clientes que buscam oportunidades de emprego.
-2. **Sobrecarga e Saúde**: No entanto, há relatos de sobrecarga na rede e problemas com a Saúde Caixa e Super Caixa, o que pode gerar insatisfação entre os clientes e funcionários. O banco não respondeu a essas questões, o que pode aumentar a frustração.
-3. **Pagamento do Bolsa Família**: Por outro lado, o banco Caixa realizou o pagamento do Bolsa Família para beneficiários com NIS final 9, o que é uma notícia positiva para os clientes que dependem desse benefício. Isso demonstra que o banco está cumprindo com suas responsabilidades sociais."
+3. **Reorganização e Parcerias**: O Santander está passando por uma reorganização e anunciou a incorporação da Esfera Fidelidade, uma subsidiária de programas de fidelidade. O banco também se tornou o gestor da folha de pagamento de 1,5 mil servidores e participou de uma operação bilionária para socorrer o BRB, o que pode indicar uma expansão de suas atividades e parcerias."
+Nubank,36,10.65,114737784.0,78.0,31143.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do Nubank, focando no sentimento do cliente e temas principais:
+
+1. **Instabilidade e problemas técnicos**: Muitos clientes do Nubank estão enfrentando dificuldades para realizar transações via Pix e acessar o aplicativo, gerando frustração e insatisfação.
+2. **Dívidas e bloqueio de contas**: A notícia sobre o bloqueio de contas por ordem judicial no mesmo dia e o caso de uma dívida que cresceu 65 vezes e chegou a R$ 788 mil geram preocupação e medo entre os clientes do Nubank.
+3. **Desconfiança e incerteza**: As notícias sobre a instabilidade do Nubank e a possibilidade de mudanças na empresa após decisão do Banco Central estão gerando desconfiança e incerteza entre os clientes, levantando questionamentos sobre o futuro do banco digital."
+Caixa,38,23.12,158194617.0,165.0,21753.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco Caixa**
+
+Aqui estão 3 tópicos curtos sobre as notícias do banco Caixa, focando no sentimento do cliente e temas principais:
+
+1. **Concurso Caixa**: O banco está estudando a realização de um novo concurso para Técnico Bancário, o que pode abrir milhares de oportunidades para nível médio. Isso pode gerar expectativa positiva entre os candidatos e melhorar a percepção do banco como empregador.
+2. **Saúde e Sobrecarga**: No entanto, os empregados do banco relatam um cenário de adoecimento devido à sobrecarga de trabalho e falta de respostas do banco sobre o tema. Isso pode afetar negativamente o sentimento dos funcionários e a imagem do banco.
+3. **Parcerias e Finanças**: O banco também está envolvido em parcerias financeiras, como a busca por capitalização bilionária com apoio de outros bancos. Isso pode ser visto como um sinal de estabilidade e crescimento do banco, mas não tem impacto direto no sentimento do cliente."
 C6,40,55.3,34326775.0,371.0,7347.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do banco C6, focando no sentimento do cliente e temas principais:
 
-1. **Instabilidade no PIX**: Os clientes do C6 Bank estão reclamando de instabilidade no sistema de pagamento PIX, o que pode gerar insatisfação e frustração.
-2. **Inovação com IA**: O C6 Bank está expandindo o uso de Inteligência Artificial (IA) para engajar clientes e melhorar a experiência, incluindo a lançamento de uma ferramenta que permite que os clientes ""conversem"" com a fatura do cartão.
-3. **Benefícios e recursos**: O C6 Bank está oferecendo benefícios e recursos aos clientes, como a possibilidade de ganhar pontos Livelo ao abrir uma conta e ferramentas de investimento e educação financeira, o que pode melhorar a satisfação e a lealdade dos clientes."
-BTG Pactual,40,42.81,27389127.0,239.0,7867.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do banco BTG Pactual, focando no sentimento do cliente e temas principais:
+1. **Instabilidade no PIX**: Os clientes do C6 Bank estão reclamando de instabilidade no sistema de pagamento PIX, o que pode gerar frustração e insatisfação.
+2. **Inovação com IA**: O C6 Bank está expandindo o uso de inteligência artificial (IA) para engajar clientes e melhorar a experiência, com a introdução de uma ferramenta que permite ""conversar"" com a fatura do cartão.
+3. **Problemas de confiança**: O banco está enfrentando problemas de confiança, com multas por empréstimo consignado fraudulento e possíveis investigações por fraudes, o que pode afetar a percepção dos clientes sobre a instituição."
+BTG Pactual,39,42.81,27389127.0,239.0,7867.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco BTG Pactual**
 
-1. **Expansão e crescimento**: O BTG Pactual está em uma fase de expansão, com a incorporação do Banco Pan e a busca por crescimento no mercado de varejo. Isso pode ser visto como uma oportunidade para os clientes, que podem ter acesso a mais produtos e serviços.
-2. **Consignado e fintechs**: O banco está investindo no consignado e disputando espaço com fintechs como a Meu Tudo. Isso pode ser visto como uma tentativa de modernizar e se adaptar às necessidades dos clientes, que buscam soluções financeiras mais ágeis e personalizadas.
-3. **Rentabilidade e confiança**: O BTG Pactual apresentou resultados financeiros positivos, com um recorde de lucro e receita. Isso pode aumentar a confiança dos clientes e investidores no banco, que pode ser visto como um sinal de estabilidade e segurança."
-PicPay,39,37.22,68839517.0,514.0,9459.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do banco PicPay, focando no sentimento do cliente e temas principais:
+Aqui estão 3 tópicos curtos sobre as notícias do banco BTG Pactual, focando no sentimento do cliente e temas principais:
 
-1. **Conflito com o Itaú**: O PicPay denunciou o Itaú ao Cade (Conselho Administrativo de Defesa Econômica) por supostas práticas anticompetitivas relacionadas à carteira digital. Isso pode gerar um sentimento de desconfiança entre os clientes do Itaú e aumentar a percepção de que o PicPay está lutando pelos interesses dos consumidores.
-2. **Expansão e parcerias**: O PicPay está expandindo suas operações e firmou parcerias com empresas como a TIM e a Casa do Patrão (um reality show da Record TV). Isso pode gerar um sentimento positivo entre os clientes, que veem o banco como inovador e disposto a investir em novas oportunidades.
-3. **Compromisso com a transparência**: O PicPay firmou um compromisso com o INSS para devolver cerca de 1 milhão de reais cobrados a título de seguro prestamista. Isso pode gerar um sentimento de confiança entre os clientes, que veem o banco como transparente e disposto a corrigir erros. Além disso, a empresa também está sendo vista como uma ""joia escondida"" por alguns analistas, com potencial de crescimento de mais de 200%."
-Inter,38,34.86,43178240.0,167.0,8097.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos sobre as notícias do Banco Inter, focando no sentimento do cliente e temas principais:
+1. **Incorporação do Banco Pan**: O BTG Pactual concluiu a incorporação do Banco Pan, o que pode gerar preocupações entre os clientes sobre mudanças nos serviços e produtos oferecidos. No entanto, o CEO do BTG Pactual afirma que a rentabilidade do Banco Pan alcançará a do grupo até 2028.
+2. **Crescimento e Lucro**: O BTG Pactual atingiu um recorde de lucro e receita, com um Roae de 26,6%. Isso pode ser visto como um sinal positivo para os clientes, indicando que o banco está em uma posição financeira sólida.
+3. **Expansão de Serviços**: O BTG Pactual está expandindo seus serviços de varejo e consignado, o que pode ser visto como uma oportunidade para os clientes terem mais opções de produtos e serviços. Além disso, a fintech Meu Tudo, do grupo, está disputando o mercado de consignado sem canibalizar os serviços do Pan."
+PicPay,40,37.22,68839517.0,514.0,9459.0,Não informado no período,1ºT/2026,"**Resumo das Notícias do Banco PicPay**
 
-1. **Descontentamento com remuneração de executivos**: O Banco Inter está enfrentando pressão dos investidores e do público em geral devido à remuneração milionária de seus executivos, o que está afetando negativamente o valor das ações do banco.
-2. **Estratégia de crédito em cenário de juro alto**: O CEO do Banco Inter afirmou que a instituição está apostando em linhas de crédito com garantias para lidar com o cenário de juro alto, o que pode ser visto como uma estratégia para manter a rentabilidade.
-3. **Desempenho financeiro e marketing**: Apesar da pressão, o Banco Inter apresentou resultados financeiros positivos, com um ROE acima de 15% e lucro anual recorde. Além disso, a instituição está investindo em marketing, com a contratação de Ronaldinho Gaúcho como embaixador para a Copa do Mundo 2026."
+Aqui estão 3 tópicos curtos sobre as notícias do banco PicPay, focando no sentimento do cliente e temas principais:
+
+1. **Crescimento e Expansão**: O PicPay registrou um lucro de 237% e uma receita de R$ 4,5 bilhões no semestre, marcando um período histórico para o banco digital. Além disso, a empresa liderou os ganhos em um dia positivo para as fintechs nos EUA.
+2. **Conflitos e Parcerias**: O PicPay está envolvido em uma disputa com o Itaú, com o Cade abrindo investigações sobre a venda de seguradoras e a carteira digital. No entanto, a empresa também fez parceria com a TIM para oferecer serviços financeiros.
+3. **Desempenho no Mercado**: O PicPay teve um desempenho misto no mercado, com uma ""upgrade"" da Moody's que não animou o mercado e uma queda de 34% em dois dias. No entanto, a empresa continua a expandir seus serviços e produtos, como o lançamento do Epic, uma aposta para a alta renda self-made."
+Inter,39,34.86,43178240.0,167.0,8097.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos resumindo as notícias do Banco Inter, com foco no sentimento do cliente e temas principais:
+
+1. **Descontentamento com remuneração de executivos**: O Banco Inter está enfrentando pressão por causa da remuneração milionária de seus executivos, o que está afetando negativamente as ações do banco e gerando descontentamento entre os investidores e clientes.
+2. **Preocupação com a gestão do banco**: As notícias sobre a queda das ações do banco e a reação exagerada do mercado estão gerando preocupação entre os clientes e investidores sobre a gestão do Banco Inter e sua capacidade de lidar com desafios econômicos.
+3. **Problemas de imagem e confiança**: O Banco Inter também está enfrentando problemas de imagem e confiança devido a erros, como o caso do STJ decidir que o banco deve devolver dinheiro de uma idosa, e incidentes internos, como o barulho em um elevador que causou apreensão em funcionários, o que pode afetar a confiança dos clientes no banco."
