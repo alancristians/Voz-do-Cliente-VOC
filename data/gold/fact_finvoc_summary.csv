@@ -1,44 +1,26 @@
 bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo,resumo_insight_ia
-Itaú,51,34.12,100863694.0,361.0,27703.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos e diretos sobre as notícias do banco Itaú, focando no sentimento do cliente, gargalos operacionais e temas principais evidenciados na mídia:
-
-1. **Sentimento do Cliente**: O Instituto de Defesa do Consumidor aplicou sanção ao Itaú por descumprimento reiterado do Código de Defesa do Consumidor, o que pode afetar negativamente a percepção dos clientes em relação ao banco.
-2. **Gargalos Operacionais**: Não há menções específicas a gargalos operacionais significativos no banco Itaú nas notícias, o que sugere que o banco está operando de forma eficiente e sem problemas significativos.
-3. **Temas Principais**: As notícias destacam a atuação do Itaú BBA em análises de mercado e recomendações de investimento, bem como a parceria com a Google para massificar a IA Gemini, o que sugere que o banco está se posicionando como um líder em inovação e tecnologia no setor financeiro. Além disso, o banco também está liderando a onda de dividendos no governo Lula 3, o que pode ser visto como um sinal de confiança dos investidores."
-Bradesco,19,48.92,110328071.0,348.0,35387.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos e diretos sobre as notícias do banco Bradesco, focando no sentimento do cliente, gargalos operacionais e temas principais evidenciados na mídia:
-
-1. **Sentimento do Cliente**: O banco Bradesco enfrenta críticas por incidentes como o ataque de um cachorro a uma idosa dentro de uma agência e a condenação por descontos excessivos em uma conta de cliente, o que pode afetar negativamente a percepção dos clientes sobre a instituição.
-2. **Gargalos Operacionais**: Problemas como a falta de dinheiro em agências, demissões arbitrárias e ignorância a adoecimentos de funcionários podem indicar gargalos operacionais que precisam ser abordados pelo banco para melhorar a eficiência e a satisfação dos clientes.
-3. **Temas Principais**: Além dos desafios, o Bradesco também está investindo em promoções e ações de marketing, como a parceria com a Elo para oferecer viagens e prêmios em dinheiro, e a ampliação da conexão com a cultura nordestina nos festejos de São João, o que pode ajudar a melhorar a percepção dos clientes e a aumentar a fidelidade."
-Santander,27,34.49,71632364.0,187.0,24301.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos e diretos sobre as notícias do banco Santander, focando no sentimento do cliente, gargalos operacionais e temas principais evidenciados na mídia:
-
-1. **Sentimento do Cliente**: O banco Santander enfrenta desafios em relação ao sentimento do cliente, com notícias sobre demissões irregulares de funcionários e esquemas fraudulentos que causaram prejuízos à instituição. No entanto, a abertura de vagas de emprego e a realização de encontros com empresários e investidores podem contribuir para melhorar a percepção do banco.
-
-2. **Gargalos Operacionais**: Os gargalos operacionais do Santander incluem a necessidade de reavaliação de transações fiscais e a resolução de problemas relacionados a demissões irregulares. Além disso, a instituição precisa lidar com esquemas fraudulentos que podem afetar a confiança dos clientes.
-
-3. **Temas Principais**: Os temas principais evidenciados na mídia sobre o Santander incluem a inovação e o crescimento, com a abertura de inscrições para trainee global, a criação de uma comunidade de startups e a elencação de ações líderes de IA na Bolsa brasileira. Esses esforços podem contribuir para melhorar a imagem do banco e atrair novos clientes."
-Nubank,31,10.65,114737784.0,78.0,31143.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos e diretos sobre as notícias do Nubank, focando no sentimento do cliente, gargalos operacionais e temas principais evidenciados na mídia:
-
-1. **Sentimento do Cliente**: O Nubank está investindo em experiências imersivas e benefícios para os clientes, como a inauguração de um espaço cultural na Avenida Paulista e a preparação de benefícios durante a Copa do Mundo, demonstrando um foco em melhorar a experiência do cliente e aumentar a satisfação.
-2. **Gargalos Operacionais**: Não há menções significativas a gargalos operacionais nos artigos, o que sugere que o Nubank está funcionando bem em termos de operações e não enfrenta problemas significativos nesse sentido.
-3. **Temas Principais**: O Nubank está investindo em sua marca e presença física, com a renovação da identidade visual e a inauguração de um espaço cultural, além de competir com outras fintechs, como a Revolut, que busca uma valuation de US$ 115 bilhões, quase duas vezes o valor do Nubank."
-Caixa,22,23.12,158194617.0,165.0,21753.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos e diretos sobre as notícias do banco Caixa, focando no sentimento do cliente, gargalos operacionais e temas principais evidenciados na mídia:
-
-1. **Unificação de Aplicativos**: O banco Caixa anunciou a unificação de seus aplicativos, substituindo 14 aplicativos por uma plataforma única, visando melhorar a experiência do cliente e simplificar o acesso aos serviços.
-2. **Gargalos Operacionais**: A possível fechamento de agências da Caixa pode comprometer a oferta de crédito habitacional, segundo uma pesquisa, o que pode afetar negativamente o sentimento do cliente e a percepção da instituição.
-3. **Modernização e Investimentos**: O presidente da Caixa afirmou que 2026 é o ano da modernização do banco, com investimentos em tecnologia e melhorias nos serviços, o que pode melhorar a experiência do cliente e aumentar a satisfação com os serviços oferecidos."
-C6,2,55.3,34326775.0,371.0,7347.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos e diretos sobre as notícias do banco C6:
-
-1. **Sentimento do Cliente**: O patrocínio ao surfista Yago Dora pode gerar um sentimento positivo entre os clientes e o público em geral, associando a marca C6 Bank a valores como esporte, aventura e juventude.
-2. **Gargalos Operacionais**: Não há menção a gargalos operacionais específicos nas notícias, o que sugere que o banco está focado em iniciativas de marketing e patrocínio para melhorar a experiência do cliente.
-3. **Temas Principais**: Os temas principais evidenciados na mídia são o patrocínio esportivo e a comunicação de datas importantes, como o quinto dia útil de junho de 2026, demonstrando a preocupação do banco em se conectar com os clientes e manter uma presença ativa na mídia."
-BTG Pactual,0,42.81,27389127.0,239.0,7867.0,Não informado no período,1ºT/2026,Sem notícias relevantes mapeadas para este banco no período do mês atual.
-PicPay,4,37.22,68839517.0,514.0,9459.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos e diretos sobre as notícias do banco PicPay, focando no sentimento do cliente, gargalos operacionais e temas principais evidenciados na mídia:
-
-1. **Sentimento do Cliente**: A queda de 19% no valor das ações do PicPay após o 1T26 pode refletir uma percepção negativa dos investidores e clientes em relação ao desempenho da empresa, apesar de ter superado as expectativas de guidance.
-2. **Gargalos Operacionais**: A concorrência acirrada com o Banco do Brasil e o Nubank pode representar um desafio operacional para o PicPay, exigindo investimentos em inovação e melhoria dos serviços para manter a competitividade.
-3. **Temas Principais**: A aposta no consignado privado e a expansão de parcerias, como o patrocínio com o Esporte Clube Pinheiros, são estratégias do PicPay para diversificar seus serviços e melhorar a experiência do cliente, buscando reverter a perda de valor e manter a confiança dos investidores e clientes."
-Inter,17,34.86,43178240.0,167.0,8097.0,Não informado no período,1ºT/2026,"Aqui estão 3 tópicos curtos e diretos sobre as notícias do banco Inter, focando no sentimento do cliente, gargalos operacionais e temas principais evidenciados na mídia:
-
-1. **Sentimento do Cliente**: O banco Inter está investindo em inovação e tecnologia para melhorar a experiência do cliente, com o lançamento de acessórios como anel, pulseira e relógio para facilitar pagamentos, demonstrando um esforço para se manter competitivo e atender às necessidades dos clientes.
-2. **Gargalos Operacionais**: A incorporação de ativos do BMG pode ter causado uma queda nas ações do banco Inter, mas o desempenho de small cap e os resultados do 4T25 mostram um ROE acima de 15% e lucro anual recorde, indicando que o banco está trabalhando para superar os desafios operacionais e manter a rentabilidade.
-3. **Temas Principais**: A expansão internacional do banco Inter, com a obtenção de licença para operar filial nos EUA, é um tema principal que pode impactar positivamente no sentimento do cliente e na percepção do banco como uma instituição financeira sólida e inovadora, com potencial para crescer e se estabelecer no mercado global."
+Itaú,52,34.12,100863694.0,361.0,27703.0,Não informado no período,1ºT/2026,"🔹 Itaú lança R$ 3 bi em letras financeiras.
+🔹 Instituto de Defesa do Consumidor aplica sanção ao Itaú.
+🔹 Itaú e Google se aliam para massificar a IA Gemini."
+Bradesco,19,48.92,110328071.0,348.0,35387.0,Não informado no período,1ºT/2026,"🔹 Incidente com idosa atacada por cachorro na agência.
+🔹 Condenação por descontos excessivos em conta de idosa.
+🔹 Demissões arbitrárias e adoecimento de funcionários."
+Santander,27,34.49,71632364.0,187.0,24301.0,Não informado no período,1ºT/2026,"🔹 Reintegração de bancária demitida irregularmente.
+🔹 Comunidade de startups atinge 400 empresas.
+🔹 Nova regra de gastos para salas VIP."
+Nubank,31,10.65,114737784.0,78.0,31143.0,Não informado no período,1ºT/2026,"🔹 Nubank investe em experiências imersivas.
+🔹 Revolut supera valorização do Nubank.
+🔹 Nubank anuncia benefícios para clientes."
+Caixa,22,23.12,158194617.0,165.0,21753.0,Não informado no período,1ºT/2026,"🔹 Unificação de aplicativos para melhorar experiência do cliente.
+🔹 Modernização da Caixa em 2026 para aumentar eficiência.
+🔹 Fechamento de agências pode afetar oferta de crédito habitacional."
+C6,2,55.3,34326775.0,371.0,7347.0,Não informado no período,1ºT/2026,"🔹 Patrocínio ao surfista Yago Dora promove marca.
+🔹 Comunicação institucional sobre datas úteis informa clientes.
+🔹 Notícias neutras reforçam presença do C6 Bank."
+BTG Pactual,0,42.81,27389127.0,239.0,7867.0,Não informado no período,1ºT/2026,🔹 Sem fatos relevantes ou menções críticas mapeadas na mídia para esta instituição no mês vigente.
+PicPay,4,37.22,68839517.0,514.0,9459.0,Não informado no período,1ºT/2026,"🔹 Concorrência intensa com Nubank e Banco do Brasil.
+🔹 Desempenho financeiro volátil afeta confiança do mercado.
+🔹 Parcerias estratégicas reforçam presença no mercado."
+Inter,18,34.86,43178240.0,167.0,8097.0,Não informado no período,1ºT/2026,"🔹 Desempenho financeiro do Inter é destacado.
+🔹 Expansão internacional com licença nos EUA.
+🔹 Lançamento de produtos inovadores para pagamentos."
