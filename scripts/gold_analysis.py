@@ -34,16 +34,27 @@ def gerar_resumo_ia(banco, manchetes):
     Implementa isolamento de exceções (Fail-Safe) para resiliência do pipeline.
     """
     if not manchetes:
-        return "Sem notícias relevantes mapeadas para este banco no período do mês atual."
+        return "🔹 Sem fatos relevantes ou menções críticas mapeadas na mídia para esta instituição no mês vigente."
     
     # Restrição física de amostragem para otimização de tokens (Janela de Contexto)
     texto_input = "\n".join([f"- {m}" for m in manchetes[:10]])
     
+    # Prompt estruturado com restrições de comportamento e formatação para o Dashboard
     prompt = f"""
-    Como analista sênior de Customer Experience (CX), resuma as notícias do banco {banco} em exatamente 3 tópicos curtos e diretos.
-    Foque estritamente no sentimento do cliente, gargalos operacionais e temas principais evidenciados na mídia. Seja direto, corporativo e conciso.
-    
-    Notícias:
+    Atue como um Especialista Sênior em Inteligência de Mercado e Customer Experience (CX) no setor bancário.
+    Sua tarefa é analisar o clipping de notícias fornecido para o banco {banco} e consolidar um diagnóstico de reputação.
+
+    DIRETRIZES DE ANÁLISE:
+    1. Identifique os principais pontos críticos (ex: instabilidade em apps, reclamações de segurança, falhas de atendimento) ou movimentos estratégicos relevantes.
+    2. Avalie o impacto direto no sentimento do cliente (atrito, insatisfação, engajamento).
+    3. Se as notícias forem neutras ou institucionais, relate o fato sem inventar crises de CX.
+
+    RESTRIÇÕES DE FORMATAÇÃO (CRÍTICO):
+    - Retorne EXATAMENTE 3 tópicos, utilizando markdown (bullet points com o caractere '🔹').
+    - Cada tópico deve ser uma frase curta, direta e altamente corporativa (máximo 20 palavras por tópico).
+    - NÃO adicione saudações, introduções ou conclusões. Retorne APENAS os 3 tópicos limpos.
+
+    Notícias para análise:
     {texto_input}
     """
     
@@ -51,13 +62,13 @@ def gerar_resumo_ia(banco, manchetes):
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": prompt}],
-            temperature=0.3,
-            max_tokens=600
+            temperature=0.2, # Baixado para 0.2 para maior determinismo e menos criatividade/alucinação
+            max_tokens=400   # Reduzido para economizar tokens, dado que exigimos síntese
         )
-        return completion.choices[0].message.content
+        return completion.choices[0].message.content.strip()
     except Exception as e:
         print(f"⚠️ Alerta IA: Falha ao gerar insight preditivo para {banco}. Erro: {str(e)}")
-        return "Insight de IA temporariamente indisponível devido a instabilidade na API externa."
+        return "🔹 Insight de IA temporariamente indisponível devido a instabilidade na API externa."
 
 def salvar_timestamp():
     """Garante a persistência do metadado de controle cronológico de execução (last_update)."""
