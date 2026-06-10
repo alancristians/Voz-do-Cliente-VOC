@@ -194,12 +194,25 @@ if df is not None:
             df_raw_news = pd.read_parquet(news_path)
             df_raw_news = df_raw_news[df_raw_news['bank'].isin(selected_banks)]
             df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce')
-            limite_30d = pd.Timestamp.now().replace(hour=0, minute=0, second=0, microsecond=0) - pd.Timedelta(days=30)
-            df_filtered_news = df_raw_news[df_raw_news['published_dt'].dt.tz_localize(None) >= limite_30d]
-            df_counts = df_filtered_news.groupby('bank').size().reset_index(name='vol_30d')
             
-            fig_news = px.treemap(df_counts, path=['bank'], values='vol_30d', color='bank', 
+            # -------------------------------------------------------------------------
+            # REGRA DE NEGÓCIO: FILTRO DE COMPETÊNCIA (MÊS CALENDÁRIO ATUAL)
+            # Garante o isolamento volumétrico do mês vigente (ano/mês) para o dashboard,
+            # evitando sobreposição de períodos na virada do mês (rolling window de 30 dias).
+            # -------------------------------------------------------------------------
+            hoje = pd.Timestamp.now()
+            df_filtered_news = df_raw_news[
+                (df_raw_news['published_dt'].dt.year == hoje.year) & 
+                (df_raw_news['published_dt'].dt.month == hoje.month)
+            ]
+            
+            # Agregação volumétrica por instituição (Camada de Apresentação)
+            df_counts = df_filtered_news.groupby('bank').size().reset_index(name='vol_mes')
+            
+            # Renderização do gráfico de distribuição de market share de mídia (Treemap)
+            fig_news = px.treemap(df_counts, path=['bank'], values='vol_mes', color='bank', 
                                   color_discrete_map=BANK_COLORS, template="plotly_dark")
+            
             fig_news.update_layout(showlegend=True, legend_title_text="Instituição", margin=dict(t=10, l=0, r=0, b=0), paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
             fig_news.update_traces(textinfo="label+value", hovertemplate='<b>%{label}</b><br>Notícias: %{value}', textfont=dict(size=14, color="white"), marker=dict(line=dict(width=1, color='#333333')))
             st.plotly_chart(fig_news, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
