@@ -39,20 +39,20 @@ def gerar_resumo_ia(banco, manchetes):
     # Restrição física de amostragem para otimização de tokens (Janela de Contexto)
     texto_input = "\n".join([f"- {m}" for m in manchetes[:10]])
     
-    # Prompt estruturado com restrições de comportamento e formatação para o Dashboard
+    # REFINAMENTO DE PROMPT: Foco em quebra de linha estruturada e profundidade analítica
     prompt = f"""
-    Atue como um Especialista Sênior em Inteligência de Mercado e Customer Experience (CX) no setor bancário.
-    Sua tarefa é analisar o clipping de notícias fornecido para o banco {banco} e consolidar um diagnóstico de reputação.
+    Atue como um Analista Sênior de Customer Experience (CX) e Inteligência de Mercado no setor financeiro.
+    Sua tarefa é analisar as notícias recentes do banco {banco} e consolidar um resumo executivo de reputação.
 
     DIRETRIZES DE ANÁLISE:
-    1. Identifique os principais pontos críticos (ex: instabilidade em apps, reclamações de segurança, falhas de atendimento) ou movimentos estratégicos relevantes.
-    2. Avalie o impacto direto no sentimento do cliente (atrito, insatisfação, engajamento).
-    3. Se as notícias forem neutras ou institucionais, relate o fato sem inventar crises de CX.
+    1. Identifique os principais movimentos (ex: lançamentos, parcerias, sanções ou reclamações operacionais).
+    2. Explique brevemente o contexto de cada ponto em vez de apenas listar o título da notícia.
 
-    RESTRIÇÕES DE FORMATAÇÃO (CRÍTICO):
-    - Retorne EXATAMENTE 3 tópicos, utilizando markdown (bullet points com o caractere '🔹').
-    - Cada tópico deve ser uma frase curta, direta e altamente corporativa (máximo 20 palavras por tópico).
-    - NÃO adicione saudações, introduções ou conclusões. Retorne APENAS os 3 tópicos limpos.
+    ESTRUTURA E REGRAS DE FORMATO (OBRIGATÓRIO):
+    - Retorne EXATAMENTE 3 tópicos distintos.
+    - Comece cada tópico OBRIGATORIAMENTE com o emoji '🔹 '.
+    - Dê uma QUEBRA DE LINHA dupla (pressione Enter duas vezes) entre cada um dos tópicos para que eles não fiquem colados.
+    - NÃO adicione saudações, introduções ou textos como "Aqui está o resumo". Retorne apenas os tópicos.
 
     Notícias para análise:
     {texto_input}
@@ -62,8 +62,8 @@ def gerar_resumo_ia(banco, manchetes):
         completion = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[{"role": "user", "content": prompt}],
-            temperature=0.2, # Baixado para 0.2 para maior determinismo e menos criatividade/alucinação
-            max_tokens=400   # Reduzido para economizar tokens, dado que exigimos síntese
+            temperature=0.3, # Subimos levemente para ele contextualizar melhor
+            max_tokens=600
         )
         return completion.choices[0].message.content.strip()
     except Exception as e:
