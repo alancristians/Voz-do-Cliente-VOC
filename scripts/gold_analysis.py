@@ -115,16 +115,14 @@ def executar_gold():
         print("⚠️ Aviso: Fonte qualitativa de reclamações não localizada.")
     
     # -------------------------------------------------------------------------
-    # REGRA DE NEGÓCIO: ISOLAMENTO TEMPORAL NA GOLD (MÊS CALENDÁRIO ATUAL)
-    # Alinha os dados de entrada da IA com a mesma janela de visualização do app.py
+    # REGRA DE NEGÓCIO: ISOLAMENTO TEMPORAL NA GOLD (15 DIAS MÓVEIS)
+    # Garante que a volumetria da fato e o input da IA reflitam estritamente
+    # a janela móvel de duas semanas configurada na camada de apresentação.
     # -------------------------------------------------------------------------
     df_news['published_dt'] = pd.to_datetime(df_news['published'], errors='coerce')
-    hoje = datetime.now()
-    df_news_filtered = df_news[
-        (df_news['published_dt'].dt.year == hoje.year) & 
-        (df_news['published_dt'].dt.month == hoje.month)
-    ].copy()
+    limite_15d = datetime.now() - pd.Timedelta(days=15)
     
+    df_news_filtered = df_news[df_news['published_dt'].dt.tz_localize(None) >= limite_15d].copy()
     df_news_filtered['bank_clean'] = df_news_filtered['bank'].apply(normalizar_chave)
 
     # Malha dimensional de instituições financeiras monitoradas

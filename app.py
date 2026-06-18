@@ -188,7 +188,7 @@ if df is not None:
     with c1:
         news_path = "data/silver/stg_noticias.parquet"
         st.subheader("Volume de Notícias na Mídia")
-        st.caption("Dados referentes aos dias do mês atual")
+        st.caption("Dados referentes aos últimos 15 dias móveis")
         
         if os.path.exists(news_path):
             df_raw_news = pd.read_parquet(news_path)
@@ -196,28 +196,51 @@ if df is not None:
             df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce')
             
             # -------------------------------------------------------------------------
-            # REGRA DE NEGÓCIO: FILTRO DE COMPETÊNCIA (MÊS CALENDÁRIO ATUAL)
-            # Garante o isolamento volumétrico do mês vigente (ano/mês) para o dashboard,
-            # evitando sobreposição de períodos na virada do mês (rolling window de 30 dias).
+            # REGRA DE NEGÓCIO: JANELA MÓVEL DE COMPETÊNCIA DE 15 DIAS (ROLLING WINDOW)
+            # Captura o volume de menções em uma janela retroativa de 15 dias móveis.
+            # Essa abordagem mitiga o efeito de "gráfico vazio" no início de cada mês
+            # e mantém o dashboard focado nas tendências de mídia mais imediatas.
             # -------------------------------------------------------------------------
-            hoje = pd.Timestamp.now()
-            df_filtered_news = df_raw_news[
-                (df_raw_news['published_dt'].dt.year == hoje.year) & 
-                (df_raw_news['published_dt'].dt.month == hoje.month)
-            ]
+            limite_15d = pd.Timestamp.now().replace(hour=0, minute=0, second=0, microsecond=0) - pd.Timedelta(days=15)
+            df_filtered_news = df_raw_news[df_raw_news['published_dt'].dt.tz_localize(None) >= limite_15d]
             
             # Agregação volumétrica por instituição (Camada de Apresentação)
-            df_counts = df_filtered_news.groupby('bank').size().reset_index(name='vol_mes')
+            df_counts = df_filtered_news.groupby('bank').size().reset_index(name='vol_15d')
             
             # Renderização do gráfico de distribuição de market share de mídia (Treemap)
-            fig_news = px.treemap(df_counts, path=['bank'], values='vol_mes', color='bank', 
-                                  color_discrete_map=BANK_COLORS, template="plotly_dark")
+            fig_news = px.treemap(
+                df_counts, 
+                path=['bank'], 
+                values='vol_15d', 
+                color='bank', 
+                color_discrete_map=BANK_COLORS, 
+                template="plotly_dark"
+            )
             
-            fig_news.update_layout(showlegend=True, legend_title_text="Instituição", margin=dict(t=10, l=0, r=0, b=0), paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
-            fig_news.update_traces(textinfo="label+value", hovertemplate='<b>%{label}</b><br>Notícias: %{value}', textfont=dict(size=14, color="white"), marker=dict(line=dict(width=1, color='#333333')))
+            fig_news.update_layout(
+                showlegend=True, 
+                legend_title_text="Instituição", 
+                margin=dict(t=10, l=0, r=0, b=0), 
+                paper_bgcolor='rgba(0,0,0,0)', 
+                plot_bgcolor='rgba(0,0,0,0)'
+            )
+            fig_news.update_traces(
+                textinfo="label+value", 
+                hovertemplate='<b>%{label}</b><br>Notícias: %{value}', 
+                textfont=dict(size=14, color="white"), 
+                marker=dict(line=dict(width=1, color='#333333'))
+            )
             st.plotly_chart(fig_news, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
         else:
-            fig_news = px.bar(df_p.sort_values('qtd_noticias_recentes'), y='bank', x='qtd_noticias_recentes', orientation='h', color='bank', color_discrete_map=BANK_COLORS, template="plotly_dark")
+            fig_news = px.bar(
+                df_p.sort_values('qtd_noticias_recentes'), 
+                y='bank', 
+                x='qtd_noticias_recentes', 
+                orientation='h', 
+                color='bank', 
+                color_discrete_map=BANK_COLORS, 
+                template="plotly_dark"
+            )
             fig_news.update_layout(margin=dict(t=10, l=0, r=0, b=0))
             st.plotly_chart(fig_news, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
         
