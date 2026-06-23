@@ -41,7 +41,7 @@ def run_news_ingestion():
         "Banco do Brasil": "Banco do Brasil",
         "Caixa": "Caixa Econômica",
         "C6": "C6 Bank",
-        "BTG Pactual": "BTG Pactual OR Banco Pan",
+        "BTG Pactual": "BTG Pactual",  
         "PicPay": "PicPay",
         "Inter": "Banco Inter",
         "Neon": "Banco Neon",
