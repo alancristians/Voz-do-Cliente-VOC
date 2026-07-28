@@ -28,9 +28,9 @@ def run_bcb_ingestion():
     """
     Orquestra a ingestão com fallback: se assuntos não existirem, não mata o processo.
     """
-    print("📡 Consultando Dados Oficiais do BCB - 1º Tri de 2026...")
+    print("📡 Consultando Dados Oficiais do BCB - 2º Tri de 2026...")
     ano = "2026"
-    trimestre = "1"
+    trimestre = "2"
     os.makedirs("data/bronze", exist_ok=True)
     
     sucesso_ranking = False

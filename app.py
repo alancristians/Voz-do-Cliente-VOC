@@ -55,19 +55,16 @@ BANK_COLORS = {
     "Neon": "#00E5FF"           
 }
 
-@st.cache_data
 def carregar_dados():
-    """
-    Realiza a leitura dos dados processados nas camadas Silver e Gold.
-    Aplica tratamento de tipos e leitura do timestamp de atualização.
-    """
     path = "data/gold/fact_finvoc_summary.csv"
     news_path = "data/silver/stg_noticias.parquet"
     hist_path = "data/silver/hist_reclamacoes_bcb.csv"
     last_update_path = "data/gold/last_update.txt"
+    
     assuntos_path = "data/silver/stg_assuntos_ranking.csv"
+    if not os.path.exists(assuntos_path):
+        assuntos_path = "stg_assuntos_ranking.csv"
 
-    # Captura data de atualização via arquivo de controle (TXT)
     last_update = "---"
     if os.path.exists(last_update_path):
         with open(last_update_path, "r") as f:
@@ -83,7 +80,6 @@ def carregar_dados():
             df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
         df['taxa_procedencia'] = (df['recl_procedentes'] / df['total_respondidas'] * 100).fillna(0)
     
-    # Mapa de nomes para padronização
     mapa_nomes = {
         "ITAU (conglomerado)": "Itaú",
         "BRADESCO (conglomerado)": "Bradesco",
@@ -91,6 +87,7 @@ def carregar_dados():
         "NU PAGAMENTOS (conglomerado)": "Nubank",
         "BB (conglomerado)": "Banco do Brasil",
         "CAIXA ECONMICA FEDERAL (conglomerado)": "Caixa",
+        "CAIXA ECONÔMICA FEDERAL (conglomerado)": "Caixa",
         "BANCO C6 (conglomerado)": "C6",
         "BTG PACTUAL/BANCO PAN (conglomerado)": "BTG Pactual",
         "PICPAY (conglomerado)": "PicPay",
@@ -106,11 +103,23 @@ def carregar_dados():
 
     df_assuntos = pd.DataFrame()
     if os.path.exists(assuntos_path):
-        df_assuntos = pd.read_csv(assuntos_path)
+        try:
+            df_assuntos = pd.read_csv(assuntos_path, sep=';', encoding='latin-1', on_bad_lines='skip')
+        except Exception:
+            try:
+                df_assuntos = pd.read_csv(assuntos_path)
+            except:
+                pass
+            
         if not df_assuntos.empty:
-            # Limpa colunas e padroniza nomes
+            df_assuntos = df_assuntos.loc[:, ~df_assuntos.columns.str.contains('^Unnamed')]
             df_assuntos.columns = [c.strip() for c in df_assuntos.columns]
-            df_assuntos['Instituição financeira'] = df_assuntos['Instituição financeira'].str.strip().replace(mapa_nomes)
+            if 'Instituição financeira' in df_assuntos.columns:
+                df_assuntos['Instituição financeira'] = df_assuntos['Instituição financeira'].str.strip().replace(mapa_nomes)
+            if 'Quantidade de reclamações procedentes' in df_assuntos.columns:
+                df_assuntos['Quantidade de reclamações procedentes'] = pd.to_numeric(
+                    df_assuntos['Quantidade de reclamações procedentes'], errors='coerce'
+                ).fillna(0).astype(int)
         
     return df, last_update, df_hist, df_assuntos
 
@@ -153,33 +162,61 @@ if df is not None:
     st.subheader("🎯 Detalhamento de Reclamações por Banco")
     st.caption("Filtro automático aplicado com base nas instituições selecionadas na barra lateral esquerda.")
 
+    # =============================================================================
+    # BLOCO EXPANSÍVEL: ANÁLISE COMPARATIVA DE EVOLUÇÃO (1T vs. 2T 2026)
+    # =============================================================================
+    with st.expander("📊 **Ver Análise Comparativa de Mudanças (1T2026 vs. 2T2026)**", expanded=False):
+        st.markdown("""
+        ### 📈 Destaques da Transição Trimestral de Reclamações (BCB)
+
+        * <span style="background-color: #C8102E; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Bradesco</span> **: Forte aceleração de queixas.** O primeiro motivo (**Cartões de Crédito**) disparou de 1.039 para **1.364** (+31%), o segundo motivo (**Operações de Crédito**) subiu para **1.136** e falhas em **Internet Banking** surgiram como terceiro vetor com **625** registros.
+        * <span style="background-color: #EC7000; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Itaú</span> **: Mudança nos principais ofensores.** Enquanto no 1T2026 os tópicos ficavam na faixa de ~390 reclamações, no 2T2026 **Cartões de Crédito** disparou para **701** (+79%), **Crédito Consignado** foi para **604** e **SAC/Atendimento** subiu de 362 para **486**.
+        * <span style="background-color: #21C25E; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">PicPay</span> **: Queda expressiva no volume do principal ofensor.** A concessão de crédito sem formalização caiu de 553 para **216** (-61%), empatando com **Oferta de Consignado Inadequada** (**216**) e **Cartões de Crédito** (**204**).
+        * <span style="background-color: #FF0000; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Santander</span> **: Reorganização do ranking.** A liderança de queixas passou para **Oferta/Informação sobre Crédito** com **489** (subindo de 436 no 1T), seguida por **Informação sobre Produtos** (**377**) e **Integridade de Operações** (**363**).
+        * <span style="background-color: #F8D117; color: #000000; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Banco do Brasil</span> **: Entrou em destaque no ecossistema de Cartões de Crédito**, registrando **560** reclamações no 2T, seguido por **Oferta de Consignado** (**305**) e **Informações do DDC** (**280**).
+        * <span style="background-color: #353434; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">C6 Bank</span> **: Lidera com folga em Oferta/Informação Inadequada de Crédito Consignado**, somando **532** ocorrências, seguido por **Débito Não Autorizado** (**235**).
+        * <span style="background-color: #005CA9; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Caixa Econômica</span> **: O principal gargalo da instituição é no suporte direto**, liderando em **Insatisfação com SAC e Central de Relacionamento** (**488**) e **Internet Banking** (**366**).
+        * <span style="background-color: #820AD1; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Nubank</span> **: As reclamações concentram-se em burocracias de dados de crédito**, liderando no **Sistema de Informações de Crédito do BCB (SCR)** com **195** menções e problemas em **Contas Pós-paga** (**130**).
+        * <span style="background-color: #00AEEF; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Mercado Pago</span> **: Apresenta pico em Contas de Pagamento (Pós e Pré-paga)**, acumulando **337** reclamações em cada categoria.
+        * <span style="background-color: #001C3D; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">BTG Pactual</span> **: Apresenta menor volume geral**, com foco principal em atendimento no **SAC/Central** (**185**) e **Informações de Consignado** (**145**).
+        * <span style="background-color: #FF7A00; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Inter</span> **: Reclamações concentradas no suporte SAC/Central** (**204**), seguido por **Cartões de Crédito** (**144**).
+        * <span style="background-color: #00E5FF; color: #000000; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Neon</span> **: Apresenta baixo volume absoluto**, liderado por **Conta de Pagamento Pós-paga** com **92** reclamações no trimestre.
+        """, unsafe_allow_html=True)
+
     if not df_assuntos.empty:
         col_inst = 'Instituição financeira'
         col_motivo = 'Irregularidade'
         col_qtd = 'Quantidade de reclamações procedentes'
 
-        # Filtragem dinâmica baseada na sidebar
-        df_assuntos_f = df_assuntos[df_assuntos[col_inst].isin(selected_banks)]
-        df_final_lista = df_assuntos_f.sort_values(by=col_qtd, ascending=False)
+        if col_inst in df_assuntos.columns and col_motivo in df_assuntos.columns and col_qtd in df_assuntos.columns:
+            df_assuntos_f = df_assuntos[df_assuntos[col_inst].isin(selected_banks)]
+            if df_assuntos_f.empty:
+                df_assuntos_f = df_assuntos
 
-        st.dataframe(
-            df_final_lista[[col_inst, col_motivo, col_qtd]],
-            column_config={
-                col_inst: st.column_config.TextColumn("Banco", width="small"),
-                col_motivo: st.column_config.TextColumn("Motivo da Reclamação", width="large"),
-                col_qtd: st.column_config.ProgressColumn(
-                    "Volume",
-                    help="Quantidade de reclamações procedentes",
-                    format="%d",
-                    min_value=0,
-                    max_value=int(df_assuntos[col_qtd].max()) if not df_assuntos.empty else 100
-                ),
-            },
-            hide_index=True,
-            use_container_width=True
-        )
+            df_final_lista = df_assuntos_f.sort_values(by=col_qtd, ascending=False)
+            max_val = int(df_assuntos[col_qtd].max()) if not df_assuntos.empty else 100
+            if max_val <= 0: max_val = 100
+
+            st.dataframe(
+                df_final_lista[[col_inst, col_motivo, col_qtd]],
+                column_config={
+                    col_inst: st.column_config.TextColumn("Banco", width="small"),
+                    col_motivo: st.column_config.TextColumn("Motivo da Reclamação", width="large"),
+                    col_qtd: st.column_config.ProgressColumn(
+                        "Volume",
+                        help="Quantidade de reclamações procedentes",
+                        format="%d",
+                        min_value=0,
+                        max_value=max_val
+                    ),
+                },
+                hide_index=True,
+                use_container_width=True
+            )
+        else:
+            st.error("❌ As colunas esperadas não foram encontradas no arquivo CSV de assuntos.")
     else:
-        st.info("💡 Execute o script de ingestão para visualizar o detalhamento de motivos.")
+        st.warning("⚠️ Arquivo de assuntos não localizado ou vazio.")
 
     st.divider()
 
@@ -305,8 +342,8 @@ if df is not None:
         fig_proc.update_layout(showlegend=False, yaxis_title="Índice", xaxis_title="", margin=dict(t=20, b=0, l=0, r=0))
         st.plotly_chart(fig_proc, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
 
-    # --- BLOCO: ANÁLISE DE TENDÊNCIA HISTÓRICA (HOJE vs Q4/2025) ---
-    with st.expander("📈 Evolução e Tendência Histórica (2025)", expanded=True):
+    # --- BLOCO: ANÁLISE DE TENDÊNCIA HISTÓRICA (HOJE vs 1T/2026) ---
+    with st.expander("📈 Evolução e Tendência Histórica (2025/2026)", expanded=True):
         if not df_hist.empty:
             df_hist_filtered = df_hist[df_hist['bank'].isin(selected_banks)]
             if not df_hist_filtered.empty:
@@ -318,7 +355,7 @@ if df is not None:
                         if not bd.empty:
                             vn = bd.iloc[-1]['indice_bcb']
                             delta_pct = ((va - vn) / vn * 100) if vn != 0 else 0
-                            st.metric(label=b, value=f"{va:.2f}", delta=f"{delta_pct:.1f}% vs Q4", delta_color="inverse")
+                            st.metric(label=b, value=f"{va:.2f}", delta=f"{delta_pct:.1f}% vs 1T", delta_color="inverse")
                 
                 st.write("---")
                 fig_ev = px.line(df_hist_filtered.sort_values('ordem_cronologica'), x='periodo', y='indice_bcb', color='bank', markers=True, template="plotly_dark", color_discrete_map=BANK_COLORS)
@@ -327,7 +364,7 @@ if df is not None:
             else:
                 st.info("⚠️ Selecione os bancos no filtro lateral para ver a evolução histórica.")
         else:
-            st.warning("⚠️ Arquivo histórico de 2025 não encontrado.")
+            st.warning("⚠️ Arquivo histórico de 2025/2026 não encontrado.")
 
     # 9. MATRIZ DE DIAGNÓSTICO (Tabela Fato)
     st.subheader(f"⚠️ Matriz de Diagnóstico VOC")
