@@ -395,46 +395,76 @@ if df is not None:
             st.markdown(f"**Análise da IA para {focus_bank}:**")
             
             if resumo and str(resumo).strip():
-                # Trata e divide os tópicos com base no caractere '◆' gerado pela IA
-                topicos = [t.strip() for t in str(resumo).split("◆") if t.strip()]
+                import re
+                # Quebra o texto bruto nos blocos marcados por '◆'
+                chunks = str(resumo).split("◆")
                 
-                if topicos:
-                    for topico in topicos:
-                        partes = topico.split("\n", 1)
-                        titulo = partes[0].replace("#", "").strip()
-                        conteudo = partes[1].strip() if len(partes) > 1 else ""
+                encontrou_topico = False
+                for chunk in chunks:
+                    chunk_limpo = chunk.strip()
+                    if not chunk_limpo:
+                        continue
+                    
+                    encontrou_topico = True
+                    linhas = chunk_limpo.split("\n")
+                    titulo_bruto = linhas[0].strip()
+                    
+                    # Remove asteriscos, hashtags e marks de markdown do título
+                    titulo_limpo = re.sub(r'[\*\#\_]', '', titulo_bruto).strip()
+                    
+                    # Junta o restante das linhas como o conteúdo do insight
+                    conteudo_linhas = [l.strip() for l in linhas[1:] if l.strip()]
+                    conteudo_texto = " ".join(conteudo_linhas)
+                    
+                    # Fallback caso o título venha colado com dois pontos na mesma linha
+                    if not conteudo_texto and ":" in titulo_limpo:
+                        partes = titulo_limpo.split(":", 1)
+                        titulo_limpo = partes[0].strip()
+                        conteudo_texto = partes[1].strip()
+                    elif not conteudo_texto:
+                        conteudo_texto = titulo_limpo
+                        titulo_limpo = "Destaque Estratégico"
+
+                    # Renderiza cada insight em seu próprio cartão limpo e nativo
+                    with st.container(border=True):
+                        st.markdown(f"**🔹 {titulo_limpo}**")
+                        st.write(conteudo_texto)
                         
-                        # Renderiza cada tópico dentro de um card limpo e padronizado
-                        st.markdown(f"""
-                            <div style="
-                                background-color: #0e1526; 
-                                border-left: 4px solid #3b82f6; 
-                                padding: 14px 18px; 
-                                border-radius: 6px; 
-                                margin-bottom: 10px;
-                                border: 1px solid #1e293b;
-                            ">
-                                <div style="color: #60a5fa; font-weight: 600; font-size: 15px; margin-bottom: 6px;">🔹 {titulo}</div>
-                                <div style="color: #cbd5e1; font-size: 14px; line-height: 1.5;">{conteudo}</div>
-                            </div>
-                        """, unsafe_allow_html=True)
-                else:
-                    # Fallback caso o texto venha sem o separador '◆'
-                    st.markdown(f"""
-                        <div style="
-                            background-color: #0e1526; 
-                            border-left: 4px solid #3b82f6; 
-                            padding: 14px 18px; 
-                            border-radius: 6px; 
-                            border: 1px solid #1e293b;
-                            color: #cbd5e1; font-size: 14px; line-height: 1.5;
-                        ">
-                            {resumo}
-                        </div>
-                    """, unsafe_allow_html=True)
+                if not encontrou_topico:
+                    with st.container(border=True):
+                        st.write(str(resumo).strip())
             else:
                 st.info("⚠️ Nenhum insight estratégico disponível para este banco.")
         st.divider()
+
+    # 10. EXPLORADOR DE DADOS (Silver Layer)
+    st.subheader(f"🔍 Explorador de Notícias")
+    news_path = "data/silver/stg_noticias.parquet"
+    
+    if os.path.exists(news_path):
+        df_news = pd.read_parquet(news_path)
+        df_news = df_news[df_news['bank'].isin(selected_banks)]
+        search = st.text_input("Busca textual nas manchetes:", placeholder="Ex: C6 Bank, Reclamação, App...")
+        
+        if search:
+            mask = df_news.apply(lambda r: r.astype(str).str.contains(search, case=False).any(), axis=1)
+            df_news = df_news[mask]
+        
+        st.dataframe(
+            df_news,
+            column_config={
+                "link": st.column_config.LinkColumn("link", help="Clique para abrir a notícia original", validate=r"^https?://"),
+                "title": "title",
+                "published": "published"
+            },
+            use_container_width=True, 
+            hide_index=True
+        )
+
+        if not df_news.empty:
+            st.caption(f"Exibindo as {len(df_news)} notícias mais relevantes/recentes.")
+    else:
+        st.error("❌ Erro na carga dos dados.")
 
     # 10. EXPLORADOR DE DADOS (Silver Layer)
     st.subheader(f"🔍 Explorador de Notícias")
