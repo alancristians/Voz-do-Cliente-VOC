@@ -384,14 +384,56 @@ if df is not None:
 
     st.divider()
 
-    # --- NOVO BLOCO: INSIGHTS ESTRATÉGICOS DE IA (MOVIDO PARA JUNTO DO EXPLORADOR) ---
+    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
     if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
         st.subheader("🧠 Insights Estratégicos (IA)")
-        focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks)
+        focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
         
         if focus_bank:
             resumo = df_p[df_p['bank'] == focus_bank]['resumo_insight_ia'].values[0]
-            st.info(f"**Análise da IA para {focus_bank}:**\n\n{resumo}")
+            
+            st.markdown(f"**Análise da IA para {focus_bank}:**")
+            
+            if resumo and str(resumo).strip():
+                # Trata e divide os tópicos com base no caractere '◆' gerado pela IA
+                topicos = [t.strip() for t in str(resumo).split("◆") if t.strip()]
+                
+                if topicos:
+                    for topico in topicos:
+                        partes = topico.split("\n", 1)
+                        titulo = partes[0].replace("#", "").strip()
+                        conteudo = partes[1].strip() if len(partes) > 1 else ""
+                        
+                        # Renderiza cada tópico dentro de um card limpo e padronizado
+                        st.markdown(f"""
+                            <div style="
+                                background-color: #0e1526; 
+                                border-left: 4px solid #3b82f6; 
+                                padding: 14px 18px; 
+                                border-radius: 6px; 
+                                margin-bottom: 10px;
+                                border: 1px solid #1e293b;
+                            ">
+                                <div style="color: #60a5fa; font-weight: 600; font-size: 15px; margin-bottom: 6px;">🔹 {titulo}</div>
+                                <div style="color: #cbd5e1; font-size: 14px; line-height: 1.5;">{conteudo}</div>
+                            </div>
+                        """, unsafe_allow_html=True)
+                else:
+                    # Fallback caso o texto venha sem o separador '◆'
+                    st.markdown(f"""
+                        <div style="
+                            background-color: #0e1526; 
+                            border-left: 4px solid #3b82f6; 
+                            padding: 14px 18px; 
+                            border-radius: 6px; 
+                            border: 1px solid #1e293b;
+                            color: #cbd5e1; font-size: 14px; line-height: 1.5;
+                        ">
+                            {resumo}
+                        </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.info("⚠️ Nenhum insight estratégico disponível para este banco.")
         st.divider()
 
     # 10. EXPLORADOR DE DADOS (Silver Layer)
