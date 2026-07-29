@@ -384,7 +384,7 @@ if df is not None:
 
     st.divider()
 
-    # --- NOVO BLOCO: INSIGHTS ESTRATÉGICOS DE IA (CARDS INDIVIDUAIS LIMPOS) ---
+    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
     if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
         st.subheader("🧠 Insights Estratégicos (IA)")
         focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
@@ -398,33 +398,46 @@ if df is not None:
                 import re
                 
                 text_resumo = str(resumo).strip()
-                # Remove eventuais linhas tracejadas ou separadores feios gerados pela IA
-                text_resumo = re.sub(r'[\-]{3,}', '', text_resumo)
                 
-                # Divide o texto pelos marcadores de tópicos da IA (◆ ou •)
-                raw_chunks = re.split(r'[◆•]', text_resumo)
+                # O Segredo: Regex robusto que identifica e quebra o texto por qualquer 
+                # tipo de marcador de lista (*, -, •, ◆) ou numérico (1., 2.) no início da linha
+                pattern = r'(?:^|\n)\s*(?:[\*\-\•\◆\♦\❖\◈]|\d+\.)\s+'
+                chunks = re.split(pattern, text_resumo)
                 
                 topicos_validos = []
-                for chunk in raw_chunks:
+                for chunk in chunks:
                     c_limpo = chunk.strip()
                     if not c_limpo:
                         continue
                     
+                    # Separa o título do corpo do texto
                     linhas = [l.strip() for l in c_limpo.split('\n') if l.strip()]
                     if not linhas:
                         continue
                         
-                    titulo = linhas[0]
-                    titulo = re.sub(r'[\*\#\_]', '', titulo).strip()
+                    # Remove forçadamente sujeiras de Markdown (**, ##, __) do título
+                    titulo = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
                     
-                    conteudo_linhas = linhas[1:] if len(linhas) > 1 else [titulo]
-                    conteudo = " ".join(conteudo_linhas)
+                    # O restante vira o corpo explicativo
+                    conteudo = " ".join(linhas[1:])
                     
-                    if len(titulo) > 80 and len(conteudo_linhas) <= 1:
-                        topicos_validos.append(("Destaque Estratégico", titulo))
-                    else:
-                        topicos_validos.append((titulo, conteudo))
+                    # Fallback de segurança: Se a IA mandou tudo na mesma linha (ex: "Título: Conteúdo")
+                    if not conteudo:
+                        if ':' in titulo:
+                            parts = titulo.split(':', 1)
+                            titulo = parts[0].strip()
+                            conteudo = parts[1].strip()
+                        elif '-' in titulo:
+                            parts = titulo.split('-', 1)
+                            titulo = parts[0].strip()
+                            conteudo = parts[1].strip()
+                        else:
+                            conteudo = titulo
+                            titulo = "Destaque Estratégico"
+                            
+                    topicos_validos.append((titulo, conteudo))
                 
+                # Renderiza cada insight estritamente no seu próprio container nativo com borda
                 if topicos_validos:
                     for titulo, conteudo in topicos_validos:
                         with st.container(border=True):
