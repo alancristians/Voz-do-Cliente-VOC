@@ -384,7 +384,7 @@ if df is not None:
 
     st.divider()
 
-    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
+    # --- NOVO BLOCO: INSIGHTS ESTRATÉGICOS DE IA (CARDS INDIVIDUAIS LIMPOS) ---
     if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
         st.subheader("🧠 Insights Estratégicos (IA)")
         focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
@@ -396,43 +396,43 @@ if df is not None:
             
             if resumo and str(resumo).strip():
                 import re
-                # Quebra o texto bruto nos blocos marcados por '◆'
-                chunks = str(resumo).split("◆")
                 
-                encontrou_topico = False
-                for chunk in chunks:
-                    chunk_limpo = chunk.strip()
-                    if not chunk_limpo:
+                text_resumo = str(resumo).strip()
+                # Remove eventuais linhas tracejadas ou separadores feios gerados pela IA
+                text_resumo = re.sub(r'[\-]{3,}', '', text_resumo)
+                
+                # Divide o texto pelos marcadores de tópicos da IA (◆ ou •)
+                raw_chunks = re.split(r'[◆•]', text_resumo)
+                
+                topicos_validos = []
+                for chunk in raw_chunks:
+                    c_limpo = chunk.strip()
+                    if not c_limpo:
                         continue
                     
-                    encontrou_topico = True
-                    linhas = chunk_limpo.split("\n")
-                    titulo_bruto = linhas[0].strip()
-                    
-                    # Remove asteriscos, hashtags e marks de markdown do título
-                    titulo_limpo = re.sub(r'[\*\#\_]', '', titulo_bruto).strip()
-                    
-                    # Junta o restante das linhas como o conteúdo do insight
-                    conteudo_linhas = [l.strip() for l in linhas[1:] if l.strip()]
-                    conteudo_texto = " ".join(conteudo_linhas)
-                    
-                    # Fallback caso o título venha colado com dois pontos na mesma linha
-                    if not conteudo_texto and ":" in titulo_limpo:
-                        partes = titulo_limpo.split(":", 1)
-                        titulo_limpo = partes[0].strip()
-                        conteudo_texto = partes[1].strip()
-                    elif not conteudo_texto:
-                        conteudo_texto = titulo_limpo
-                        titulo_limpo = "Destaque Estratégico"
-
-                    # Renderiza cada insight em seu próprio cartão limpo e nativo
-                    with st.container(border=True):
-                        st.markdown(f"**🔹 {titulo_limpo}**")
-                        st.write(conteudo_texto)
+                    linhas = [l.strip() for l in c_limpo.split('\n') if l.strip()]
+                    if not linhas:
+                        continue
                         
-                if not encontrou_topico:
+                    titulo = linhas[0]
+                    titulo = re.sub(r'[\*\#\_]', '', titulo).strip()
+                    
+                    conteudo_linhas = linhas[1:] if len(linhas) > 1 else [titulo]
+                    conteudo = " ".join(conteudo_linhas)
+                    
+                    if len(titulo) > 80 and len(conteudo_linhas) <= 1:
+                        topicos_validos.append(("Destaque Estratégico", titulo))
+                    else:
+                        topicos_validos.append((titulo, conteudo))
+                
+                if topicos_validos:
+                    for titulo, conteudo in topicos_validos:
+                        with st.container(border=True):
+                            st.markdown(f"**🔹 {titulo}**")
+                            st.write(conteudo)
+                else:
                     with st.container(border=True):
-                        st.write(str(resumo).strip())
+                        st.write(text_resumo)
             else:
                 st.info("⚠️ Nenhum insight estratégico disponível para este banco.")
         st.divider()
