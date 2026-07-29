@@ -353,7 +353,7 @@ if df is not None:
                         va = df_p[df_p['bank'] == b]['indice_bcb'].values[0]
                         bd = df_hist_filtered[df_hist_filtered['bank'] == b].sort_values('ordem_cronologica')
                         if not bd.empty:
-                            vn = bd.iloc[-1]['indice_bcb']
+                            vn = bd.iloc[-2]['indice_bcb']
                             delta_pct = ((va - vn) / vn * 100) if vn != 0 else 0
                             st.metric(label=b, value=f"{va:.2f}", delta=f"{delta_pct:.1f}% vs 1T", delta_color="inverse")
                 
