@@ -384,7 +384,7 @@ if df is not None:
 
     st.divider()
 
-    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
+    # --- NOVO BLOCO: INSIGHTS ESTRATÉGICOS DE IA (CONTRATO ESTRUTURADO) ---
     if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
         st.subheader("🧠 Insights Estratégicos (IA)")
         focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
@@ -395,57 +395,27 @@ if df is not None:
             st.markdown(f"**Análise da IA para {focus_bank}:**")
             
             if resumo and str(resumo).strip():
-                import re
+                # Divide os blocos usando o separador inquebrável estipulado na Gold
+                blocos = str(resumo).split('|||')
                 
-                text_resumo = str(resumo).strip()
-                
-                # O Segredo: Regex robusto que identifica e quebra o texto por qualquer 
-                # tipo de marcador de lista (*, -, •, ◆) ou numérico (1., 2.) no início da linha
-                pattern = r'(?:^|\n)\s*(?:[\*\-\•\◆\♦\❖\◈]|\d+\.)\s+'
-                chunks = re.split(pattern, text_resumo)
-                
-                topicos_validos = []
-                for chunk in chunks:
-                    c_limpo = chunk.strip()
-                    if not c_limpo:
+                for bloco in blocos:
+                    bloco_limpo = bloco.strip()
+                    if not bloco_limpo: 
                         continue
                     
-                    # Separa o título do corpo do texto
-                    linhas = [l.strip() for l in c_limpo.split('\n') if l.strip()]
-                    if not linhas:
-                        continue
+                    titulo = "Destaque Estratégico"
+                    conteudo = bloco_limpo
+                    
+                    # Faz o parse cravado baseado nas chaves TÍTULO e CONTEÚDO
+                    if "TÍTULO:" in bloco_limpo and "CONTEÚDO:" in bloco_limpo:
+                        partes = bloco_limpo.split("CONTEÚDO:")
+                        titulo = partes[0].replace("TÍTULO:", "").strip()
+                        conteudo = partes[1].strip()
                         
-                    # Remove forçadamente sujeiras de Markdown (**, ##, __) do título
-                    titulo = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
-                    
-                    # O restante vira o corpo explicativo
-                    conteudo = " ".join(linhas[1:])
-                    
-                    # Fallback de segurança: Se a IA mandou tudo na mesma linha (ex: "Título: Conteúdo")
-                    if not conteudo:
-                        if ':' in titulo:
-                            parts = titulo.split(':', 1)
-                            titulo = parts[0].strip()
-                            conteudo = parts[1].strip()
-                        elif '-' in titulo:
-                            parts = titulo.split('-', 1)
-                            titulo = parts[0].strip()
-                            conteudo = parts[1].strip()
-                        else:
-                            conteudo = titulo
-                            titulo = "Destaque Estratégico"
-                            
-                    topicos_validos.append((titulo, conteudo))
-                
-                # Renderiza cada insight estritamente no seu próprio container nativo com borda
-                if topicos_validos:
-                    for titulo, conteudo in topicos_validos:
-                        with st.container(border=True):
-                            st.markdown(f"**🔹 {titulo}**")
-                            st.write(conteudo)
-                else:
+                    # Renderiza no container com borda
                     with st.container(border=True):
-                        st.write(text_resumo)
+                        st.markdown(f"**🔹 {titulo}**")
+                        st.write(conteudo)
             else:
                 st.info("⚠️ Nenhum insight estratégico disponível para este banco.")
         st.divider()
