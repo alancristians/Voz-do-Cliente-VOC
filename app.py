@@ -384,7 +384,7 @@ if df is not None:
 
     st.divider()
 
-    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
+    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA (PADRÃO UNIFICADO POR CARD) ---
     if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
         st.subheader("🧠 Insights Estratégicos (IA)")
         focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
@@ -399,47 +399,33 @@ if df is not None:
                 
                 texto = str(resumo).strip()
                 
-                # Identifica o delimitador real presente no texto gerado
-                if '|||' in texto:
-                    raw_blocks = texto.split('|||')
-                elif '🔹' in texto:
-                    raw_blocks = texto.split('🔹')
-                else:
-                    # Fallback seguro: divide apenas por quebras de linha duplas (parágrafos inteiros)
-                    raw_blocks = re.split(r'\n\s*\n', texto)
+                # Limpa eventuais resíduos antigos
+                texto = re.sub(r'(?:T[IÍ]TULO:|CONTEÚDO:)\s*', '', texto, flags=re.IGNORECASE)
+                
+                # Divide o texto limpo em blocos por quebras de linha duplas (cada tópico do Llama)
+                blocos = [b.strip() for b in re.split(r'\n\s*\n', texto) if b.strip()]
+                
+                for bloco in blocos:
+                    # Tenta extrair o título em negrito se houver (ex: **Título**)
+                    match_negrito = re.search(r'\*\*([^*]+)\*\*', bloco)
                     
-                cards = []
-                for block in raw_blocks:
-                    b = block.strip()
-                    if not b:
-                        continue
-                    
-                    # Remove eventuais tags residuais
-                    b = re.sub(r'^(?:T[IÍ]TULO:|CONTEÚDO:)\s*', '', b, flags=re.IGNORECASE).strip()
-                    
-                    # Separa título e conteúdo de forma inteligente
-                    linhas = [l.strip() for l in b.split('\n') if l.strip()]
-                    if len(linhas) > 1:
-                        titulo = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
-                        conteudo = " ".join(linhas[1:])
-                    elif ":" in b and len(b.split(":", 1)[0]) < 40:
-                        partes = b.split(":", 1)
-                        titulo = partes[0].replace("*", "").strip()
-                        conteudo = partes[1].strip()
+                    if match_negrito:
+                        titulo = match_negrito.group(1).strip()
+                        # O conteúdo é todo o bloco removendo o trecho em negrito do título
+                        conteudo = bloco.replace(match_negrito.group(0), "").strip()
+                        # Limpa pontuações iniciais que possam ter sobrado (ex: traços ou dois pontos)
+                        conteudo = re.sub(r'^[:\-]\s*', '', conteudo).strip()
                     else:
-                        # Se for um bloco de texto coeso, usa as primeiras palavras como título e o resto como corpo
-                        palavras = b.split()
-                        if len(palavras) > 6:
-                            titulo = " ".join(palavras[:4]).replace("*", "").strip() + "..."
-                            conteudo = " ".join(palavras[4:])
-                        else:
-                            titulo = "Destaque Estratégico"
-                            conteudo = b
-                            
-                    cards.append((titulo, conteudo))
+                        # Fallback caso venha sem asteriscos
+                        linhas = bloco.split('\n')
+                        titulo = linhas[0].strip() if len(linhas) > 1 else "Destaque Estratégico"
+                        conteudo = " ".join(linhas[1:]) if len(linhas) > 1 else linhas[0]
                     
-                # Renderiza cada card de forma limpa e isolada
-                for titulo, conteudo in cards:
+                    if not conteudo:
+                        conteudo = titulo
+                        titulo = "Análise de Mercado"
+
+                    # Renderiza cada tópico em um único card coeso e blindado
                     with st.container(border=True):
                         st.markdown(f"**🔹 {titulo}**")
                         st.write(conteudo)

@@ -28,7 +28,7 @@ def limpar_valor_bcb(v):
 
 def gerar_resumo_ia(banco, manchetes):
     if not manchetes:
-        return "TÍTULO: Sem Fatos Relevantes\nCONTEÚDO: Nenhuma menção crítica mapeada na mídia para esta instituição no mês vigente."
+        return "**Sem Fatos Relevantes**\nNenhuma menção crítica mapeada na mídia para esta instituição no mês vigente."
     
     texto_input = "\n".join([f"- {m}" for m in manchetes[:10]])
     prompt = f"""
@@ -39,17 +39,12 @@ def gerar_resumo_ia(banco, manchetes):
     1. Identifique os principais movimentos (lançamentos, parcerias, sanções ou reclamações).
     2. Explique brevemente o contexto de cada ponto.
 
-    REGRAS RÍGIDAS DE FORMATAÇÃO (CRÍTICO):
-    1. NÃO faça introduções ou conclusões genéricas.
-    2. NÃO use marcações Markdown (sem asteriscos, sem hífens, sem linhas).
-    3. Retorne EXATAMENTE 3 tópicos distintos.
-    4. Formate CADA tópico EXATAMENTE com a estrutura abaixo, separando-os OBRIGATORIAMENTE com "|||":
-
-    TÍTULO: [Escreva um título curto]
-    CONTEÚDO: [Escreva a análise em um único parágrafo]
-    |||
-    TÍTULO: [Próximo título]
-    CONTEÚDO: [Próximo conteúdo]
+    REGRAS RÍGIDAS DE FORMATO (OBRIGATÓRIO):
+    - Retorne EXATAMENTE 3 tópicos distintos.
+    - Cada tópico DEVE começar com o título em negrito no formato exato: **Título Curto Aqui**
+    - Logo abaixo do título, escreva o parágrafo explicativo da análise na mesma linha ou na linha seguinte.
+    - Separe os 3 tópicos usando uma linha em branco entre eles.
+    - NÃO inclua a palavra 'CONTEÚDO:' ou 'TÍTULO:'. Retorne apenas os blocos de texto limpos.
 
     Notícias para análise:
     {texto_input}
@@ -58,13 +53,13 @@ def gerar_resumo_ia(banco, manchetes):
         completion = client.chat.completions.create(
             model=MODELO_GROQ,
             messages=[{"role": "user", "content": prompt}],
-            temperature=0.2, # Reduzi a temperatura para focar na obediência ao formato
+            temperature=0.2,
             max_tokens=600,
             timeout=15
         )
         return completion.choices[0].message.content.strip()
     except Exception as e:
-        return "TÍTULO: API Indisponível\nCONTEÚDO: Insight de IA temporariamente indisponível devido a instabilidade externa."
+        return "**API Indisponível**\nInsight de IA temporariamente indisponível devido a instabilidade externa."
 
 def salvar_timestamp():
     os.makedirs("data/gold", exist_ok=True)
