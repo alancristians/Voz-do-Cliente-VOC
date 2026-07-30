@@ -384,7 +384,7 @@ if df is not None:
 
     st.divider()
 
-    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA (PADRÃO UNIFICADO POR CARD) ---
+    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
     if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
         st.subheader("🧠 Insights Estratégicos (IA)")
         focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
@@ -398,34 +398,37 @@ if df is not None:
                 import re
                 
                 texto = str(resumo).strip()
-                
-                # Limpa eventuais resíduos antigos
                 texto = re.sub(r'(?:T[IÍ]TULO:|CONTEÚDO:)\s*', '', texto, flags=re.IGNORECASE)
                 
-                # Divide o texto limpo em blocos por quebras de linha duplas (cada tópico do Llama)
-                blocos = [b.strip() for b in re.split(r'\n\s*\n', texto) if b.strip()]
+                # Divide o texto em blocos baseados em quebras de linha duplas
+                blocos_brutos = [b.strip() for b in re.split(r'\n\s*\n', texto) if b.strip()]
                 
-                for bloco in blocos:
-                    # Tenta extrair o título em negrito se houver (ex: **Título**)
-                    match_negrito = re.search(r'\*\*([^*]+)\*\*', bloco)
+                pares_insight = []
+                titulo_atual = None
+                
+                # Varre os blocos unificando títulos isolados com seus respectivos parágrafos
+                for bloco in blocos_brutos:
+                    # Remove asteriscos e marcações
+                    bloco_limpo = re.sub(r'[\*\#\_]', '', bloco).strip()
                     
-                    if match_negrito:
-                        titulo = match_negrito.group(1).strip()
-                        # O conteúdo é todo o bloco removendo o trecho em negrito do título
-                        conteudo = bloco.replace(match_negrito.group(0), "").strip()
-                        # Limpa pontuações iniciais que possam ter sobrado (ex: traços ou dois pontos)
-                        conteudo = re.sub(r'^[:\-]\s*', '', conteudo).strip()
+                    # Se o bloco for curto (menos de 70 caracteres e sem ponto final), ele é um Título
+                    if len(bloco_limpo) < 70 and not bloco_limpo.endswith('.'):
+                        titulo_atual = bloco_limpo
                     else:
-                        # Fallback caso venha sem asteriscos
-                        linhas = bloco.split('\n')
-                        titulo = linhas[0].strip() if len(linhas) > 1 else "Destaque Estratégico"
-                        conteudo = " ".join(linhas[1:]) if len(linhas) > 1 else linhas[0]
-                    
-                    if not conteudo:
-                        conteudo = titulo
-                        titulo = "Análise de Mercado"
-
-                    # Renderiza cada tópico em um único card coeso e blindado
+                        # Se já temos um título guardado, formamos o par perfeito
+                        if titulo_atual:
+                            pares_insight.append((titulo_atual, bloco_limpo))
+                            titulo_atual = None
+                        else:
+                            # Caso venha um parágrafo solto sem título prévio
+                            pares_insight.append(("Análise de Mercado", bloco_limpo))
+                
+                # Se sobrou algum título sem parágrafo
+                if titulo_atual:
+                    pares_insight.append((titulo_atual, "Análise detalhada em processamento."))
+                
+                # Renderiza cada par (Título + Conteúdo) estritamente em UM ÚNICO card coeso
+                for titulo, conteudo in pares_insight:
                     with st.container(border=True):
                         st.markdown(f"**🔹 {titulo}**")
                         st.write(conteudo)
