@@ -384,7 +384,7 @@ if df is not None:
 
     st.divider()
 
-    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
+    # --- NOVO BLOCO: INSIGHTS ESTRATÉGICOS DE IA (SPLIT INTELIGENTE POR TÓPICOS) ---
     if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
         st.subheader("🧠 Insights Estratégicos (IA)")
         focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
@@ -399,45 +399,53 @@ if df is not None:
                 
                 texto_bruto = str(resumo).strip()
                 
-                # 1. Tenta limpar eventuais artefatos de delimitadores antigos (||| ou ---)
+                # 1. Normaliza eventuais quebras e limpa hífens ou traços soltos
                 texto_bruto = re.sub(r'[\-\|]{3,}', '\n', texto_bruto)
                 
-                # 2. Divide os blocos por 'TÍTULO:' ou quebras duplas estruturadas
-                # Se a IA mandou com TÍTULO:/CONTEÚDO:, tratamos isso cirurgicamente:
-                blocos_brutos = re.split(r'(?:T[IÍ]TULO:\s*|\|\|\|)', texto_bruto)
+                # 2. Identifica onde começam os subtópicos grudados (ex: frases em negrito ou padrões de títulos)
+                # O regex busca padrões como **Título** ou termos seguidos de texto descritivo no meio do parágrafo
+                # e injeta uma quebra de linha real antes deles para fatiarmos depois.
+                texto_formatado = re.sub(r'(?<!^)(?:\*\*([A-ZÀ-Ú][a-zA-ZÀ-Ú\s]{3,40})\*\*|([A-ZÀ-Ú][a-zA-ZÀ-Ú\s]{3,40})(?=\s+[O|A|Os|As|O\s|O\sBancos|O\sItaú|O\sBradesco|O\sSantander]))', r'\n\n\1\2', texto_bruto)
+                
+                # 3. Divide o texto em blocos individuais baseados nas quebras de linha duplas ou marcadores
+                blocos = re.split(r'\n\s*\n|\|\|\|', texto_formatado)
                 
                 insights_extraidos = []
-                
-                for bloco in blocos_brutos:
+                for bloco in blocos:
                     b_limpo = bloco.strip()
                     if not b_limpo: 
                         continue
                         
-                    # Remove a palavra CONTEÚDO: caso ela tenha vazado no texto
-                    b_limpo = re.sub(r'CONTEÚDO:\s*', '', b_limpo).strip()
+                    # Limpa prefixos residuais
+                    b_limpo = re.sub(r'^(?:T[IÍ]TULO:|CONTEÚDO:)\s*', '', b_limpo, flags=re.IGNORECASE).strip()
                     
                     linhas = [l.strip() for l in b_limpo.split('\n') if l.strip()]
                     if not linhas:
                         continue
                         
-                    # A primeira linha vira o Título do card
-                    titulo = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
-                    
-                    # O restante das linhas vira o conteúdo do card
-                    conteudo = " ".join(linhas[1:])
-                    
-                    # Se não sobrou conteúdo separado, significa que o bloco inteiro era um texto único
-                    if not conteudo:
-                        conteudo = titulo
-                        titulo = "Análise de Mercado"
-                        
+                    # Se o bloco tem mais de uma linha, a primeira é o título e o resto é o conteúdo
+                    if len(linhas) > 1:
+                        titulo = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
+                        conteudo = " ".join(linhas[1:])
+                    else:
+                        # Se veio tudo na mesma linha (ex: "Título do Tópico O banco anunciou...")
+                        texto_linha = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
+                        # Tenta separar por ponto ou espaço se for muito longo
+                        partes = texto_linha.split('. ', 1)
+                        if len(partes) > 1 and len(partes[0]) < 50:
+                            titulo = partes[0].strip()
+                            conteudo = partes[1].strip()
+                        else:
+                            titulo = "Análise de Mercado"
+                            conteudo = texto_linha
+                            
                     insights_extraidos.append((titulo, conteudo))
                 
-                # Se por acaso o parser gerou itens vazios ou unificados demais, fazemos um fallback por parágrafos
+                # Fallback caso nada seja extraído
                 if not insights_extraidos:
                     insights_extraidos = [("Análise de Mercado", texto_bruto)]
                 
-                # Renderiza cada insight estritamente em um card isolado e limpo
+                # 4. Renderiza CADA TÓPICO em seu próprio card isolado com borda
                 for titulo, conteudo in insights_extraidos:
                     with st.container(border=True):
                         st.markdown(f"**🔹 {titulo}**")
