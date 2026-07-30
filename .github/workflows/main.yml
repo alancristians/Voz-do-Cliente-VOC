@@ -75,10 +75,11 @@ jobs:
           # O -f (force) aqui é soberano sobre o .gitignore
           git add -f data/
           
-          # 5. Verifica se houve mudanças e sobe pro abraço
+          # 5. Verifica se houve mudanças, puxa atualizações e envia com segurança
           if git diff --staged --quiet; then
             echo "Nada novo para salvar."
           else
             git commit -m "data: medallion update with AI insights [skip ci]"
+            git pull --rebase origin main
             git push origin main
           fi
