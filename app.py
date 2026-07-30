@@ -384,7 +384,7 @@ if df is not None:
 
     st.divider()
 
-    # --- NOVO BLOCO: INSIGHTS ESTRATÉGICOS DE IA (SPLIT INTELIGENTE POR TÓPICOS) ---
+    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
     if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
         st.subheader("🧠 Insights Estratégicos (IA)")
         focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
@@ -397,56 +397,49 @@ if df is not None:
             if resumo and str(resumo).strip():
                 import re
                 
-                texto_bruto = str(resumo).strip()
+                texto = str(resumo).strip()
                 
-                # 1. Normaliza eventuais quebras e limpa hífens ou traços soltos
-                texto_bruto = re.sub(r'[\-\|]{3,}', '\n', texto_bruto)
-                
-                # 2. Identifica onde começam os subtópicos grudados (ex: frases em negrito ou padrões de títulos)
-                # O regex busca padrões como **Título** ou termos seguidos de texto descritivo no meio do parágrafo
-                # e injeta uma quebra de linha real antes deles para fatiarmos depois.
-                texto_formatado = re.sub(r'(?<!^)(?:\*\*([A-ZÀ-Ú][a-zA-ZÀ-Ú\s]{3,40})\*\*|([A-ZÀ-Ú][a-zA-ZÀ-Ú\s]{3,40})(?=\s+[O|A|Os|As|O\s|O\sBancos|O\sItaú|O\sBradesco|O\sSantander]))', r'\n\n\1\2', texto_bruto)
-                
-                # 3. Divide o texto em blocos individuais baseados nas quebras de linha duplas ou marcadores
-                blocos = re.split(r'\n\s*\n|\|\|\|', texto_formatado)
-                
-                insights_extraidos = []
-                for bloco in blocos:
-                    b_limpo = bloco.strip()
-                    if not b_limpo: 
-                        continue
-                        
-                    # Limpa prefixos residuais
-                    b_limpo = re.sub(r'^(?:T[IÍ]TULO:|CONTEÚDO:)\s*', '', b_limpo, flags=re.IGNORECASE).strip()
+                # Identifica o delimitador real presente no texto gerado
+                if '|||' in texto:
+                    raw_blocks = texto.split('|||')
+                elif '🔹' in texto:
+                    raw_blocks = texto.split('🔹')
+                else:
+                    # Fallback seguro: divide apenas por quebras de linha duplas (parágrafos inteiros)
+                    raw_blocks = re.split(r'\n\s*\n', texto)
                     
-                    linhas = [l.strip() for l in b_limpo.split('\n') if l.strip()]
-                    if not linhas:
+                cards = []
+                for block in raw_blocks:
+                    b = block.strip()
+                    if not b:
                         continue
-                        
-                    # Se o bloco tem mais de uma linha, a primeira é o título e o resto é o conteúdo
+                    
+                    # Remove eventuais tags residuais
+                    b = re.sub(r'^(?:T[IÍ]TULO:|CONTEÚDO:)\s*', '', b, flags=re.IGNORECASE).strip()
+                    
+                    # Separa título e conteúdo de forma inteligente
+                    linhas = [l.strip() for l in b.split('\n') if l.strip()]
                     if len(linhas) > 1:
                         titulo = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
                         conteudo = " ".join(linhas[1:])
+                    elif ":" in b and len(b.split(":", 1)[0]) < 40:
+                        partes = b.split(":", 1)
+                        titulo = partes[0].replace("*", "").strip()
+                        conteudo = partes[1].strip()
                     else:
-                        # Se veio tudo na mesma linha (ex: "Título do Tópico O banco anunciou...")
-                        texto_linha = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
-                        # Tenta separar por ponto ou espaço se for muito longo
-                        partes = texto_linha.split('. ', 1)
-                        if len(partes) > 1 and len(partes[0]) < 50:
-                            titulo = partes[0].strip()
-                            conteudo = partes[1].strip()
+                        # Se for um bloco de texto coeso, usa as primeiras palavras como título e o resto como corpo
+                        palavras = b.split()
+                        if len(palavras) > 6:
+                            titulo = " ".join(palavras[:4]).replace("*", "").strip() + "..."
+                            conteudo = " ".join(palavras[4:])
                         else:
-                            titulo = "Análise de Mercado"
-                            conteudo = texto_linha
+                            titulo = "Destaque Estratégico"
+                            conteudo = b
                             
-                    insights_extraidos.append((titulo, conteudo))
-                
-                # Fallback caso nada seja extraído
-                if not insights_extraidos:
-                    insights_extraidos = [("Análise de Mercado", texto_bruto)]
-                
-                # 4. Renderiza CADA TÓPICO em seu próprio card isolado com borda
-                for titulo, conteudo in insights_extraidos:
+                    cards.append((titulo, conteudo))
+                    
+                # Renderiza cada card de forma limpa e isolada
+                for titulo, conteudo in cards:
                     with st.container(border=True):
                         st.markdown(f"**🔹 {titulo}**")
                         st.write(conteudo)
