@@ -384,7 +384,7 @@ if df is not None:
 
     st.divider()
 
-    # --- NOVO BLOCO: INSIGHTS ESTRATÉGICOS DE IA (CONTRATO ESTRUTURADO) ---
+    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
     if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
         st.subheader("🧠 Insights Estratégicos (IA)")
         focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
@@ -395,24 +395,50 @@ if df is not None:
             st.markdown(f"**Análise da IA para {focus_bank}:**")
             
             if resumo and str(resumo).strip():
-                # Divide os blocos usando o separador inquebrável estipulado na Gold
-                blocos = str(resumo).split('|||')
+                import re
                 
-                for bloco in blocos:
-                    bloco_limpo = bloco.strip()
-                    if not bloco_limpo: 
+                texto_bruto = str(resumo).strip()
+                
+                # 1. Tenta limpar eventuais artefatos de delimitadores antigos (||| ou ---)
+                texto_bruto = re.sub(r'[\-\|]{3,}', '\n', texto_bruto)
+                
+                # 2. Divide os blocos por 'TÍTULO:' ou quebras duplas estruturadas
+                # Se a IA mandou com TÍTULO:/CONTEÚDO:, tratamos isso cirurgicamente:
+                blocos_brutos = re.split(r'(?:T[IÍ]TULO:\s*|\|\|\|)', texto_bruto)
+                
+                insights_extraidos = []
+                
+                for bloco in blocos_brutos:
+                    b_limpo = bloco.strip()
+                    if not b_limpo: 
                         continue
-                    
-                    titulo = "Destaque Estratégico"
-                    conteudo = bloco_limpo
-                    
-                    # Faz o parse cravado baseado nas chaves TÍTULO e CONTEÚDO
-                    if "TÍTULO:" in bloco_limpo and "CONTEÚDO:" in bloco_limpo:
-                        partes = bloco_limpo.split("CONTEÚDO:")
-                        titulo = partes[0].replace("TÍTULO:", "").strip()
-                        conteudo = partes[1].strip()
                         
-                    # Renderiza no container com borda
+                    # Remove a palavra CONTEÚDO: caso ela tenha vazado no texto
+                    b_limpo = re.sub(r'CONTEÚDO:\s*', '', b_limpo).strip()
+                    
+                    linhas = [l.strip() for l in b_limpo.split('\n') if l.strip()]
+                    if not linhas:
+                        continue
+                        
+                    # A primeira linha vira o Título do card
+                    titulo = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
+                    
+                    # O restante das linhas vira o conteúdo do card
+                    conteudo = " ".join(linhas[1:])
+                    
+                    # Se não sobrou conteúdo separado, significa que o bloco inteiro era um texto único
+                    if not conteudo:
+                        conteudo = titulo
+                        titulo = "Análise de Mercado"
+                        
+                    insights_extraidos.append((titulo, conteudo))
+                
+                # Se por acaso o parser gerou itens vazios ou unificados demais, fazemos um fallback por parágrafos
+                if not insights_extraidos:
+                    insights_extraidos = [("Análise de Mercado", texto_bruto)]
+                
+                # Renderiza cada insight estritamente em um card isolado e limpo
+                for titulo, conteudo in insights_extraidos:
                     with st.container(border=True):
                         st.markdown(f"**🔹 {titulo}**")
                         st.write(conteudo)
