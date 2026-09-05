@@ -384,57 +384,51 @@ if df is not None:
 
     st.divider()
 
-    # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
-    if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
-        st.subheader(" Insights Estratégicos (IA)")
-        focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
+   # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
+if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
+    st.subheader(" Insights Estratégicos (IA)")
+    focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
+    
+    if focus_bank:
+        resumo = df_p[df_p['bank'] == focus_bank]['resumo_insight_ia'].values[0]
         
-        if focus_bank:
-            resumo = df_p[df_p['bank'] == focus_bank]['resumo_insight_ia'].values[0]
+        st.markdown(f"**Análise da IA para {focus_bank}:**")
+        
+        if resumo and str(resumo).strip():
+            import re
             
-            st.markdown(f"**Análise da IA para {focus_bank}:**")
+            texto = str(resumo).strip()
+            texto = re.sub(r'(?:T[IÍ]TULO:|CONTEÚDO:)\s*', '', texto, flags=re.IGNORECASE)
             
-            if resumo and str(resumo).strip():
-                import re
+            # Divide o texto em blocos de tópicos (separados por linha em branco)
+            blocos_brutos = [b.strip() for b in re.split(r'\n\s*\n', texto) if b.strip()]
+            
+            for bloco in blocos_brutos:
+                linhas = [l.strip() for l in bloco.split('\n') if l.strip()]
                 
-                texto = str(resumo).strip()
-                texto = re.sub(r'(?:T[IÍ]TULO:|CONTEÚDO:)\s*', '', texto, flags=re.IGNORECASE)
-                
-                # Divide o texto em blocos baseados em quebras de linha duplas
-                blocos_brutos = [b.strip() for b in re.split(r'\n\s*\n', texto) if b.strip()]
-                
-                pares_insight = []
-                titulo_atual = None
-                
-                # Varre os blocos unificando títulos isolados com seus respectivos parágrafos
-                for bloco in blocos_brutos:
-                    # Remove asteriscos e marcações
-                    bloco_limpo = re.sub(r'[\*\#\_]', '', bloco).strip()
-                    
-                    # Se o bloco for curto (menos de 70 caracteres e sem ponto final), ele é um Título
-                    if len(bloco_limpo) < 70 and not bloco_limpo.endswith('.'):
-                        titulo_atual = bloco_limpo
+                if len(linhas) >= 2:
+                    # A primeira linha é o Título (remove marcas de negrito para não duplicar)
+                    titulo = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
+                    conteudo = "\n".join(linhas[1:])
+                elif len(linhas) == 1:
+                    # Caso o título e o texto venham na mesma linha com negrito: **Título** Conteúdo
+                    match_bold = re.match(r'^\*\*(.*?)\*\*\s*(.*)', linhas[0])
+                    if match_bold:
+                        titulo = match_bold.group(1).strip()
+                        conteudo = match_bold.group(2).strip()
                     else:
-                        # Se já temos um título guardado, formamos o par perfeito
-                        if titulo_atual:
-                            pares_insight.append((titulo_atual, bloco_limpo))
-                            titulo_atual = None
-                        else:
-                            # Caso venha um parágrafo solto sem título prévio
-                            pares_insight.append(("Análise de Mercado", bloco_limpo))
-                
-                # Se sobrou algum título sem parágrafo
-                if titulo_atual:
-                    pares_insight.append((titulo_atual, "Análise detalhada em processamento."))
-                
-                # Renderiza cada par (Título + Conteúdo) estritamente em UM ÚNICO card coeso
-                for titulo, conteudo in pares_insight:
-                    with st.container(border=True):
-                        st.markdown(f"**🔹 {titulo}**")
-                        st.write(conteudo)
-            else:
-                st.info("⚠️ Nenhum insight estratégico disponível para este banco.")
-        st.divider()
+                        titulo = "Destaque"
+                        conteudo = linhas[0]
+                else:
+                    continue
+
+                # Renderiza cada tópico dinâmico em seu container
+                with st.container(border=True):
+                    st.markdown(f"**🔹 {titulo}**")
+                    st.write(conteudo)
+        else:
+            st.info("⚠️ Nenhum insight estratégico disponível para este banco.")
+    st.divider()
 
     # 10. EXPLORADOR DE DADOS (Silver Layer)
     st.subheader(f"🔍 Explorador de Notícias")
