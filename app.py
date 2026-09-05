@@ -367,7 +367,7 @@ if df is not None:
             st.warning("⚠️ Arquivo histórico de 2025/2026 não encontrado.")
 
     # 9. MATRIZ DE DIAGNÓSTICO (Tabela Fato)
-    st.subheader(f"⚠️ Matriz de Diagnóstico VOC")
+    st.subheader(f" Matriz de Diagnóstico ")
     df_matrix = df_p.copy()
     df_matrix['total_clientes_m'] = df_matrix['total_clientes'] / 1e6
 
@@ -386,7 +386,7 @@ if df is not None:
 
     # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
     if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
-        st.subheader("🧠 Insights Estratégicos (IA)")
+        st.subheader(" Insights Estratégicos (IA)")
         focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
         
         if focus_bank:

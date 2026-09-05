@@ -9,7 +9,7 @@ from groq import Groq
 
 load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-MODELO_GROQ = "llama-3.1-8b-instant"
+MODELO_GROQ = "openai/gpt-oss-120b"  # Ou "qwen/qwen3.8-27b"
 
 def normalizar_chave(texto):
     if not isinstance(texto, str): return ""
