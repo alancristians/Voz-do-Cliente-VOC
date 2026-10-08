@@ -1,66 +1,73 @@
 bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo,resumo_insight_ia
-Itaú,203,46.87,98052200.0,426.0,28687.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",2ºT/2026,"**IA Generalizada para Clientes**  
-Itaú anunciou que pretende que 100 % de sua base de clientes utilize a nova plataforma de inteligência artificial até o final do ano, reforçando a estratégia de digitalização e personalização de serviços, o que pode elevar a percepção de inovação, mas também traz expectativas de privacidade e qualidade de atendimento.
+Itaú,202,46.87,98052200.0,426.0,28687.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",2ºT/2026,"**Problema de privacidade de dados no app**  
+O Itaú foi acusado de ocultar informações de investimentos dos clientes quando o aplicativo é usado em redes Wi‑Fi não cadastradas, gerando preocupação sobre a transparência e a segurança dos dados, o que pode impactar negativamente a confiança dos usuários.
 
-**Alerta de Conformidade nos Pontos Eletrônicos**  
-O sindicato dos bancários de Belo Horizonte alertou que funcionários do Itaú devem ficar vigilantes para denunciar irregularidades no registro de ponto eletrônico, indicando foco interno em governança e risco reputacional ligado a possíveis fraudes trabalhistas.
+**Expansão de mobilidade urbana com Bike Itaú**  
+A celebração dos 15 anos do programa Bike Itaú reforça o compromisso da instituição com a sustentabilidade e a mobilidade urbana, fortalecendo a imagem de responsabilidade social e atraindo consumidores que valorizam iniciativas verdes.
 
-**Camada de Proteção de Dados no Superapp**  
-Itaú Unibanco lançou uma camada adicional de segurança para ocultar investimentos dentro do seu Superapp, demonstrando comprometimento com a privacidade dos clientes e fortalecendo a confiança no ecossistema digital da instituição."
-Bradesco,161,84.9,110412514.0,495.0,46204.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",2ºT/2026,"**JPMorgan eleva rating e outlook do Bradesco**  
-A análise da JPMorgan elevou a classificação de Bradesco, passando a recomendação para “Buy” e revisando o preço-alvo para cima, enquanto rebaixou Banco do Brasil. O ajuste reflete expectativas de maior geração de caixa, melhor eficiência operacional e resiliência frente ao cenário macroeconômico, impulsionando o preço das ações (BBDC4) em torno de 4% nas negociações.
+**Ações estratégicas de mercado e investimentos**  
+O banco ampliou sua presença em venture capital ao investir no fundo da Endeavor (US$ 320 mi) e divulgou projeções otimistas para a Petrobras (até 40 % de alta) e para o ajuste fiscal que poderia injetar R$ 270 bi na bolsa, demonstrando proatividade em inteligência de mercado e apoio ao crescimento econômico."
+Bradesco,162,84.9,110412514.0,495.0,46204.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",2ºT/2026,"**Projeção Econômica Conservadora**  
+Bradesco divulgou projeção de crescimento do PIB de apenas 1 % para 2027, apontando a alta dos juros como principal freio à economia, o que reforça a imagem do banco como analista cauteloso e alinhado às perspectivas macroeconômicas brasileiras.
 
-**Capital robusto permite múltiplo maior**  
-Estudos de mercado apontam que o índice de capitalização do Bradesco está acima do Banco do Brasil, conferindo maior solidez e capacidade de absorver choques. Essa força de capital justifica a aplicação de um múltiplo de valuation superior, reforçando a tese de que o banco tem espaço para melhorar sua rentabilidade e oferecer maior retorno aos acionistas.
+**Campanha Corporativa com Selton Mello**  
+A instituição lançou nova fase da campanha “Bradesco Empresas”, trazendo o ator Selton Mello como especialista para atrair clientes CNPJ, estratégia que eleva a percepção de inovação e proximidade com o público empresarial.
 
-**Campanha nacional “Bradesco Principal” reforça posicionamento de marca**  
-O lançamento da campanha “Bradesco Principal” reúne influenciadores das áreas de gastronomia, moda, arte, wellness e viagens, marcando a primeira iniciativa publicitária de alcance nacional do banco. A ação visa fortalecer a percepção de proximidade e relevância cultural, melhorando a experiência do cliente e diferenciando a marca no competitivo mercado financeiro."
-Santander,74,34.19,72310206.0,177.0,24592.0,"Oferta ou prestação de informação sobre operação de crédito de forma inadequada, exceto crédito consignado",2ºT/2026,"**Sanções e Responsabilidades Legais**  
-Santander foi condenado a indenizar uma moradora de Muriaé por encerramento de conta sem aviso, recebeu ordem judicial para retirar alerta de fraude de chave Pix e pagar R$ 2 mil a cliente, e teve funcionária detida por desvio de R$ 2 mi de clientes idosos, evidenciando vulnerabilidades de compliance e risco reputacional.
+**Reforço de Credibilidade nos Analistas e Mercado**  
+JPMorgan elevou a recomendação para Bradesco, destacando capital mais robusto que o do BB e justificando múltiplos maiores; simultaneamente, ações BBDC4 atingiram recorde de valorização, consolidando a reputação de solidez e atratividade para investidores."
+Santander,56,34.19,72310206.0,177.0,24592.0,"Oferta ou prestação de informação sobre operação de crédito de forma inadequada, exceto crédito consignado",2ºT/2026,"**Sanções judiciais e fraudes internas**  
+Santander foi condenado a indenizar uma moradora de Muriaé por encerramento de conta sem aviso, teve que retirar um alerta de fraude de chave Pix e pagar R$ 2 mil a cliente, e ainda enfrentou a detenção de funcionária que desviou R$ 2 mi de clientes idosos, evidenciando vulnerabilidades em compliance e segurança.
 
-**Parceria de Crédito Sustentável de R$ 50 bi**  
-O banco integrou um consórcio com Bradesco, HSBC e Itaú para disponibilizar R$ 50 bilhões em crédito destinado a projetos de inovação sustentável, reforçando seu posicionamento em ESG e ampliando oportunidades de financiamento verde no mercado brasileiro.
+**Parceria de crédito sustentável de R$ 50 bi**  
+O banco integrou um consórcio com Bradesco, HSBC e Itaú para disponibilizar R$ 50 bilhões em crédito destinado a projetos de inovação sustentável, reforçando seu posicionamento em finanças verdes e ampliando oportunidades de financiamento de longo prazo.
 
-**Desempenho de Mercado e Percepção de Investidores**  
-Santander recomendou 11 FIIs com dividendos de 12,2% para outubro, enquanto analistas da Citi questionaram o desconto nas ações do banco após as eleições brasileiras, refletindo tensão entre expectativas de retorno e avaliação de risco pelos investidores."
-Nubank,111,9.2,117259020.0,83.0,26330.0,Irregularidades relacionadas ao Sistema de Informações de Crédito do Banco Central (SCR) - instituição de pagamento,2ºT/2026,"**Parceria com Spotify Premium** – Nubank lançou benefício de três meses gratuitos de Spotify Premium para seus clientes, reforçando a estratégia de fidelização ao integrar serviços de streaming ao portfól"
-Caixa,175,23.32,160219441.0,153.0,23153.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Negociação de Dívida com o Corinthians**  
-A Caixa avançou nas tratativas para quitar a dívida de aproximadamente R$ 630‑650 mi da Neo Química Arena, com o acordo já submetido ao Conselho de Administração, sinalizando esforço de regularização de passivos e reforçando a imagem de parceiro financeiro sólido no esporte.
+**Desempenho de mercado e percepção de investidores**  
+Santander recomendou 11 FIIs com dividendos de 12,2% para outubro e, simultaneamente, viu seu desconto de ações ser questionado após as eleições brasileiras, refletindo tensão entre expectativas de retorno e avaliação de risco pelos investidores."
+Nubank,120,9.2,117259020.0,83.0,26330.0,Irregularidades relacionadas ao Sistema de Informações de Crédito do Banco Central (SCR) - instituição de pagamento,2ºT/2026,"**Instabilidade no App**  
+Diversas fontes regionais relataram quedas e lentidão no aplicativo Nubank na quarta‑feira (07), gerando reclamações intensas nas redes sociais e impactando a confiança dos usuários em momentos críticos de uso.
 
-**Oposição dos Bancários ao Desconto Assistencial**  
-Empregados da Caixa, representados pelo Sindicato dos Bancários de Cascavel, receberam até 8 de outubro para registrar oposição ao desconto assistencial, evidenciando tensão interna e potencial risco reputacional caso a questão evolua para disputa judicial ou paralisações.
+**Nova Campanha NuCoin**  
+Nubank lançou uma campanha nacional que substitui o discurso cripto do NuCoin por benefícios cotidianos como prêmios, referências a novelas e até um “palito de picolé”, buscando ampliar a adoção ao posicionar a moeda como ferramenta de recompensas práticas.
 
-**Impacto da Greve e Reabertura das Agências**  
-A greve nacional provocou alterações de horário e fechamento temporário de agências, incluindo a operação de agência‑barco em Ponta de Pedras; o retorno das unidades no Rio Grande do Norte marca a normalização dos serviços, mas ressalta a vulnerabilidade da rede diante de mobilizações trabalhistas."
-C6,4,59.77,35193110.0,411.0,8091.0,Oferta ou prestação de informação sobre crédito consignado de forma inadequada,2ºT/2026,"**Invest Week 4ª edição com incentivos**  
-O C6 Bank lançou a quarta Invest Week, oferecendo descontos em corretagem e pontos de recompensa para investimentos tanto no mercado brasileiro quanto nos EUA, estratégia que visa ampliar a base de investidores e reforçar a percepção de valor agregado ao cliente.
+**Posicionamento no Ranking de Bancos Digitais**  
+Em análise comparativa publicada pela Revista, Nubank foi avaliado ao lado de Inter e C6 Bank, destacando sua liderança em volume de clientes e inovação, mas apontando a necessidade de melhorar a estabilidade operacional para manter a vantagem competitiva."
+Caixa,162,23.32,160219441.0,153.0,23153.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Corinthians e Caixa avançam na quitação de dívida bilionária**  
+A Caixa está negociando com o Corinthians a quitação de dívida que varia entre R$ 630 mi e R$ 650 mi referentes à Neo Química Arena, com o acordo já tendo passado ao Conselho de Administração e sendo monitorado pelo Ministério Público, sinalizando um esforço de regularização financeira que pode melhorar a percepção de responsabilidade institucional.
+
+**Golpes de falsos gerentes da Caixa geram prejuízos e afetam confiança**  
+Casos recentes de fraudes envolvendo “gerentes” falsos da Caixa resultaram em perdas de até R$ 21,5 mil para empresários, destacando vulnerabilidades de segurança e potencial erosão da confiança dos clientes, exigindo respostas rápidas de comunicação e reforço de canais de verificação.
+
+**Negociações sindicais: aumento salarial e oposição ao desconto assistencial**  
+Sindicato dos Bancários de BH negocia deltas que podem elevar a remuneração‑base em até 4,6 %, enquanto o sindicato de Cascavel registra oposição ao desconto assistencial, refletindo tensão interna que pode impactar a imagem de clima organizacional e a percepção de tratamento justo aos colaboradores."
+C6,4,59.77,35193110.0,411.0,8091.0,Oferta ou prestação de informação sobre crédito consignado de forma inadequada,2ºT/2026,"**Invest Week 4ª edição com descontos e pontos**  
+O C6 Bank lançou a quarta edição da Invest Week, oferecendo descontos em taxas e a concessão de pontos para investimentos tanto no mercado brasileiro quanto nos EUA, visando ampliar a base de investidores e reforçar a proposta de diversificação de ativos.
 
 **Campanha “Portabilidade em Dobro”**  
-A iniciativa de portabilidade em dobro permite que clientes que transferem investimentos de outras corretoras recebam benefícios dobrados, reforçando a competitividade do banco no segmento de captação de recursos e buscando acelerar a migração de ativos para a plataforma C6.
+A iniciativa permite que clientes que transferem investimentos de outros bancos recebam benefícios dobrados em pontos, reforçando a estratégia de atração de novos clientes e de retenção dos atuais ao tornar a migração mais vantajosa.
 
-**Conflito trabalhista: protestos e demandas sindicais**  
-Sindicato dos Bancários organizou protestos e uma reunião de urgência contra as recentes demissões no C6, exigindo o fim das dispensas e a valorização dos trabalhadores, o que pode impactar a reputação institucional e gerar atenção regulatória."
-BTG Pactual,80,41.98,27807332.0,234.0,8772.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Ações BTG Pactual Disparam com Otimismo Eleitoral**  
-A volatilidade do primeiro turno e a expectativa de retomada do mercado de capitais elevaram o BPAC11 cerca de 27 % em um único dia, colocando o BTG à frente de grandes bancos como Itaú e Bradesco e reforçando a percepção de que o banco está bem posicionado para captar fluxo de risco pós‑eleição.
+**Conflito trabalhista e protestos sindicais**  
+Sindicato dos Bancários organizou protestos e reuniu-se com a diretoria do C6 Bank exigindo o fim das demissões e a valorização dos trabalhadores, gerando pressão reputacional e risco de impacto negativo na percepção de responsabilidade social da instituição."
+BTG Pactual,82,41.98,27807332.0,234.0,8772.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Expansão por aquisições estratégicas**  
+O BTG Pactual está avaliando a compra de participação na Buddha Spa (operadora da Smart Fit) e recebeu sinal verde do governo do Distrito Federal para eventual aquisição do Banco de Brasília (BRB) após as eleições, demonstrando uma agenda agressiva de expansão no setor de serviços e bancário.
 
-**Governo do DF Avalia Venda do BRB ao BTG Pactual**  
-A secretaria de finanças do Distrito Federal está preparando uma minuta para a possível alienação do Banco de Brasília (BRB) ao BTG Pactual, estratégia que pode ampliar a presença do banco no segmento de varejo e fortalecer sua atuação regional, porém traz riscos regulatórios e de integração que precisam ser monitorados.
+**Autoridade nas projeções de mercado**  
+Analistas do BTG publicaram projeções otimistas, apontando alta de até 30% no Ibovespa e recomendações de valorização de 42% para Arcos Dorados, além de revisões positivas para Petrobras e Rede D’Or, reforçando sua influência como referência de inteligência de mercado no segmento financeiro.
 
-**Investigação da PF sobre André Esteves Impacta a Imagem do BTG**  
-A Polícia Federal adiou o depoimento de André Esteves no inquérito sobre o Banco Master, mantendo o caso em aberto e gerando atenção negativa para a governança do BTG Pactual; embora ainda não haja condenação, a situação pode afetar a confiança de investidores e clientes institucionais."
-PicPay,3,35.66,70585296.0,419.0,10353.0,Concessão de crédito (exceto consignado) sem a formalização do título adequado,2ºT/2026,"**Lançamento do Cartão PicPay Epic World Legend**  
-O PicPay lançou o cartão Epic World Legend, direcionado a clientes de altíssima renda, oferecendo benefícios premium e programa de recompensas exclusivo, reforçando a estratégia de diversificação de produtos para captar o segmento de alta net worth.
+**Desempenho financeiro robusto e oferta de produtos atrativos**  
+O banco registrou lucro recorde, impulsionado por resultados de suas áreas de investimento e corretagem, enquanto promove títulos de renda fixa atrelados ao IPCA+ 8%, reforçando a percepção de solidez e capacidade de gerar oportunidades de rendimento para clientes."
+PicPay,3,35.66,70585296.0,419.0,10353.0,Concessão de crédito (exceto consignado) sem a formalização do título adequado,2ºT/2026,"**Crescimento de Market Share das Fintechs**  
+Fintechs como Nubank e PicPay estão ganhando participação no segmento de cartões, enquanto bancos tradicionais perdem terreno, refletindo a preferência dos consumidores por soluções digitais mais ágeis, taxas competitivas e programas de recompensas personalizados.
 
-**Bloqueio de Compras na Steam e Percepção de Risco**  
-Bancos bloquearam transações de usuários do PicPay na plataforma Steam ao confundir compras de jogos com apostas, gerando reclamações e expondo vulnerabilidades nos filtros de compliance, o que pode impactar a confiança dos consumidores na solução de pagamentos.
+**Lançamento do Cartão PicPay Epic World Legend**  
+A PicPay lançou o cartão Epic World Legend, voltado para clientes de altíssima renda, oferecendo benefícios premium como acesso a salas VIP, seguros de viagem e cashback elevado, reforçando a estratégia de diversificação de portfólio e atração de um público de alta margem.
 
-**BTG Pactual Reafirma Investimento e Projeta Alta Valorização**  
-O BTG Pactual manteve sua posição acionária no PicPay e divulgou expectativa de valorização de até 96%, sinalizando confiança institucional no modelo de negócios e potencial de crescimento, o que pode melhorar a percepção de solidez no mercado."
-Inter,15,26.15,44458414.0,137.0,7568.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Expansão para as Américas**  
-O CEO João Vitor Menin tem reiterado a visão de transformar o Banco Inter no “banco das Américas”, apoiado na “Rule of 50” que combina crescimento de ativos, rentabilidade e eficiência operacional. A estratégia inclui ampliar a presença digital em mercados latino‑americanos e captar investidores estrangeiros, reforçada por entrevistas em veículos como NeoFeed e Seu Dinheiro.
+**Desafio Regulatório nas Transações de Jogos Online**  
+Bancos bloquearam compras na Steam ao confundir jogos com apostas, evidenciando vulnerabilidades nos filtros de compliance; a situação alerta a PicPay sobre a necessidade de aprimorar seus algoritmos de classificação de transações para evitar interrupções e preservar a confiança dos usuários."
+Inter,15,26.15,44458414.0,137.0,7568.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Meta de ROE 30% e seu adiamento**  
+O CEO João Vitor Menin reiterou a meta de alcançar um ROE de 30% nos próximos dez anos, mas anunciou o adiamento da data‑alvo, mantendo a ambição como prioridade estratégica e sinalizando foco em rentabilidade sustentável.
 
-**Meta ROE 30% adiada**  
-Em entrevista ao Seu Dinheiro, o banco comunicou o adiamento da meta de ROE de 30% para 2025, mantendo o objetivo, porém priorizando a solidez do balanço e a contenção de custos. O CEO destacou que a nova prioridade é melhorar a qualidade da carteira e a eficiência de capital antes de perseguir o retorno elevado.
+**Estratégia de IA e posicionamento como “banco das Américas”**  
+Menin destacou a adoção intensiva de inteligência artificial para melhorar a experiência do cliente e consolidar o Inter como o banco principal dos usuários, reforçando a visão de se tornar o “banco das Américas” por meio de inovação tecnológica e parcerias digitais.
 
-**Pressão de inadimplência no 3T26**  
-Análises recentes apontam que a inadimplência deve subir no terceiro trimestre de 2026, reflexo de um cenário macroeconômico mais restritivo e da exposição a setores vulneráveis. O CEO reconheceu a pressão e sinalizou ajustes na política de crédito e maior foco em monitoramento de risco para mitigar o impacto nos resultados."
+**Posicionamento de mercado e discurso de investimento no Brasil em contexto eleitoral**  
+Em meio ao cenário eleitoral, o CEO reforçou que ignorar investimentos no Brasil é um erro estrutural, usando a narrativa para atrair investidores e reforçar a confiança no mercado interno, ao mesmo tempo em que acompanha tendências políticas que podem impactar o setor financeiro."
