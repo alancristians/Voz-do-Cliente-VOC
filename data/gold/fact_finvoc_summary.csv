@@ -1,64 +1,73 @@
 bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo,resumo_insight_ia
-Itaú,252,46.87,98052200.0,426.0,28687.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",2ºT/2026,"**Expansão de vagas de emprego**  
-O Itaú anunciou a abertura de 114 oportunidades de trabalho em diversas regiões do Brasil, abrangendo cargos operacionais e de gestão, reforçando sua estratégia de ampliar a presença regional e atrair talentos em um cenário de recuperação econômica.
+Itaú,268,46.87,98052200.0,426.0,28687.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",2ºT/2026,"**Multa Milionária por Depósitos Não Solicitados**  
+O Itaú foi multado em milhões de reais após a Gazeta de Varginha apontar a prática de depósitos não solicitados e descontos indevidos em benefícios do INSS, gerando reclamações de clientes e sinalizando falhas nos controles internos de compliance e proteção ao consumidor.
 
-**Sanções regulatórias e bloqueios judiciais**  
-O banco recebeu multas de R$ 1,2 mi por consignado indevido a beneficiários do INSS e teve contas bloqueadas por decisão judicial que agora autoriza bloqueios de clientes inadimplentes, refletindo pressão crescente de órgãos de defesa do consumidor e do Poder Judiciário sobre práticas de crédito.
+**Lançamento de IA Generativa para PMEs**  
+Em múltiplas publicações (CNN Brasil, ADVFN, Vero Notícias), o banco anunciou a disponibilização de um assistente de inteligência artificial generativa voltado a pequenas e médias empresas, reforçando sua estratégia de inovação tecnológica e posicionamento como parceiro digital, o que pode melhorar a percepção de modernidade e eficiência.
 
-**Desempenho financeiro sólido e cautela de investimento**  
-No terceiro trimestre de 2026, o Itaú manteve a liderança em lucro entre os grandes bancos, contribuindo para um resultado conjunto de R$ 22,61 bi; ao mesmo tempo, o Itaú BBA retirou o selo de compra da BR Partners, sinalizando maior prudência na alocação de capital em ações de risco."
-Bradesco,130,84.9,110412514.0,495.0,46204.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",2ºT/2026,"**Desempenho Financeiro no 3T**  
-Bradesco registrou lucro de R$ 22,61 bilhões no terceiro trimestre, alinhado com Itaú e Santander, o que reforça sua solidez diante da queda de 28 % nas ações do Santander, indicando que o banco mantém boa geração de caixa e atratividade para investidores.
+**Revisão de Benefícios Exclusivos e Competição com Santander**  
+O Itaú Personnalité alterou regras da Sala Pedra Preta e do programa The One, restringindo o acesso e modificando a disputa de benefícios com o Santander Unlimited, o que pode impactar a experiência de clientes premium ao reduzir a atratividade dos diferenciais oferecidos."
+Bradesco,128,84.9,110412514.0,495.0,46204.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",2ºT/2026,"**Expansão de Serviços BaaS**  
+O Bradesco as a Service atingiu a marca de 100 parceiros, ampliando a oferta de soluções financeiras integradas às jornadas corporativas, o que reforça a imagem de inovação e capacidade de apoio ao ecossistema de fintechs.
 
-**Instabilidade Operacional – Falha no Pix**  
-Em setembro, o Pix ficou parcialmente indisponível, gerando reclamações de usuários; o Banco Central confirmou a resolução da falha, mas o episódio evidencia vulnerabilidades de infraestrutura que podem impactar a confiança dos clientes no canal de pagamentos instantâneos.
+**Controvérsia Jurídica com Daniel Vorcaro**  
+O banco contestou publicamente a tentativa de Daniel Vorcaro de utilizar créditos bloqueados para quitar quase R$ 900 mil de dívida de cartões, gerando exposição negativa nas mídias e levantando dúvidas sobre a robustez dos controles internos.
 
-**Reestruturação de Rede e Percepção de Marca**  
-O fechamento da agência 407 em Poá (negado) e da agência centenária em Estrela, aliado ao reconhecimento do Bradesco como um dos “Lugares Mais Incríveis para Trabalhar”, cria um contraste entre a percepção interna positiva e a frustração externa de clientes que sentem falta de informação e acesso físico, afetando a reputação de disponibilidade de serviços."
-Santander,150,34.19,72310206.0,177.0,24592.0,"Oferta ou prestação de informação sobre operação de crédito de forma inadequada, exceto crédito consignado",2ºT/2026,"**Multa por Refém em Assalto**  
-O Santander foi condenado a pagar R$ 250 mil após a gerente ter sido feita refém durante um assalto a uma agência, evidenciando vulnerabilidades de segurança física e gerando repercussão negativa na mídia.
+**Desempenho Financeiro e Reação do Mercado**  
+Apesar do lucro de R$ 7,1 bi, as altas provisões pressionaram os resultados; a ação despencou 37 % em um dia, refletindo preocupação dos investidores com a volatilidade da Selic e a sustentabilidade dos ganhos."
+Santander,153,34.19,72310206.0,177.0,24592.0,"Oferta ou prestação de informação sobre operação de crédito de forma inadequada, exceto crédito consignado",2ºT/2026,"**Condenação por perdas de cliente vulnerável**  
+O Santander foi condenado a ressarcir R$ 344 mil a um idoso com Alzheimer que sofreu perdas na Bolsa, evidenciando falhas na orientação de investimentos para consumidores em situação de vulnerabilidade e gerando repercussão negativa na percepção de responsabilidade social da instituição.
 
-**Falha de Segurança Operacional**  
-Um dispositivo de cortina de fumaça foi acionado indevidamente em uma agência de Campo Belo após queda de energia, levantando dúvidas sobre os protocolos de contingência e a confiabilidade dos sistemas de proteção do banco.
+**Acordos sindicais e avanços nas condições de trabalho**  
+O banco firmou acordos com o Sindicato dos Bancários da Bahia (COE) e aprovou ACTs que ampliam a PPRS e concedem novos direitos aos funcionários, demonstrando um movimento positivo nas relações trabalhistas e reforçando o compromisso com a valorização dos colaboradores.
 
-**Ações de Patrocínio e Engajamento**  
-A marca reforçou sua presença institucional ao promover a primeira edição iluminada da Santander Night Run no Parque Villa‑Lobos e eventos semelhantes em Maceió, buscando melhorar a percepção pública e fortalecer o vínculo com a comunidade."
-Nubank,94,9.2,117259020.0,83.0,26330.0,Irregularidades relacionadas ao Sistema de Informações de Crédito do Banco Central (SCR) - instituição de pagamento,2ºT/2026,"**Suspensão Temporária das Operações de Cripto**  
-Nubank interrompeu saques e depósitos de criptomoedas após falha em fornecedor externo, gerando reclamações de usuários que não conseguiam movimentar seus ativos digitais.
+**Incidentes de segurança e gestão de risco**  
+Casos recentes, como o pagamento de R$ 250 mil a uma gerente feita refém durante assalto e o acionamento de um dispositivo de cortina de fumaça após queda de energia em Campo Belo, ressaltam vulnerabilidades operacionais que exigem aprimoramento dos protocolos de segurança e mitigação de riscos."
+Nubank,104,9.2,117259020.0,83.0,26330.0,Irregularidades relacionadas ao Sistema de Informações de Crédito do Banco Central (SCR) - instituição de pagamento,2ºT/2026,"**IA de autoatendimento eleva performance**  
+Nubank utilizou perfis de clientes simulados para validar sua nova IA, resultando em um aumento de 8,82 pontos no índice de autoatendimento, sinalizando maior eficiência operacional e satisfação do usuário.
 
-**Retorno das Funções e Normalização**  
-A fintech restabeleceu rapidamente as operações, anunciando que a instabilidade foi resolvida e que a plataforma voltou a aceitar retiradas e depósitos, alinhando-se às comunicações de diversos veículos de imprensa.
+**Restabelecimento de serviços de cripto**  
+Após uma interrupção causada por falha em fornecedor externo, o banco normalizou rapidamente saques e depósitos de Bitcoin e outras criptomoedas, demonstrando resiliência de infraestrutura e comprometimento com a continuidade dos serviços digitais.
 
-**Repercussão na Reputação e Expectativas de Clientes**  
-Apesar da solução rápida, a interrupção evidenciou vulnerabilidades de dependência tecnológica, reforçando a necessidade de comunicação proativa para mitigar impactos negativos na confiança dos clientes e na percepção de estabilidade da marca."
-Caixa,58,23.32,160219441.0,153.0,23153.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Depósito emergencial de R$777 via Caixa Tem**  
-O programa de transferência emergencial concedeu R$ 777 a todos os usuários ativos do aplicativo Caixa Tem em 16 de novembro, reforçando a imagem da Caixa como agente de apoio social rápido e ampliando a percepção de valor para clientes de baixa renda.
+**Redução de equipe de fraude via IA**  
+A adoção de algoritmos de IA para detecção de fraudes levou à diminuição da fila de casos suspeitos, resultando na demissão de funcionários cujas funções foram automatizadas, refletindo uma estratégia de otimização de custos e modernização de processos de risco."
+Caixa,80,23.32,160219441.0,153.0,23153.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Rebranding da Caixa após 30 anos**  
+A Caixa Econômica Federal lançou uma nova identidade visual, incluindo logotipo e cores, pela primeira vez em quase três décadas, com o objetivo de modernizar a marca e atrair um público mais jovem, conforme divulgado por múltiplas fontes de mídia.
 
-**Incidentes de roubo em agências da Caixa**  
-Nos últimos dias, múltiplas ocorrências de invasões – incluindo assaltos pelo forro e sequestro de funcionários – foram registradas em agências da Grande São Paulo, gerando preocupação sobre a segurança física das unidades e potencial impacto negativo na confiança dos correntistas.
+**Lançamento do aplicativo unificado e novo número de contato**  
+Simultaneamente à mudança de marca, a instituição alterou seu telefone de atendimento e consolidou seus serviços digitais em um único aplicativo, buscando simplificar a experiência do cliente e reduzir a fragmentação de canais.
 
-**Expansão da rede física e parcerias regionais**  
-A abertura de nova agência em Tartarugalzinho (AP) e a continuidade de operações no Paraguai, apesar da crise do Ueno Bank, demonstram a estratégia da Caixa de ampliar sua presença territorial, fortalecendo a reputação de instituição nacional com alcance regional."
-C6,0,59.77,35193110.0,411.0,8091.0,Oferta ou prestação de informação sobre crédito consignado de forma inadequada,2ºT/2026,"**Sem Fatos Relevantes**
-Nenhuma menção crítica mapeada na mídia para esta instituição no mês vigente."
-BTG Pactual,43,41.98,27807332.0,234.0,8772.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Aquisição da carteira imobiliária do BRB**  
-O BTG Pactual comprou mais da metade da carteira de crédito imobiliário do Banco de Brasília (BRB), reforçando sua presença no segmento de financiamento habitacional e ampliando ativos de alta rentabilidade, o que eleva a percepção de crescimento e solidez no mercado.
+**Fim ou reformulação do Caixa Tem**  
+Há especulação de que o aplicativo Caixa Tem será descontinuado ou integrado ao novo app unificado; a comunicação oficial ainda não esclareceu o futuro da plataforma, gerando dúvidas entre usuários que dependem do serviço para transações básicas."
+C6,1,59.77,35193110.0,411.0,8091.0,Oferta ou prestação de informação sobre crédito consignado de forma inadequada,2ºT/2026,"**C6 Bank analisa fim da queda da Selic**  
+Em artigo publicado, o C6 Bank sinaliza que a recente mudança de rumo da taxa Selic pode marcar o término do ciclo de redução de juros, indicando uma nova fase de política monetária mais restritiva no Brasil.
 
-**Ampliação de participação acionária em Viveo e captação de investidores internacionais**  
-A corretora aumentou sua participação para 19,83% na Viveo (VVEO3) e recebeu aporte de Capital International Investors, que chegou a 5% das ações preferenciais (BPAC5), demonstrando estratégia de diversificação e atração de capital estrangeiro, reforçando a imagem de instituição inovadora e bem capitalizada.
+**Ajustes nas linhas de crédito e investimentos**  
+Com a expectativa de estabilização ou alta da Selic, o banco anuncia revisão nas taxas de empréstimos e lançamentos de novos produtos de renda fixa, buscando proteger margens e oferecer opções atrativas aos clientes diante do cenário de juros mais elevados.
 
-**Controvérsias políticas e de governança**  
-Relatos de André Esteves instruindo “tentar matar isso” após questionamentos da imprensa sobre uma emenda de Ciro Nogueira, além de ligações com figuras políticas, geram preocupação sobre a transparência e a independência de decisão do banco, impactando negativamente sua reputação institucional."
-PicPay,1,35.66,70585296.0,419.0,10353.0,Concessão de crédito (exceto consignado) sem a formalização do título adequado,2ºT/2026,"**Nova Liderança em Serviços Bancários para PMEs**  
-PicPay anunciou a troca da equipe responsável pelos serviços bancários voltados a micro e pequenas empresas, trazendo executivos com experiência em crédito corporativo e fintechs, o que sinaliza um reforço de expertise para acelerar a oferta de produtos financeiros a esse segmento.
+**Repercussão de reputação entre investidores**  
+A postura proativa do C6 ao comentar o cenário macro e adaptar sua oferta gera percepção positiva no mercado, reforçando a imagem de instituição ágil e alinhada às condições econômicas, o que pode melhorar a confiança de investidores e clientes."
+BTG Pactual,47,41.98,27807332.0,234.0,8772.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Aumento de participação na Viveo (VVEO3)**  
+O BTG Pactual elevou sua participação na fintech Viveo para 19,83% após liderar um aumento de capital, reforçando sua estratégia de diversificação em serviços digitais e ampliando sua presença no segmento de pagamentos e crédito ao consumidor.
 
-**Reorientação Estratégica para o Segmento de Pequenas Empresas**  
-A mudança de liderança acompanha a ampliação da carteira de soluções para PMEs, incluindo linhas de crédito, conta digital e ferramentas de gestão de fluxo de caixa, indicando que o banco pretende posicionar-se como parceiro financeiro completo para empreendedores.
+**Aquisição da carteira de crédito imobiliário do BRB**  
+O banco comprou mais da metade da carteira de crédito imobiliário do Banco de Brasília (BRB), consolidando ativos de alta qualidade e fortalecendo sua atuação no mercado de financiamento habitacional, ao mesmo tempo em que oferece ao BRB liquidez para focar em outras áreas.
 
-**Impacto na Reputação e Expectativas dos Stakeholders**  
-Analistas de mercado veem a decisão como positiva para a imagem da PicPay, pois demonstra comprometimento com a expansão de serviços bancários e pode melhorar a confiança de investidores e clientes empresariais, embora a execução rápida seja crucial para evitar dúvidas sobre a efetividade da nova gestão."
-Inter,17,26.15,44458414.0,137.0,7568.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Parceria Cripto e Pedido de Licença ao Banco Central**  
-O Banco Inter, em conjunto com Coinbase e Ripple, submeteu um pedido conjunto de licença para operar serviços de cripto‑ativos ao Banco Central, sinalizando a criação de uma subsidiária especializada e reforçando sua estratégia de expansão no mercado de ativos digitais, ao mesmo tempo em que busca conformidade regulatória.
+**Atuação de André Esteves na capitalização de negócios e expansão regional**  
+André Esteves liderou a captação de R$ 1,5 bilhão para a Vorcaro, viabilizando a venda da Master ao BRB, e tem promovido a expansão internacional do BTG Pactual na América Latina, recebendo ainda elogios de figuras como Gilmar Mendes, o que eleva a reputação institucional do banco."
+PicPay,2,35.66,70585296.0,419.0,10353.0,Concessão de crédito (exceto consignado) sem a formalização do título adequado,2ºT/2026,"**Expansão de Crédito para Negativados**  
+A pesquisa divulgada pelo O Petróleo indica que o PicPay está entre os players que planejam ampliar a oferta de crédito a consumidores negativados até 2027, posicionando‑se como uma alternativa competitiva ao Nubank, Inter e Mercado Pago. Essa iniciativa visa captar um segmento subatendido, mas também gera atenção regulatória e de defesa do consumidor, impactando a reputação da marca ao equilibrar inclusão financeira e risco de inadimplência.
 
-**Campanha “Educação dos Filhos” para Incentivar Investimentos Familiares**  
-Lançada via Rádio Itatiaia, a campanha promove produtos de investimento voltados à educação infantil, posicionando o Inter como facilitador de planejamento financeiro familiar e ampliando o engajamento"
+**Nova Liderança de Serviços Bancários para PMEs**  
+Conforme reportagem da Finsiders Brasil, o PicPay realizou a troca de liderança da área de serviços bancários voltados a pequenas e médias empresas, nomeando um executivo com experiência em fintechs de crédito corporativo. A mudança sinaliza um reforço estratégico na oferta de soluções para PMEs, buscando acelerar a adoção de contas digitais e linhas de crédito, o que pode melhorar a percepção de inovação e comprometimento com o segmento empresarial.
+
+**Repercussão de Mercado e Percepção de Risco**  
+A combinação da expansão de crédito para negativados e a nova liderança para PMEs cria um cenário de atenção dos analistas de mercado: investidores avaliam o potencial de crescimento versus o aumento da exposição ao risco de crédito. Enquanto a estratégia pode elevar a visibilidade positiva do PicPay por sua ousadia, também pode gerar cautela entre stakeholders que monitoram a qualidade da carteira e a conformidade regulatória."
+Inter,17,26.15,44458414.0,137.0,7568.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Campanha Educação Financeira**  
+O Banco Inter lançou uma campanha voltada para incentivar famílias a investirem na educação dos filhos, reforçando seu posicionamento como facilitador de planejamento financeiro de longo prazo e ampliando a percepção de valor social da marca.
+
+**Pedido de Licença Cripto**  
+Em parceria com Coinbase e Ripple, o Inter solicitou ao Banco Central uma licença para operar serviços de criptoativos, sinalizando inovação tecnológica e diversificação de produtos, embora ainda dependa de aprovação regulatória para concretizar o impacto.
+
+**Encerramento da Sala VIP**  
+O banco decidiu fechar a sala VIP no Terminal 2 do Aeroporto de Guarulhos, gerando insatisfação entre clientes premium que utilizavam o benefício, o que pode afetar negativamente a percepção de exclusividade e qualidade de serviço."
