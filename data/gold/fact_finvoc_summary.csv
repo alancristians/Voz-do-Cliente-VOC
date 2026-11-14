@@ -1,142 +1,73 @@
 bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo,resumo_insight_ia
-<<<<<<< HEAD
-Itaú,1238,43.2,98429795.0,307.0,29086.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",3T/2026,"**Multas e questões regulatórias**  
-O Itaú recebeu multas superiores a R$ 1,7 mi por falhas na prestação de serviços e práticas abusivas, além de decisão judicial que obriga a reabertura de agências em São Luís, indicando vulnerabilidades de compliance que podem impactar negativamente a percepção de confiabilidade institucional.
+Itaú,75,43.2,98429795.0,307.0,29086.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",3T/2026,"**Desempenho de Mercado Positivo**  
+Itaú tem sido citado como fator de apoio ao Ibovespa nas duas semanas recentes, contribuindo para alta do índice e reforçando a percepção de solidez e influência no mercado financeiro brasileiro.
 
-**Iniciativas de engajamento e benefícios**  
-A parceria com o Rock in Rio 2026 e a oferta de bônus de 25 % em transferências via LATAM Pass demonstram esforços de diferenciação de CX, reforçando a imagem de banco orientado ao cliente e gerando valor percebido para segmentos de alta renda e viajantes.
+**Controvérsias Jurídicas e Trabalhistas**  
+Decisões judiciais que obrigam o banco a reintegrar funcionária demitida por telegrama e a possibilitar bloqueio de contas de clientes inadimplentes geram críticas de direitos trabalhistas e de consumidores, impactando negativamente a reputação institucional.
 
-**Desempenho de investimentos e estratégia BBA**  
-A carteira do Itaú BBA ficou 8,2 pontos abaixo do Ibovespa em 2026, enquanto a gestora adotou postura defensiva, trocando ações de varejo por agro e ajustando small caps; esses movimentos sinalizam cautela diante de volatilidade, mas podem ser vistos como falta de agressividade em geração de retorno para investidores."
-Bradesco,678,57.23,110653421.0,396.0,38377.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",3T/2026,"**Inovação e Marca** Celebrando 10 anos da assistente virtual b.ia, o Bradesco reforça sua imagem de pioneiro em IA, com campanhas conjuntas (Update or Die!, AlmapBBDO) que geram buzz positivo e reforçam o posicionamento tecnológico da instituição.
+**Inovação e Estratégia Tecnológica**  
+A iniciativa de padronizar a entrega de software com IA, em parceria com a Harness, demonstra comprometimento com a transformação digital, fortalecendo a imagem de Itaú como líder em tecnologia no setor bancário."
+Bradesco,26,57.23,110653421.0,396.0,38377.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade dos serviços relacionados a operações de crédito, exceto consignado",3T/2026,"**Reputação como Empregador**  
+A suspensão da reforma do departamento de Cartões gerou forte indignação sindical, sinalizando fragilidade na gestão de mudanças internas; porém, a abertura de 239 vagas, a escuta ativa dos funcionários e o reforço da marca empregadora indicam esforços de recuperação e fortalecimento da imagem perante colaboradores e candidatos.
 
-**Controvérsias Legais e Regulatórias** Diversas publicações (Times Brasil, Estadão, Folha) relatam que liquidantes de processos internacionais solicitaram ao Bradesco dados sobre transações envolvendo Vorcaro nos EUA, indicando exposição a riscos de compliance e potencial impacto negativo na reputação perante reguladores e investidores.
+**Inovação e Expansão de Serviços**  
+O reconhecimento como “Inovador Transformador do Ano” pelo Qorus 2026 e a habilitação de empresas para integrar serviços financeiros demonstram a capacidade do Bradesco de liderar a transformação digital no setor, reforçando sua reputação de banco inovador e parceiro estratégico.
 
-**Operações e Percepção do Cliente** Reclamações de instabilidade no site, a greve dos bancários no Pará e a contratação para gerir a folha da Prefeitura de Bataguassu (R$ 1,2 mi) evidenciam desafios operacionais e de imagem junto ao público, exigindo respostas rápidas para mitigar desgaste e preservar a confiança dos clientes."
-Santander,687,29.75,72919598.0,145.0,24189.0,"Oferta ou prestação de informação sobre operação de crédito de forma inadequada, exceto crédito consignado",3T/2026,"**Movimentação Estratégica e Parcerias**  
-A retomada da cobertura pós‑OPA, a aliança com 19 bancos para lançar stablecoin e a substituição da parceria com a American Express por um cartão Unlimited gratuito sinalizam um reposicionamento agressivo, porém a saída da Amex pode gerar dúvidas sobre a consistência das alianças de pagamento.
+**Posicionamento Econômico e Perspectivas de Mercado**  
+As previsões de queda de juros, inflação alta em 2027, adiamento de cortes da Selic e projeção de PIB de 0,4% refletem um posicionamento cauteloso diante de um cenário macroeconômico incerto, o que pode impactar a confiança dos investidores e clientes na estabilidade e visão de longo prazo do banco."
+Santander,61,29.75,72919598.0,145.0,24189.0,"Oferta ou prestação de informação sobre operação de crédito de forma inadequada, exceto crédito consignado",3T/2026,"**Engajamento Comunitário**  
+A realização do Santander Night Run em Belo Horizonte reforça a imagem do banco como patrocinador ativo de eventos de saúde e bem‑estar, gerando visibilidade positiva e fortalecendo o vínculo com a comunidade local.
 
-**Investimento em Talentos e Tecnologia**  
-A oferta de 2.500 vagas em programa gratuito, 100 mil vagas para cursos online de IA e a abertura de leilões de imóveis demonstram foco em capacitação e digitalização, reforçando a imagem de empregador inovador e ampliando a presença de marca entre profissionais e consumidores digitais.
+**Desempenho Financeiro e Perspectivas Econômicas**  
+Os relatórios que apontam PIB mais fraco, inflação persistente e elevação da Selic até 2027, combinados com a recorde de PDD de R$ 49 bi, sinalizam desafios macroeconômicos que pressionam a reputação de estabilidade do Santander; porém, o destaque da IA gerando €200 mi em benefícios demonstra capacidade de inovação e resiliência.
 
-**Desempenho de Mercado e Percepção de Risco**  
-O impulso da ação pela OPA contrasta com análises que apontam fundamentos frágeis, enquanto o anúncio de encerramento dos cartões de crédito pode ser visto como corte de custos, mas também como redução de oferta ao cliente, impactando a confiança dos investidores e a percepção de estabilidade financeira."
-Nubank,651,10.68,119583925.0,85.0,29782.0,Irregularidades relacionadas ao Sistema de Informações de Crédito do Banco Central (SCR) - instituição de pagamento,3T/2026,"**Instabilidade Operacional**  
-A sequência de falhas no Pix e no aplicativo, concentradas em um único dia, evidencia fragilidade nos sistemas críticos de pagamento e de acesso, gerando milhares de reclamações e interrupções que afetam a experiência do cliente.
+**Estratégias de Governança e Expansão**  
+A convocação de AGE para revisão do plano de incentivo, a oferta de R$ 11,7 bi pela fatia restante no Brasil e o aumento de oferta de ações (SANB11) indicam movimentações estratégicas voltadas à reestruturação de capital e alinhamento de interesses acionários, reforçando a percepção de proatividade, embora possam gerar incerteza entre investidores."
+Nubank,75,10.68,119583925.0,85.0,29782.0,Irregularidades relacionadas ao Sistema de Informações de Crédito do Banco Central (SCR) - instituição de pagamento,3T/2026,"**Licença Bancária Conquistada**  
+A aprovação do Banco Central para a compra do Banco Porto Real garante ao Nubank a licença bancária plena, permitindo o uso da nomenclatura “banco” e ampliando seu escopo regulatório. Essa conquista elimina a barreira legal que limitava a oferta de produtos como crédito consignado e contas de poupança, reforçando a posição do Nubank como instituição financeira completa.
 
-**Reação nas Redes Sociais**  
-As queixas se espalharam rapidamente nas redes, acumulando cerca de mil menções negativas; o volume e a velocidade da disseminação aumentam a visibilidade do problema e potencializam o risco de viralização negativa.
+**Expansão de Base e Serviços**  
+Com a licença, o Nubank pode integrar 120 milhões de clientes a uma gama mais ampla de serviços bancários, incluindo contas correntes com CDBs, empréstimos e investimentos próprios. A capacidade de oferecer produtos tradicionais ao lado da experiência digital fortalece a proposta de valor e potencializa a retenção e atração de novos usuários.
 
-**Risco de Reputação e Mitigação**  
-A recorrência de incidentes pode erosionar a confiança dos usuários e impactar a percepção de confiabilidade da marca; é urgente implementar comunicação proativa, transparência nas causas e um plano de contingência robusto para restaurar a credibilidade."
-Caixa,654,17.15,160906922.0,99.0,24095.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,3T/2026,"**Greves em Expansão**  
-A sequência de greves anunciadas em Alagoas, Tocantins, Teresópolis, Belo Horizonte e outras regiões indica uma escalada de insatisfação sindical, com demandas rejeitadas e paralisações por tempo indeterminado, afetando a imagem da Caixa como empregadora estável.
+**Impacto na Reputação e Confiança**  
+A aprovação regulatória e a conclusão da aquisição são percebidas como um voto de confiança institucional, elevando a credibilidade do Nubank no mercado financeiro. Esse marco reforça a imagem de inovação responsável, reduzindo dúvidas sobre a solidez da empresa e posicionando-a como um concorrente de peso frente aos bancos tradicionais."
+Caixa,117,17.15,160906922.0,99.0,24095.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços disponibilizados em internet banking",3T/2026,"**Aumento de juros no financiamento imobiliário**  
+A recorrente cobertura sobre a intenção da Caixa de elevar as taxas de financiamento gera percepção de maior custo de crédito para consumidores, podendo deteriorar a imagem de acessibilidade da instituição e alimentar críticas sobre responsabilidade social, sobretudo em um cenário de alta da Selic.
 
-**Risco ao Atendimento ao Cliente**  
-A paralisação de até 58 agências em Alagoas e a ameaça de interrupções em outros estados elevam o risco de deterioração da experiência do cliente, potencializando reclamações, perda de confiança e impacto negativo nos indicadores de NPS.
+**Corte de quadro e expansão de base de clientes**  
+O anúncio de lucro de R$ 10,9 bi até setembro, aliado à redução de empregados enquanto a carteira de clientes cresce, sinaliza eficiência operacional, mas pode ser interpretado como priorização de resultados financeiros em detrimento do atendimento ao cliente, afetando a confiança dos stakeholders internos e externos.
 
-**Inovação Contraposta à Instabilidade**  
-O lançamento do Pix parcelado com juros e prazo de até 12 vezes demonstra esforço de modernização, porém a repercussão positiva pode ser ofuscada pela percepção de instabilidade operacional gerada pelas greves, exigindo comunicação clara para equilibrar a reputação."
-C6,165,52.31,36191709.0,363.0,8435.0,Oferta ou prestação de informação sobre crédito consignado de forma inadequada,3T/2026,"**Expansão para o segmento PJ**  
-A estratégia de ampliação de produtos para pessoas jurídicas, aliada à oferta de benefícios e ao uso de IA, reforça a imagem do C6 Bank como um player ágil e focado em atender demandas corporativas, elevando sua reputação entre empresas que buscam soluções digitais integradas.
+**Incorporação do histórico do FGTS na análise de crédito**  
+A inclusão do histórico do FGTS nas avaliações de crédito amplia a capacidade de segmentação e personalização de ofertas, reforçando a imagem da Caixa como inovadora e orientada ao cliente, o que pode mitigar impactos negativos das demais notícias e melhorar a reputação no mercado."
+C6,2,52.31,36191709.0,363.0,8435.0,Oferta ou prestação de informação sobre crédito consignado de forma inadequada,3T/2026,"**Benefícios de Cartão Atrativos**  
+A campanha de cupons na 99 e Amazon reforça a imagem do C6 como banco digital focado em recompensas tangíveis, aumentando a satisfação e lealdade dos clientes.
 
-**Aquisição da Alymente e entrada no mercado de benefícios**  
-A compra da startup Alymente, amplamente divulgada pela mídia, posiciona o C6 Bank como um concorrente sério no segmento de vale‑refeição e outros benefícios corporativos, gerando percepção de crescimento agressivo e capacidade de integrar ecossistemas de bem‑estar ao portfólio bancário.
+**Posicionamento como Fonte de Insight Econômico**  
+A publicação sobre a Selic demonstra autoridade e proatividade na comunicação de cenários macroeconômicos, fortalecendo a reputação de consultoria financeira do C6.
 
-**Percepção de inovação via IA e benefícios corporativos**  
-A combinação de inteligência artificial com a nova oferta de benefícios cria uma narrativa de inovação tecnológica, fortalecendo a reputação do C6 como banco digital avançado e atraente para empresas que valorizam eficiência, personalização e modernização dos processos de RH."
-BTG Pactual,504,40.6,27766130.0,245.0,8775.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,3T/2026,"**Crescimento Estratégico e Diversificação de Portfólio**  
-O BTG Pactual ampliou sua presença no mercado ao fechar a compra do Banco Digimais, lançar o MegaFiagro de R$ 10 bi e selecionar 10 ações para o período eleitoral, demonstrando capacidade de gerar novas fontes de receita e de se posicionar como referência em investimentos setoriais.
+**Alinhamento Estratégico entre Oferta e Cenário de Juros**  
+Ao combinar benefícios de consumo com análise de juros, o C6 cria"
+BTG Pactual,44,40.6,27766130.0,245.0,8775.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,3T/2026,"**Lucro Recorde e Solidez de Rentabilidade**  
+O BTG Pactual reportou lucro recorde de R$ 5,3 bi no 3T 26, com crescimento de 17 % e ROE acima de 25 % em todos os cenários, reforçando a percepção de alta geração de caixa e eficiência operacional no mercado financeiro.
 
-**Governança e Riscos de Reputação**  
-A aquisição do Digimais, banco associado a Edir Macedo, e a incorporação do fundo taxa zero da Empiricus trazem questionamentos sobre a gestão de conflitos de interesse e a transparência nas decisões de investimento, exigindo reforço nas políticas de compliance para mitigar impactos reputacionais.
+**Desvalorização da Ação e Corte de Preço‑Alvo**  
+Apesar dos resultados positivos, a ação recuou e analistas do Estadão reduziram o preço‑alvo, refletindo preocupação com a fraqueza macroeconômica projetada para 2027 e a expectativa de adiamento de IPOs, o que pressiona a avaliação de curto prazo.
 
-**Autoridade Analítica e Influência no Mercado**  
-O BTG lidera o ranking de projeções fiscais do governo central e recomendações de small caps (Cosan, Panvel) para 2026, consolidando sua imagem como fonte confiável de inteligência de mercado e reforçando a credibilidade perante investidores institucionais e de varejo."
-PicPay,219,35.51,72189706.0,442.0,11164.0,Concessão de crédito (exceto consignado) sem a formalização do título adequado,3T/2026,"**Lucro Recorde e Crescimento de Receita**  
-O PicPay registrou um aumento de 135 % no lucro trimestral, atingindo R$ 269 mi, impulsionado pela expansão do crédito consignado privado e pela forte performance nas ações nos EUA, consolidando sua reputação de crescimento robusto entre as fintechs.
+**Expansão Estratégica e Riscos Regulatórios**  
+A aprovação para operar no mercado cripto e a aprovação de recompra de até R$ 2 bi sinalizam diversificação e retorno de capital aos acionistas, porém a dependência de novos negócios internacionais e a volatilidade regulatória do setor cripto permanecem como fatores de risco para a reputação institucional."
+PicPay,1,35.51,72189706.0,442.0,11164.0,Concessão de crédito (exceto consignado) sem a formalização do título adequado,3T/2026,"**Expansão de Crédito para Negativados**  
+PicPay está sendo destacado como um dos players que ampliará a oferta de crédito a consumidores negativados até 2027, sinalizando uma estratégia de inclusão financeira que pode melhorar sua imagem perante esse segmento marginalizado.
 
-**Risco de Crédito e Qualidade de Ativos**  
-Analistas do BTG e InvesTalk apontam que, apesar do lucro em alta, a inadimplência (NPL) permanece elevada e a qualidade do portfólio de crédito ainda não demonstra estabilização, gerando cautela sobre a sustentabilidade do crescimento.
+**Posicionamento Competitivo**  
+A comparação direta com Nubank, Inter e Mercado Pago coloca o PicPay em um cenário de disputa acirrada; sua capacidade de liberar mais crédito pode reforçar a percepção de inovação, mas também exige diferenciação clara para evitar ser visto apenas como “mais um” provedor de crédito de alto risco.
 
-**Inovação e Estratégia de Mercado**  
-A aposta em IA como “secretária financeira” e a participação em iniciativas de Open Finance com equipe enxuta reforçam a imagem do PicPay como líder inovador, diferenciando‑se no ecossistema fintech e atraindo interesse de investidores internacionais."
-Inter,245,18.45,45938075.0,95.0,7701.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,3T/2026,"**Inovação de Produto e Experiência Digital**  
-O Inter amplia seu ecossistema tecnológico ao migrar para MacOS e ao desenvolver relógios com pagamento por aproximação, reforçando a imagem de banco digital avançado e atraindo usuários de dispositivos premium.
+**Riscos de Reputação e Compliance**  
+Ao focar em clientes com histórico de inadimplência, o PicPay aumenta a exposição a potenciais inadimplências e críticas regulatórias; a gestão cuidadosa desses riscos será crucial para manter a confiança dos investidores e do público."
+Inter,15,18.45,45938075.0,95.0,7701.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",3T/2026,"**Incidente no Lounge VIP**  
+A interdição da sala VIP no aeroporto de Fortaleza por alimentos vencidos gerou repercussão negativa nas redes sociais, evidenciando fragilidade nos controles de qualidade e potencial dano à percepção de confiabilidade e cuidado com o cliente.
 
-**Conformidade Regulatória e Estratégia de Mercado**  
-A aprovação parcial da CVM para o fim dos BDRs patrocinados demonstra progresso nas adequações regulatórias, enquanto a busca de parceiros para a gestão do Beira‑Rio e a estratégia de quitação de débitos com jogadores sinalizam esforços de diversificação e mitigação de riscos.
+**Desempenho Financeiro e Expansão de Crédito**  
+Lucro recorde de R$ 425 mi no 3T26, crescimento de 26 % e base de 46,8 mi de clientes reforçam a imagem de solidez e capacidade de expansão, impulsionando alta de ações e reforçando a reputação de banco inovador e rentável.
 
-**Percepção de Marca e Satisfação do Cliente**  
-A conquista da melhor posição histórica no ranking de reclamações do Banco Central indica melhoria na qualidade do atendimento, contrastando com a exposição da fortuna do fundador, que pode gerar atenção pública adicional sobre governança e responsabilidade social."
-=======
-Itaú,219,46.87,98052200.0,426.0,28687.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",2ºT/2026,"**Apoio ao Ibovespa impulsiona imagem positiva**  
-O Itaú foi citado como um dos principais sustentáculos da alta do Ibovespa em duas ocasiões distintas, reforçando sua percepção como agente estabilizador do mercado financeiro e gerando confiança entre investidores e acionistas.
-
-**Controvérsias judiciais e reclamações trabalhistas**  
-Decisões judiciais que permitem ao Itaú bloquear contas de clientes inadimplentes, somadas a casos de demissão de funcionária por telegrama e denúncias de ambiente insalubre em agências em obras, geram críticas de consumidores e sindicatos, impactando negativamente a reputação institucional.
-
-**Parceria de IA com Harness moderniza operações**  
-A iniciativa de padronizar a entrega de software usando a plataforma de inteligência artificial da Harness demonstra comprometimento com inovação tecnológica, potencializando eficiência operacional e fortalecendo a imagem do banco como líder em transformação digital."
-Bradesco,94,84.9,110412514.0,495.0,46204.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",2ºT/2026,"**Cancelamento da reforma do departamento de Cartões gera crise interna**  
-A decisão de suspender a reestruturação do setor de Cartões provocou forte indignação entre os bancários, conforme relato do Sindicato dos Bancários, sinalizando risco reputacional relacionado à gestão de mudanças e ao clima organizacional.
-
-**Premiação Qorus 2026 destaca Bradesco como Inovador Transformador**  
-O banco foi o único brasileiro a receber o título “Inovador Transformador do Ano” no Qorus 2026, reforçando sua imagem de liderança tecnológica e capacidade de oferecer soluções disruptivas no mercado financeiro.
-
-**Estratégia de atração e engajamento de talentos reforça marca empregadora**  
-A abertura de 239 vagas para jovens profissionais, aliada a iniciativas de escuta interna divulgadas por diversos veículos, evidencia um esforço coordenado para fortalecer a marca empregadora e melhorar a percepção dos colaboradores."
-Santander,125,34.19,72310206.0,177.0,24592.0,"Oferta ou prestação de informação sobre operação de crédito de forma inadequada, exceto crédito consignado",2ºT/2026,"**Inovação em IA gera ganhos de €200 mi**  
-O diretor financeiro revelou que a inteligência artificial já trouxe ao Santander um impacto positivo de 200 milhões de euros, reforçando a imagem do banco como líder em tecnologia financeira e impulsionando a confiança dos investidores em sua capacidade de gerar eficiência e novos negócios.
-
-**Revisão de projeções macroeconômicas no Brasil**  
-O Santander reduziu sua previsão de PIB e elevou a inflação para 2026‑2027, sinalizando um cenário econômico mais desafiador; essa postura cautelosa pode afetar a percepção de estabilidade do banco entre clientes e analistas, embora demonstre transparência nas expectativas de mercado.
-
-**Movimentação de governança e oferta acionária**  
-A convocação de Assembleia Geral Extraordinária para alterar o plano de incentivo e a proposta de R$ 11,7 bi para adquirir a fatia restante no Brasil evidenciam mudanças estratégicas de governança e capitalização, impactando acionistas e reforçando o comprometimento do Santander com a expansão e alinhamento de interesses corporativos."
-Nubank,141,9.2,117259020.0,83.0,26330.0,Irregularidades relacionadas ao Sistema de Informações de Crédito do Banco Central (SCR) - instituição de pagamento,2ºT/2026,"**Aquisição do Banco Porto Real**  
-O Nubank concluiu a compra do Banco Porto Real, operação aprovada pelo Banco Central, permitindo a incorporação de ativos, carteira de crédito e infraestrutura bancária, reforçando sua capacidade de oferecer serviços completos de banco.
-
-**Concessão da Licença Bancária**  
-Com a aprovação do BC, o Nubank recebeu a licença bancária oficial, passando de fintech a banco regulado, o que amplia seu leque de produtos (como empréstimos e investimentos) e reduz barreiras regulatórias para expansão.
-
-**Impacto nos 120 milhões de clientes e posicionamento**  
-A transição para banco institucionaliza a relação com os 120 milhões de usuários, aumentando a confiança e possibilitando a oferta de serviços mais sofisticados, consolidando o Nubank como um dos maiores players financeiros do Brasil."
-Caixa,151,23.32,160219441.0,153.0,23153.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Revisão de Juros do Financiamento Imobiliário**  
-A Caixa tem sido citada por diversos veículos (Acia Araçatuba, Banda B, Jornal de Brasília, Conexão Política, Seu Dinheiro, Times Brasil, UOL Economia, TV Sim Brasil) como estando em fase de estudo para elevar as taxas de juros dos financiamentos habitacionais, refletindo preocupação com a alta da Selic e o impacto nos custos de crédito para a casa própria.
-
-**Incorporação do Histórico do FGTS na Análise de Crédito**  
-Segundo a Gazeta de São Paulo, a instituição passou a integrar o histórico de movimentação do FGTS dos clientes nos modelos de avaliação de crédito, ampliando o leque de informações para decisões de concessão e potencialmente reduzindo risco de inadimplência.
-
-**Crescimento de Lucro com Redução de Pessoal e Expansão de Clientes**  
-Reportado pela Contraf-CUT, a Caixa registrou lucro de R$ 10,9 bilhões até setembro, ao mesmo tempo em que diminuiu seu quadro de empregados e aumentou significativamente o número de clientes, indicando uma estratégia de eficiência operacional e foco em escala de serviços."
-C6,2,59.77,35193110.0,411.0,8091.0,Oferta ou prestação de informação sobre crédito consignado de forma inadequada,2ºT/2026,"**Programa de Recompensas Mastercard com Cupons**  
-O C6 Bank lançou o “Compra Premiada”, um programa que vincula o uso do cartão Mastercard a cupons de desconto válidos na 99 e na Amazon, ampliando o portfólio de benefícios e incentivando a frequência de uso do cartão.
-
-**Parceria Estratégica com 99 e Amazon**  
-A iniciativa de cupons reflete parcerias comerciais concretas com a plataforma de mobilidade 99 e o marketplace Amazon, reforçando a estratégia do banco de integrar serviços de consumo digital e gerar valor agregado ao cliente"
-BTG Pactual,61,41.98,27807332.0,234.0,8772.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**Lucro Recorde no 3T26 e Recompra de Ações**  
-BTG Pactual anunciou lucro líquido de R$ 5,3 bilhões no terceiro trimestre de 2026, alta de 17 % em relação ao período anterior, e aprovou programa de recompra de até R$ 2 bilhões em ações, reforçando a confiança na geração de caixa e elevando a percepção de solidez entre investidores e clientes.
-
-**Corte de Preço‑Alvo e Queda da Ação**  
-Analistas do Estadão reduziram o preço‑alvo das ações do BTG, refletindo preocupação com a volatilidade do mercado e a desaceleração econômica projetada, o que provocou queda nas cotações mesmo diante dos resultados positivos, gerando dúvidas sobre a consistência da estratégia de crescimento.
-
-**Expansão para Cripto e Perspectiva de ROE**  
-A aprovação para operar no mercado de cripto‑ativos posiciona o banco como pioneiro no setor financeiro brasileiro, enquanto o CFO projeta um cenário econômico mais fraco até 2027, mas mantém a meta de ROE acima de 25 % e aposta em expansão internacional, sinalizando foco em diversificação e rentabilidade de longo prazo."
-PicPay,2,35.66,70585296.0,419.0,10353.0,Concessão de crédito (exceto consignado) sem a formalização do título adequado,2ºT/2026,"**PicPay avança na oferta de crédito para negativados**  
-A análise comparativa de 2027 indica que o PicPay está entre os líderes ao liberar crédito para consumidores negativados, superando concorrentes como Nubank e Mercado Pago em volume de aprovação, o que reforça sua estratégia de inclusão financeira e atrai um segmento de alto risco, porém potencialmente lucrativo.
-
-**Nova liderança focada em serviços bancários para PMEs**  
-O PicPay anunciou a troca de sua liderança de serviços bancários, trazendo um executivo com experiência em fintechs B2B para conduzir a expansão de soluções de conta corrente, pagamentos e crédito voltadas a micro e pequenas empresas, sinalizando um reposicionamento estratégico para capturar esse mercado ainda pouco atendido.
-
-**Impacto na reputação: percepção de inovação vs risco regulatório**  
-Enquanto as iniciativas de crédito agressivo e a nova direção para PMEs elevam a imagem de inovação do PicPay, elas também geram preocupação regulatória e aumentam a exposição a reclamações de consumidores negativados, exigindo reforço nas políticas de compliance e comunicação transparente para equilibrar crescimento e confiança do cliente."
-Inter,19,26.15,44458414.0,137.0,7568.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,2ºT/2026,"**VIP Lounge Interditado em Fortaleza**  
-Fiscalização constatou alimentos vencidos na sala VIP do Banco Inter no aeroporto, levando à interdição e gerando reclamações de clientes sobre falhas de controle de qualidade e higiene.
-
-**Resultados Financeiros Positivos no 3T26**  
-O banco reportou lucro de R$ 425 mi, crescimento de 26 % e atingiu 46,8 mi de clientes, o que impulsionou as ações (+6 % na NYSE, +8 % na B3) e reduziu a preocupação dos investidores com a inadimplência.
-
-**Expansão de Crédito e Pressão de Inadimplência**  
-Apesar da ampliação de crédito e do recorde de lucro, as provisões subiram 39 %, indicando que a inadimplência ainda pressiona o portfólio, embora a instituição acredite estar próxima do pico desse risco."
->>>>>>> c42fe2518e923ea1b59b4ac1d2eb805e64864533
+**Pressões de Inadimplência e Volatilidade de Mercado**  
+Provisões em alta de 39 % sinalizam risco de inadimplência ainda presente; embora o mercado tenha reagido positivamente ao alívio percebido, investidores permanecem cautelosos quanto à sustentabilidade do otimismo."
