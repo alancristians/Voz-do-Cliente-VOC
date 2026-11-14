@@ -1,6 +1,6 @@
 # 🛡️ FinVoC 2.0 - Voz do Cliente | Monitor Inteligente de Experiência Bancária
 
-**FinVoC (Financial Voice of Customer)** é um ecossistema de Engenharia de Dados de ponta a ponta, projetado para monitorar e analisar a reputação das principais instituições financeiras do Brasil. O projeto combina dados oficiais, notícias de mercado e **Inteligência Artificial Generativa** para transformar dados brutos em insights estratégicos para o setor bancário.
+**FinVoC (Financial Voice of Customer)** é um ecossistema de Engenharia de Dados de ponta a ponta, projetado para monitorar e analisar a reputação das principais instituições financeiras do Brasil. O projeto combina dados oficiais do Banco Central (BCB), notícias de mercado e **Inteligência Artificial Generativa** para transformar dados brutos em insights estratégicos para o setor bancário.
 
 ---
 
@@ -16,16 +16,18 @@
 
 ## 🚀 Principais Funcionalidades
 * **Resumo Executivo (IA):** Cards inteligentes gerados por LLM que sintetizam o "humor" do mercado para cada player.
+* **Radar de CX & Drivers de Atrito:** Agrupamento executivo por zonas de pressão operacional e diagnósticos de motivos de queixas procedentes.
 * **KPIs de Desempenho:** Monitoramento de Índice de Reclamações, Taxa de Procedência e Market Share de contas ativas.
-* **Voz do Mercado:** Ingestão dinâmica de notícias focada em menções recentes e tendências de reputação.
-* **Matriz de Diagnóstico:** Comparativo técnico de eficiência entre Bancos Tradicionais e Neobanks (C6, Nubank, Inter, PicPay, etc).
+* **Voz do Mercado:** Ingestão dinâmica de notícias focada em menções recentes (janela de 7 dias) de-duplicadas por manchete.
+* **Matriz de Diagnóstico:** Comparativo técnico de eficiência entre Bancos Tradicionais e Neobanks (C6, Nubank, Inter, PicPay, Mercado Pago, etc).
 
 ## 🏗️ Arquitetura de Dados (Medallion)
 O fluxo de dados segue rigorosamente as melhores práticas de arquitetura de dados moderna:
 
-1.  **🥉 Camada Bronze:** Ingestão de dados brutos do Ranking BCB, Google News e metadados do Consumidor.gov em formato Parquet/CSV.
-2.  **🥈 Camada Silver:** Limpeza profunda, padronização de nomes de instituições (Fuzzy Matching) e tratamento de tipagem de dados.
-3.  **🥇 Camada Gold:** Cruzamento de bases, enriquecimento via **IA Generativa** e consolidação na `fact_finvoc_summary.csv`, otimizada para consumo analítico.
+1. **📦 Camada Seed:** Dados históricos estáticos e baseline de trimestres legados (`data/seeds/hist_bcb_seed.csv`).
+2. **🥉 Camada Bronze:** Ingestão de dados brutos do Ranking BCB, Google News e metadados do Consumidor.gov em formato Parquet/CSV.
+3. **🥈 Camada Silver:** Limpeza profunda, padronização de nomes de instituições (Fuzzy Matching), deduplicação por manchetes e tratamento de tipagem de dados sanitizada (`hist_reclamacoes_bcb.csv` e `stg_assuntos_ranking.csv`).
+4. **🥇 Camada Gold:** Cruzamento de bases, enriquecimento via **IA Generativa** e consolidação na `fact_finvoc_summary.csv`, otimizada para consumo analítico.
 
 ## 🛠️ Stack Tecnológica
 * **Linguagem:** Python 3.11+
@@ -36,8 +38,8 @@ O fluxo de dados segue rigorosamente as melhores práticas de arquitetura de dad
 * **Armazenamento:** Arquitetura Medalhão (Versionada via Git)
 
 ## 📊 Status e Referência
-* **Dados de Referência:** 1º Trimestre de 2026 (Dados oficiais BCB).
-* **Instituições Monitoradas:** Itaú, Bradesco, Santander, Banco do Brasil, Caixa, Nubank, C6 Bank, BTG Pactual, Inter e PicPay.
+* **Dados de Referência:** 3º Trimestre de 2026 (Dados oficiais BCB).
+* **Instituições Monitoradas:** Itaú, Bradesco, Santander, Banco do Brasil, Caixa, Nubank, C6 Bank, BTG Pactual, Inter, PicPay e Mercado Pago.
 
 ---
 **Desenvolvido por:** [Alan Cristian Oliveira Freire da Silva](https://github.com/alancristians)  

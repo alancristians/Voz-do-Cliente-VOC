@@ -1,11 +1,16 @@
-# === Dados e Artefactos ===
-# Bloqueia a pasta data e formatos de dados por padrão
+# === Dados e Artefatos ===
+# Bloqueia a pasta data e formatos de dados brutos por padrão
 data/
 *.csv
 *.parquet
 
-# EXCEPÇÃO: Força o Git a permitir este ficheiro específico para o Dashboard
+# EXCEÇÕES: Permite arquivos de Seeds, Staging e Gold para o Git/Dashboard
+!data/seeds/
+!data/seeds/*.csv
 !data/silver/stg_assuntos_ranking.csv
+!data/silver/hist_reclamacoes_bcb.csv
+!data/gold/fact_finvoc_summary.csv
+!data/gold/last_update.txt
 
 # === Python ===
 __pycache__/
@@ -21,7 +26,4 @@ venv/
 
 # === Logs e Debug ===
 *.log
-error_debug.png
-debug_final.png
-erro_v5.png
-debug_screenshot.png
+*.png

@@ -3,14 +3,11 @@ import pandas as pd
 import plotly.express as px
 import os
 import pytz
+import re
 from datetime import datetime
 
-# 1. CONFIGURAÇÕES DE INTERFACE
-# Definição do layout e metadados da página
 st.set_page_config(page_title="Voz do Cliente | Monitor de Experiência", layout="wide", page_icon="🛡️")
 
-# 2. ESTILIZAÇÃO CUSTOMIZADA (CSS)
-# Customização de métricas e rodapé para alinhamento com a identidade visual do projeto
 st.markdown("""
     <style>
     div[data-testid="stMetric"] {
@@ -38,8 +35,6 @@ st.markdown("""
 st.title("🗣️ Voz do Cliente | Monitor de Experiência Bancária")
 st.caption('“Só existe um chefe: o cliente. Ele pode demitir todos na empresa gastando seu dinheiro em outro lugar.” – Sam Walton')
 
-# 3. IDENTIDADE VISUAL E CORES INSTITUCIONAIS
-# Mapeamento de cores para consistência visual entre gráficos
 BANK_COLORS = {
     "Itaú": "#EC7000", 
     "Bradesco": "#C8102E", 
@@ -100,6 +95,8 @@ def carregar_dados():
     if os.path.exists(hist_path):
         df_hist = pd.read_csv(hist_path, sep=';', encoding='latin-1')
         df_hist['bank'] = df_hist['bank'].str.strip().replace(mapa_nomes)
+        if 'ordem_cronologica' in df_hist.columns:
+            df_hist['ordem_cronologica'] = pd.to_numeric(df_hist['ordem_cronologica'], errors='coerce').fillna(0).astype(int)
 
     df_assuntos = pd.DataFrame()
     if os.path.exists(assuntos_path):
@@ -108,7 +105,7 @@ def carregar_dados():
         except Exception:
             try:
                 df_assuntos = pd.read_csv(assuntos_path)
-            except:
+            except Exception:
                 pass
             
         if not df_assuntos.empty:
@@ -123,14 +120,11 @@ def carregar_dados():
         
     return df, last_update, df_hist, df_assuntos
 
-# Inicialização da carga de dados
 df, data_atualizacao, df_hist, df_assuntos = carregar_dados()
 
 if df is not None:
-    # 4. DASHBOARD HEADER - Status do Pipeline
     st.info(f"📊 **Dados de Referência:** {df['periodo'].iloc[0]} | 🔄 **Atualização Diária:** Última carga em {data_atualizacao}")
     
-    # 5. SIDEBAR - Governança de Filtros
     st.sidebar.header("⚙️ Configurações")
     with st.sidebar.expander("🏦 Filtrar Instituições", expanded=True):
         todos_bancos = df['bank'].unique().tolist()
@@ -149,38 +143,68 @@ if df is not None:
     
     df_p = df[df['bank'].isin(selected_banks)]
 
-    # 6. CAMADA DE MÉTRICAS (KPIs)
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Bancos Analisados", len(df_p), help="Quantidade de bancos no filtro atual.")
     k2.metric("Exposição (Notícias)", int(df_p['qtd_noticias_recentes'].sum()), help="Total de menções capturadas via Google News.")
     k3.metric("Média Índice BCB", f"{df_p['indice_bcb'].mean():.2f}", help="Média do ranking oficial de reclamações.")
-    k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", help="Representa o total de CPFs e CNPJs com relacionamento ativo em cada instituição.")
+    k4.metric("Total de Contas (BCB)", f"{df_p['total_clientes'].sum()/1e6:.1f}M", help="Total de CPFs e CNPJs com relacionamento ativo.")
 
     st.divider()
 
-    # --- BLOCO: DETALHAMENTO DE MOTIVOS POR BANCO (LISTA DINÂMICA) ---
     st.subheader("🎯 Detalhamento de Reclamações por Banco")
     st.caption("Filtro automático aplicado com base nas instituições selecionadas na barra lateral esquerda.")
 
-    # =============================================================================
-    # BLOCO EXPANSÍVEL: ANÁLISE COMPARATIVA DE EVOLUÇÃO (1T vs. 2T 2026)
-    # =============================================================================
-    with st.expander("📊 **Ver Análise Comparativa de Mudanças (1T2026 vs. 2T2026)**", expanded=False):
+    with st.expander("📊 **Ver Análise Comparativa de Mudanças (2T2026 vs. 3T2026)**", expanded=False):
         st.markdown("""
-        ### 📈 Destaques da Transição Trimestral de Reclamações (BCB)
+        ### 🧭 Radar de Experiência do Cliente & Drivers de Atrito (BCB 3T/2026)
 
-        * <span style="background-color: #C8102E; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Bradesco</span> **: Forte aceleração de queixas.** O primeiro motivo (**Cartões de Crédito**) disparou de 1.039 para **1.364** (+31%), o segundo motivo (**Operações de Crédito**) subiu para **1.136** e falhas em **Internet Banking** surgiram como terceiro vetor com **625** registros.
-        * <span style="background-color: #EC7000; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Itaú</span> **: Mudança nos principais ofensores.** Enquanto no 1T2026 os tópicos ficavam na faixa de ~390 reclamações, no 2T2026 **Cartões de Crédito** disparou para **701** (+79%), **Crédito Consignado** foi para **604** e **SAC/Atendimento** subiu de 362 para **486**.
-        * <span style="background-color: #21C25E; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">PicPay</span> **: Queda expressiva no volume do principal ofensor.** A concessão de crédito sem formalização caiu de 553 para **216** (-61%), empatando com **Oferta de Consignado Inadequada** (**216**) e **Cartões de Crédito** (**204**).
-        * <span style="background-color: #FF0000; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Santander</span> **: Reorganização do ranking.** A liderança de queixas passou para **Oferta/Informação sobre Crédito** com **489** (subindo de 436 no 1T), seguida por **Informação sobre Produtos** (**377**) e **Integridade de Operações** (**363**).
-        * <span style="background-color: #F8D117; color: #000000; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Banco do Brasil</span> **: Entrou em destaque no ecossistema de Cartões de Crédito**, registrando **560** reclamações no 2T, seguido por **Oferta de Consignado** (**305**) e **Informações do DDC** (**280**).
-        * <span style="background-color: #353434; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">C6 Bank</span> **: Lidera com folga em Oferta/Informação Inadequada de Crédito Consignado**, somando **532** ocorrências, seguido por **Débito Não Autorizado** (**235**).
-        * <span style="background-color: #005CA9; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Caixa Econômica</span> **: O principal gargalo da instituição é no suporte direto**, liderando em **Insatisfação com SAC e Central de Relacionamento** (**488**) e **Internet Banking** (**366**).
-        * <span style="background-color: #820AD1; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Nubank</span> **: As reclamações concentram-se em burocracias de dados de crédito**, liderando no **Sistema de Informações de Crédito do BCB (SCR)** com **195** menções e problemas em **Contas Pós-paga** (**130**).
-        * <span style="background-color: #00AEEF; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Mercado Pago</span> **: Apresenta pico em Contas de Pagamento (Pós e Pré-paga)**, acumulando **337** reclamações em cada categoria.
-        * <span style="background-color: #001C3D; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">BTG Pactual</span> **: Apresenta menor volume geral**, com foco principal em atendimento no **SAC/Central** (**185**) e **Informações de Consignado** (**145**).
-        * <span style="background-color: #FF7A00; color: #FFFFFF; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Inter</span> **: Reclamações concentradas no suporte SAC/Central** (**204**), seguido por **Cartões de Crédito** (**144**).
-        * <span style="background-color: #00E5FF; color: #000000; padding: 3px 8px; border-radius: 4px; font-weight: bold;">Neon</span> **: Apresenta baixo volume absoluto**, liderado por **Conta de Pagamento Pós-paga** com **92** reclamações no trimestre.
+        ---
+
+        #### 🚨 **1. Zona de Alta Pressão Operacional**
+        * 🔴 **Bradesco** | `Índice: 57,23` | `🔻 -32.6% vs Q2`  
+          **Gargalo Principal:** *Operações de Crédito (Segurança & Legitimidade)* — 1.200 queixas procedentes.  
+          *Diagnóstico:* Teve a maior redução absoluta do trimestre (-27,67 pts), mas permanece na 1ª posição devido à alta concentração de atritos em concessões de crédito.
+
+        * 🖤 **C6 Bank** | `Índice: 52,31` | `🔻 -12.5% vs Q2`  
+          **Gargalo Principal:** *Crédito Consignado (Informações Inadequadas)* — 636 queixas procedentes.  
+          *Diagnóstico:* A transparência na contratação de consignado segue como o principal fator de desgaste na percepção da marca.
+
+        * 🟠 **Itaú** | `Índice: 43,20` | `🔻 -7.8% vs Q2`  
+          **Gargalo Principal:** *Cartões de Crédito (Segurança & Contestação)* — 900 queixas procedentes.  
+          *Diagnóstico:* Mantém trajetória descendente no índice geral, concentrando fricção operacional em contestação e segurança no ecossistema de cartões.
+
+        ---
+
+        #### ⚡ **2. Zona Intermediária & Plataformas**
+        * 💙 **BTG Pactual** | `Índice: 40,60` | `🔻 -3.3% vs Q2`  
+          **Gargalo Principal:** *SAC & Central de Relacionamento* — 207 queixas procedentes.  
+          *Diagnóstico:* Perfil atípico no setor: o produto em si gera pouca queixa, mas o transbordo e resolutividade no atendimento de 1º nível são os gargalos.
+
+        * 🟢 **PicPay** | `Índice: 35,51` | `➡️ Estável vs Q2`  
+          **Gargalo Principal:** *Formalização de Crédito sem Título Adequado* — 540 queixas procedentes.  
+          *Diagnóstico:* Estabilidade no índice médio, exigindo ajuste fino de governança na esteira de contratação de produtos de crédito.
+
+        * 🌐 **Mercado Pago** | `Índice: 30,57` | `🆕 Estreia no Ranking`  
+          **Gargalo Principal:** *Contas Pré-Pagas (Segurança & Bloqueios)* — 384 queixas procedentes.  
+          *Diagnóstico:* Entrada direta na 6ª posição com índice controlado, concentrando queixas na segurança de contas de pagamento.
+
+        ---
+
+        #### 🛡️ **3. Zona de Maior Eficiência Relativa**
+        * 🟡 **Banco do Brasil** | `Índice: 29,94` | `🔻 -14.9% vs Q2`  
+          **Gargalo Principal:** *Cartões de Crédito* — 382 queixas procedentes. *(Recuo consistente para a 7ª posição geral)*.
+
+        * 🔴 **Santander** | `Índice: 29,75` | `🔻 -13.0% vs Q2`  
+          **Gargalo Principal:** *Transparência em Operações de Crédito* — 509 queixas procedentes. *(Evolução operacional contínua no trimestre)*.
+
+        * 🟠 **Inter** | `Índice: 18,45` | `🔻 -29.4% vs Q2`  
+          **Gargalo Principal:** *Cartões de Crédito* — 205 queixas procedentes. *(Destaque positivo de queda no volume de atritos entre os bancos digitais)*.
+
+        * 🔵 **Caixa Econômica** | `Índice: 17,15` | `🔻 -26.5% vs Q2`  
+          **Gargalo Principal:** *Serviços no Internet Banking* — 363 queixas procedentes. *(Excelente indicador em relação à base massiva de 160M+ contas)*.
+
+        * 🟣 **Nubank** | `Índice: 10,68` | `🔺 +16.1% vs Q2`  
+          **Gargalo Principal:** *Apontamentos no SCR / Registrato* — 210 queixas procedentes. *(Sustenta a menor taxa proporcional de reclamações entre os grandes players)*.
         """, unsafe_allow_html=True)
 
     if not df_assuntos.empty:
@@ -214,41 +238,35 @@ if df is not None:
                 use_container_width=True
             )
         else:
-            st.error("❌ As colunas esperadas não foram encontradas no arquivo CSV de assuntos.")
+            st.error("❌ As colunas esperadas não foram encontradas no arquivo de assuntos.")
     else:
         st.warning("⚠️ Arquivo de assuntos não localizado ou vazio.")
 
     st.divider()
 
-    # 7. VISUALIZAÇÕES - Camada de Notícias e Reclamações
     c1, c2 = st.columns(2)
     with c1:
         news_path = "data/silver/stg_noticias.parquet"
         st.subheader("Volume de Notícias na Mídia")
-        st.caption("Dados referentes aos últimos 15 dias móveis")
+        st.caption("Dados referentes aos últimos 7 dias móveis (de-duplicados por manchete)")
         
         if os.path.exists(news_path):
             df_raw_news = pd.read_parquet(news_path)
             df_raw_news = df_raw_news[df_raw_news['bank'].isin(selected_banks)]
-            df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce')
+            df_raw_news['published_dt'] = pd.to_datetime(df_raw_news['published'], errors='coerce', utc=True).dt.tz_convert(None)
+            df_raw_news = df_raw_news.drop_duplicates(subset=['bank', 'title'], keep='first')
             
-            # -------------------------------------------------------------------------
-            # REGRA DE NEGÓCIO: JANELA MÓVEL DE COMPETÊNCIA DE 15 DIAS (ROLLING WINDOW)
-            # Captura o volume de menções em uma janela retroativa de 15 dias móveis.
-            # Essa abordagem mitiga o efeito de "gráfico vazio" no início de cada mês
-            # e mantém o dashboard focado nas tendências de mídia mais imediatas.
-            # -------------------------------------------------------------------------
-            limite_15d = pd.Timestamp.now().replace(hour=0, minute=0, second=0, microsecond=0) - pd.Timedelta(days=15)
-            df_filtered_news = df_raw_news[df_raw_news['published_dt'].dt.tz_localize(None) >= limite_15d]
+            limite_7d = pd.Timestamp.now().replace(hour=0, minute=0, second=0, microsecond=0) - pd.Timedelta(days=7)
+            df_filtered_news = df_raw_news[df_raw_news['published_dt'] >= limite_7d]
+            if df_filtered_news.empty:
+                df_filtered_news = df_raw_news
             
-            # Agregação volumétrica por instituição (Camada de Apresentação)
-            df_counts = df_filtered_news.groupby('bank').size().reset_index(name='vol_15d')
+            df_counts = df_filtered_news.groupby('bank').size().reset_index(name='vol_7d')
             
-            # Renderização do gráfico de distribuição de market share de mídia (Treemap)
             fig_news = px.treemap(
                 df_counts, 
                 path=['bank'], 
-                values='vol_15d', 
+                values='vol_7d', 
                 color='bank', 
                 color_discrete_map=BANK_COLORS, 
                 template="plotly_dark"
@@ -325,7 +343,6 @@ if df is not None:
 
     st.divider()
 
-    # 8. VISUALIZAÇÕES - Market Share e Eficiência Operacional
     c3, c4 = st.columns(2)
     with c3:
         st.subheader("Market Share")
@@ -336,29 +353,44 @@ if df is not None:
     with c4:
         df_proc_sorted = df_p.sort_values('taxa_procedencia', ascending=True)
         st.subheader("Taxa de Procedência (%)")
-        st.caption("Menor valor indica melhor eficiência operacional")
+        st.caption("Percentual de reclamações julgadas procedentes pelo BCB (menor = melhor)")
         fig_proc = px.bar(df_proc_sorted, x='bank', y='taxa_procedencia', color='bank', color_discrete_map=BANK_COLORS, text_auto='.2f', template="plotly_dark")
         fig_proc.update_traces(textposition='outside')
-        fig_proc.update_layout(showlegend=False, yaxis_title="Índice", xaxis_title="", margin=dict(t=20, b=0, l=0, r=0))
+        fig_proc.update_layout(showlegend=False, yaxis_title="Procedência (%)", xaxis_title="", margin=dict(t=20, b=0, l=0, r=0))
         st.plotly_chart(fig_proc, use_container_width=True, config={'displayModeBar': 'hover', 'scrollZoom': False})
 
-    # --- BLOCO: ANÁLISE DE TENDÊNCIA HISTÓRICA (HOJE vs 1T/2026) ---
     with st.expander("📈 Evolução e Tendência Histórica (2025/2026)", expanded=True):
         if not df_hist.empty:
-            df_hist_filtered = df_hist[df_hist['bank'].isin(selected_banks)]
+            df_hist_filtered = df_hist[df_hist['bank'].isin(selected_banks)].copy()
             if not df_hist_filtered.empty:
+                df_hist_filtered = df_hist_filtered.sort_values('ordem_cronologica')
+                periodos_ordenados = df_hist_filtered['periodo'].drop_duplicates().tolist()
+                
                 cols_met = st.columns(len(selected_banks[:4]))
                 for i, b in enumerate(selected_banks[:4]):
                     with cols_met[i]:
-                        va = df_p[df_p['bank'] == b]['indice_bcb'].values[0]
-                        bd = df_hist_filtered[df_hist_filtered['bank'] == b].sort_values('ordem_cronologica')
-                        if not bd.empty:
-                            vn = bd.iloc[-2]['indice_bcb']
-                            delta_pct = ((va - vn) / vn * 100) if vn != 0 else 0
-                            st.metric(label=b, value=f"{va:.2f}", delta=f"{delta_pct:.1f}% vs 1T", delta_color="inverse")
+                        va_rows = df_p[df_p['bank'] == b]['indice_bcb'].values
+                        if len(va_rows) > 0:
+                            va = va_rows[0]
+                            bd = df_hist_filtered[df_hist_filtered['bank'] == b].sort_values('ordem_cronologica')
+                            if not bd.empty:
+                                bd_anteriores = bd[bd['ordem_cronologica'] < 20263]
+                                vn = bd_anteriores.iloc[-1]['indice_bcb'] if not bd_anteriores.empty else bd.iloc[-1]['indice_bcb']
+                                delta_pct = ((va - vn) / vn * 100) if vn != 0 else 0
+                                st.metric(label=b, value=f"{va:.2f}", delta=f"{delta_pct:.1f}% vs Q2/26", delta_color="inverse")
                 
                 st.write("---")
-                fig_ev = px.line(df_hist_filtered.sort_values('ordem_cronologica'), x='periodo', y='indice_bcb', color='bank', markers=True, template="plotly_dark", color_discrete_map=BANK_COLORS)
+                fig_ev = px.line(
+                    df_hist_filtered, 
+                    x='periodo', 
+                    y='indice_bcb', 
+                    color='bank', 
+                    markers=True, 
+                    template="plotly_dark", 
+                    color_discrete_map=BANK_COLORS,
+                    category_orders={"periodo": periodos_ordenados}
+                )
+                fig_ev.update_xaxes(categoryorder='array', categoryarray=periodos_ordenados)
                 fig_ev.update_layout(margin=dict(t=20, b=0, l=0, r=0), xaxis_title="Trimestre", yaxis_title="Índice BCB")
                 st.plotly_chart(fig_ev, use_container_width=True, config={'displayModeBar': 'hover'})
             else:
@@ -366,8 +398,7 @@ if df is not None:
         else:
             st.warning("⚠️ Arquivo histórico de 2025/2026 não encontrado.")
 
-    # 9. MATRIZ DE DIAGNÓSTICO (Tabela Fato)
-    st.subheader(f" Matriz de Diagnóstico ")
+    st.subheader("📊 Matriz de Diagnóstico")
     df_matrix = df_p.copy()
     df_matrix['total_clientes_m'] = df_matrix['total_clientes'] / 1e6
 
@@ -384,59 +415,56 @@ if df is not None:
 
     st.divider()
 
-   # --- BLOCO: INSIGHTS ESTRATÉGICOS DE IA ---
-if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
-    st.subheader(" Insights Estratégicos (IA)")
-    focus_bank = st.selectbox("Selecione um banco para ouvir a opinião da IA (Llama 3.3):", options=selected_banks, key="focus_bank_ia")
-    
-    if focus_bank:
-        resumo = df_p[df_p['bank'] == focus_bank]['resumo_insight_ia'].values[0]
+    if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
+        st.subheader("💡 Insights Estratégicos (IA)")
+        focus_bank = st.selectbox(
+            "Selecione um banco para ouvir a opinião da IA (GPT-OSS 120b):", 
+            options=selected_banks, 
+            key="focus_bank_ia"
+        )
         
-        st.markdown(f"**Análise da IA para {focus_bank}:**")
-        
-        if resumo and str(resumo).strip():
-            import re
+        if focus_bank:
+            resumo = df_p[df_p['bank'] == focus_bank]['resumo_insight_ia'].values[0]
             
-            texto = str(resumo).strip()
-            texto = re.sub(r'(?:T[IÍ]TULO:|CONTEÚDO:)\s*', '', texto, flags=re.IGNORECASE)
+            st.markdown(f"**Análise da IA para {focus_bank}:**")
             
-            # Divide o texto em blocos de tópicos (separados por linha em branco)
-            blocos_brutos = [b.strip() for b in re.split(r'\n\s*\n', texto) if b.strip()]
-            
-            for bloco in blocos_brutos:
-                linhas = [l.strip() for l in bloco.split('\n') if l.strip()]
+            if resumo and str(resumo).strip():
+                texto = str(resumo).strip()
+                texto = re.sub(r'(?:T[IÍ]TULO:|CONTEÚDO:)\s*', '', texto, flags=re.IGNORECASE)
                 
-                if len(linhas) >= 2:
-                    # A primeira linha é o Título (remove marcas de negrito para não duplicar)
-                    titulo = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
-                    conteudo = "\n".join(linhas[1:])
-                elif len(linhas) == 1:
-                    # Caso o título e o texto venham na mesma linha com negrito: **Título** Conteúdo
-                    match_bold = re.match(r'^\*\*(.*?)\*\*\s*(.*)', linhas[0])
-                    if match_bold:
-                        titulo = match_bold.group(1).strip()
-                        conteudo = match_bold.group(2).strip()
+                blocos_brutos = [b.strip() for b in re.split(r'\n\s*\n', texto) if b.strip()]
+                
+                for bloco in blocos_brutos:
+                    linhas = [l.strip() for l in bloco.split('\n') if l.strip()]
+                    
+                    if len(linhas) >= 2:
+                        titulo = re.sub(r'[\*\#\_]', '', linhas[0]).strip()
+                        conteudo = "\n".join(linhas[1:])
+                    elif len(linhas) == 1:
+                        match_bold = re.match(r'^\*\*(.*?)\*\*\s*(.*)', linhas[0])
+                        if match_bold:
+                            titulo = match_bold.group(1).strip()
+                            conteudo = match_bold.group(2).strip()
+                        else:
+                            titulo = "Destaque"
+                            conteudo = linhas[0]
                     else:
-                        titulo = "Destaque"
-                        conteudo = linhas[0]
-                else:
-                    continue
+                        continue
 
-                # Renderiza cada tópico dinâmico em seu container
-                with st.container(border=True):
-                    st.markdown(f"**🔹 {titulo}**")
-                    st.write(conteudo)
-        else:
-            st.info("⚠️ Nenhum insight estratégico disponível para este banco.")
-    st.divider()
+                    with st.container(border=True):
+                        st.markdown(f"**🔹 {titulo}**")
+                        st.write(conteudo)
+            else:
+                st.info("⚠️ Nenhum insight estratégico disponível para este banco.")
+        st.divider()
 
-    # 10. EXPLORADOR DE DADOS (Silver Layer)
-    st.subheader(f"🔍 Explorador de Notícias")
+    st.subheader("🔍 Explorador de Notícias")
     news_path = "data/silver/stg_noticias.parquet"
     
     if os.path.exists(news_path):
         df_news = pd.read_parquet(news_path)
         df_news = df_news[df_news['bank'].isin(selected_banks)]
+        df_news = df_news.drop_duplicates(subset=['bank', 'title'], keep='first')
         search = st.text_input("Busca textual nas manchetes:", placeholder="Ex: C6 Bank, Reclamação, App...")
         
         if search:
@@ -457,10 +485,9 @@ if 'resumo_insight_ia' in df_p.columns and not df_p.empty:
         if not df_news.empty:
             st.caption(f"Exibindo as {len(df_news)} notícias mais relevantes/recentes.")
     else:
-        st.error("❌ Erro na carga dos dados.")
+        st.error("❌ Erro na carga dos dados de notícias.")
 
-# 11. FOOTER - Identidade Profissional
-st.markdown(f"""
+st.markdown("""
     <div class="main-footer">
         Desenvolvido e sustentado por <b>Alan Cristian</b> | 
         <a href="https://www.linkedin.com/in/alancristians/" target="_blank">LinkedIn</a><br>
@@ -468,7 +495,6 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# 12. SIDEBAR - Selo de Qualidade e Versão
 st.sidebar.markdown("---")
 st.sidebar.caption(f"📅 **Sincronização:** {data_atualizacao}")
 st.sidebar.markdown("[🔗 Ranking de Reclamações (BCB)](https://www.bcb.gov.br/meubc/rankingreclamacoes)")

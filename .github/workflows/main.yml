@@ -7,7 +7,6 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  # Injeta a chave da Groq para que o script Gold consiga gerar os insights de IA
   GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
 
 permissions:
@@ -36,7 +35,7 @@ jobs:
       - name: "🥉 Etapa 1: Ingestão Bronze (Fontes)"
         run: |
           echo "::group::Coleta Ranking BCB"
-          python scripts/bcb_ingestion.py
+          python scripts/bcb_ingestion.py 2026 3
           echo "::endgroup::"
           
           echo "::group::Coleta Google News"
@@ -49,6 +48,10 @@ jobs:
 
       - name: "🥈 Etapa 2: Transformação Prata (Limpeza)"
         run: |
+          echo "::group::Geração de Seeds Históricas"
+          python scripts/setup_seeds.py
+          echo "::endgroup::"
+
           echo "::group::Processamento Silver"
           python scripts/silver_transformation.py
           echo "::endgroup::"
@@ -65,17 +68,16 @@ jobs:
           git config --global user.name 'Alan (FinVoC Bot)'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # 2. Silencia o aviso de arquivos ignorados para não poluir o log
+          # 2. Silencia o aviso de arquivos ignorados
           git config --global advice.addIgnoredFile false
           
           # 3. Garante que as pastas existem
-          mkdir -p data/bronze data/silver data/gold
+          mkdir -p data/bronze data/silver data/gold data/seeds
           
-          # 4. A MARRETA: Força a adição de TUDO o que estiver na pasta data
-          # O -f (force) aqui é soberano sobre o .gitignore
+          # 4. Adiciona arquivos mantidos
           git add -f data/
           
-          # 5. Verifica se houve mudanças, puxa atualizações e envia com segurança
+          # 5. Commit e Push seguro
           if git diff --staged --quiet; then
             echo "Nada novo para salvar."
           else
