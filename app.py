@@ -156,11 +156,8 @@ if df is not None:
 
     with st.expander("📊 **Ver Análise Comparativa de Mudanças (2T2026 vs. 3T2026)**", expanded=False):
         st.markdown("""
-        ### 🧭 Radar de Experiência do Cliente & Drivers de Atrito (BCB 3T/2026)
 
-        ---
-
-        #### 🚨 **1. Zona de Alta Pressão Operacional**
+        #### **1. Zona de Alta Pressão**
         * 🔴 **Bradesco** | `Índice: 57,23` | `🔻 -32.6% vs Q2`  
           **Gargalo Principal:** *Operações de Crédito (Segurança & Legitimidade)* — 1.200 queixas procedentes.  
           *Diagnóstico:* Teve a maior redução absoluta do trimestre (-27,67 pts), mas permanece na 1ª posição devido à alta concentração de atritos em concessões de crédito.
@@ -175,7 +172,7 @@ if df is not None:
 
         ---
 
-        #### ⚡ **2. Zona Intermediária & Plataformas**
+        #### **2. Zona Intermediária**
         * 💙 **BTG Pactual** | `Índice: 40,60` | `🔻 -3.3% vs Q2`  
           **Gargalo Principal:** *SAC & Central de Relacionamento* — 207 queixas procedentes.  
           *Diagnóstico:* Perfil atípico no setor: o produto em si gera pouca queixa, mas o transbordo e resolutividade no atendimento de 1º nível são os gargalos.
@@ -190,7 +187,7 @@ if df is not None:
 
         ---
 
-        #### 🛡️ **3. Zona de Maior Eficiência Relativa**
+        #### **3. Zona de Maior Eficiência Relativa**
         * 🟡 **Banco do Brasil** | `Índice: 29,94` | `🔻 -14.9% vs Q2`  
           **Gargalo Principal:** *Cartões de Crédito* — 382 queixas procedentes. *(Recuo consistente para a 7ª posição geral)*.
 
