@@ -1,67 +1,67 @@
 bank,qtd_noticias_recentes,indice_bcb,total_clientes,recl_procedentes,total_respondidas,principal_motivo,periodo,resumo_insight_ia
-Itaú,94,43.2,98429795.0,307.0,29086.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",3T/2026,"**Confiabilidade Operacional**  
-Incidentes recentes de indisponibilidade do aplicativo, login e Pix geram fricção imediata para clientes digitais, reforçando a necessidade de investimentos em infraestrutura resiliente e comunicação proativa para mitigar impactos na experiência do usuário.
+Itaú,100,43.2,98429795.0,307.0,29086.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",3T/2026,"**Desempenho de Mercado e Projeções**  
+O Itaú BBA mantém projeções otimistas para o Ibovespa (+14% até 2027) e destaca oportunidades em setores como soja e carne bovina, mas enfrenta cautela de investidores e rebaixamento de ações em carteiras de gestores como BTG, sinalizando volatilidade na percepção de risco.
 
-**Posicionamento de Marca e Liderança**  
-O Itaú mantém a liderança como marca mais valiosa no Brasil pelo quinto ano consecutivo e consolida influência institucional ao eleger Rubens Fogli para presidir o Comitê Executivo da Abecs, fortalecendo a percepção de solidez e responsabilidade corporativa.
+**Desafios Operacionais e Segurança**  
+Incidentes de fraude (compras não reconhecidas) e a decisão judicial que autoriza bloqueio de contas de clientes do Itaú por dívidas aumentam a preocupação com a segurança e a confiança dos usuários, exigindo reforço imediato nos controles de prevenção e comunicação transparente.
 
-**Estratégia de Mercado e Relacionamento com Empresários**  
-A expansão da participação do mercado de capitais no financiamento sucroenergético (27% da dívida) e a mudança de posicionamento para estreitar laços com empresários demonstram foco em diversificação de negócios e apoio ao ecossistema empresarial, embora a redução de preço‑alvo da Direcional indique cautela nas recomendações de investimento."
-Bradesco,26,57.23,110653421.0,396.0,38377.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade dos serviços relacionados a operações de crédito, exceto consignado",3T/2026,"**Brand Visibility & Estratégia de Marketing**  
-A negociação de naming rights do Morumbi reforça a presença da marca Bradesco em grandes eventos esportivos, ampliando a visibilidade e associando o banco a valores de tradição e paixão nacional, o que pode melhorar a percepção de relevância e engajamento junto ao público.
+**Iniciativas de Responsabilidade e Comunicação**  
+Campanhas como “Toda Empresa é um Feito” e análises setoriais (ex.: virada da JBS) demonstram esforços de posicionamento de marca e engajamento com o mercado, porém precisam ser alinhadas a respostas rápidas a crises para preservar a reputação institucional."
+Bradesco,44,57.23,110653421.0,396.0,38377.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade dos serviços relacionados a operações de crédito, exceto consignado",3T/2026,"**Governança e Remuneração**  
+A série de assembleias de bancários (BH, Cascavel, Contec) sobre PPR/PRB demonstra transparência nas negociações de remuneração variável, mas a repetição de comunicados pode sinalizar tensão interna e necessidade de maior clareza nos critérios de distribuição.
 
-**Riscos Legais e de Conformidade**  
-Diversos processos judiciais – incluindo afastamento de responsabilidade por golpe de bilhete premiado, condenação por fraude em empréstimos, obrigação de pensão vitalícia por lesões ocupacionais e o rombo histórico do Master – evidenciam vulnerabilidades em controles internos e compliance, gerando potenciais impactos negativos na reputação e aumento de custos de litígio.
+**Perspectiva Econômica e Risco de Mercado**  
+O CEO alerta para um cenário adverso em 2027, reforçado por análises do Valor Econômico e Guia do Investidor, indicando que a volatilidade cambial e o risco macroeconômico podem impactar a confiança dos investidores e a percepção de estabilidade do Bradesco.
 
-**Inovação Tecnológica vs. Desempenho Financeiro**  
-A iniciativa de tokenizar fundos na blockchain Solana demonstra liderança em inovação, porém a deterioração do crédito no terceiro trimestre e resultados inferiores ao concorrente BB indicam desafios na saúde financeira que podem contrabalançar os ganhos de imagem associados à tecnologia avançada."
-Santander,52,29.75,72919598.0,145.0,24189.0,"Oferta ou prestação de informação sobre operação de crédito de forma inadequada, exceto crédito consignado",3T/2026,"**Regulação e Solidez de Capital**  
-Santander cumpre os requisitos mínimos do BCE para 2027 e vê aumento nas exigências de capital e reserva de risco sistêmico, indicando foco em conformidade regulatória, mas também sinalizando pressão sobre a alavancagem e necessidade de reforçar buffers de capital.
+**Incidente de Reputação e Experiência do Cliente**  
+A divulgação de que o banco “sujou” o nome de um cliente sem comprovação (Estadão MT) gera risco reputacional significativo, contrastando com a campanha de Black Friday no app (Let's Money), que busca melhorar a experiência do consumidor, mas pode ser ofuscada por questões de confiança."
+Santander,38,29.75,72919598.0,145.0,24189.0,"Oferta ou prestação de informação sobre operação de crédito de forma inadequada, exceto crédito consignado",3T/2026,"**Risco Reputacional no Agro**  
+A percepção de que o crédito agro está se tornando mais restrito e que fazendeiros com dívidas altas podem perder terras tem gerado preocupação entre stakeholders rurais, potencialmente afetando a imagem do Santander como parceiro financeiro confiável no setor.
 
-**Crédito Rural e Controvérsias Legais**  
-A “ressaca” da crise no agronegócio, combinada com a suspensão judicial de cobrança de R$ 7,6 mi a produtores de Minas Gerais, evidencia vulnerabilidade na carteira de crédito rural e potencia risco reputacional perante agricultores e autoridades.
+**Impacto da Crise do BB no Crédito Rural**  
+A crise do Banco do Brasil, destacada por diretores do Santander, pode alterar o acesso ao crédito rural, colocando o Santander em posição de destaque para suprir a demanda, mas também expondo-o a críticas caso não consiga atender às necessidades dos produtores.
 
-**Gestão Operacional e Relações Trabalhistas**  
-Denúncias de falta de suporte a funcionários na Bahia e a percepção de retração de fundos no setor agro geram críticas sobre a experiência do colaborador e a confiança dos investidores, impactando a imagem institucional do banco."
-Nubank,116,10.68,119583925.0,85.0,29782.0,Irregularidades relacionadas ao Sistema de Informações de Crédito do Banco Central (SCR) - instituição de pagamento,3T/2026,"**Investimento Estratégico e Visibilidade Internacional**  
-A injeção de US$ 33,5 mi da gestora ligada ao genro de Donald Trump eleva o perfil global do Nubank, sinalizando confiança de investidores estrangeiros e potencializando a percepção de solidez financeira, o que pode reforçar a reputação institucional perante acionistas e clientes.
+**Conformidade Regulatória e Perspectivas de Investidores**  
+O cumprimento dos requisitos mínimos do BCE para 2027 reforça a solidez regulatória do Santander, porém a recomendação negativa da Nos e a discussão sobre tributação de investidores estrangeiros introduzem incertezas que podem pressionar a confiança dos investidores e impactar a reputação institucional."
+Nubank,97,10.68,119583925.0,85.0,29782.0,Irregularidades relacionadas ao Sistema de Informações de Crédito do Banco Central (SCR) - instituição de pagamento,3T/2026,"**Expansão de Marca e Visibilidade nos Mercados**  
+A inclusão do Nubank em ETFs de destaque (Suno, Valor Investe) e a conquista de 16 mi de clientes no México reforçam a percepção de crescimento acelerado e presença internacional, elevando a reputação como fintech de escala global.
 
-**Transformação em Banco Pleno e Impacto Regulatório**  
-A aprovação do Banco Central para a compra do Banco Porto Real e a oficialização do status de “banco de verdade” ampliam o leque de serviços, mas também expõem o Nubank a maior escrutínio regulatório; a inclusão potencial no Ibovespa e em ETFs reforça a visibilidade de mercado, porém aumenta a sensibilidade a variações de desempenho e a expectativas de governança robusta.
+**Atração de Capital Estratégico e Conexões Políticas**  
+Os aportes de US$ 33,5 mi provenientes da gestora ligada ao genro de Donald Trump geram atenção midiática; embora aumentem a capacidade de investimento, também introduzem risco reputacional associado a potenciais controvérsias políticas.
 
-**Desafios Operacionais e Relações Trabalhistas**  
-A aquisição do Porto Real gerou resistência sindical, com cobranças de direitos trabalhistas, indicando risco de conflitos laborais que podem impactar a imagem de responsabilidade social; a necessidade de integrar equipes e manter a cultura de atendimento ao cliente será crucial para preservar a reputação de excelência em CX."
-Caixa,100,17.15,160906922.0,99.0,24095.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços disponibilizados em internet banking",3T/2026,"**Escândalos e Contenciosos Legais**  
-A condenação do ex‑tesoureiro por desvio de R$ 890 mil e a ação judicial do fundo imobiliário que processa a Caixa seis vezes evidenciam vulnerabilidades de governança e aumentam a percepção de risco reputacional, exigindo reforço imediato em controles internos e transparência nas respostas públicas.
+**Consolidação Regulatória e Operacional**  
+A aprovação do Banco Central para a compra do Banco Porto Real, garantindo licença bancária plena, e a discussão sobre inclusão no Ibovespa/BDRs sinalizam maturidade institucional, mitigando rumores de extinção e fortalecendo a confiança dos stakeholders."
+Caixa,72,17.15,160906922.0,99.0,24095.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços disponibilizados em internet banking",3T/2026,"**Governança e Controvérsias Legais**  
+A condenação do ex‑tesoureiro por desvio de quase R$ 890 mil e as cobranças da Contraf‑CUT sobre o déficit do plano de saúde evidenciam vulnerabilidades de compliance, gerando risco reputacional e exigindo reforço imediato de controles internos e transparência nas negociações sindicais.
 
-**Pressões de Mercado e Estratégias de Crédito**  
-O aumento de juros em três bancos, inclusive a possível revisão pela Caixa, aliado à renegociação de R$ 4 bi em dívidas do agronegócio, indica tensão nas condições de crédito. A mensagem “pior já passou” busca mitigar a preocupação dos stakeholders, mas a volatilidade de taxas pode impactar a confiança dos investidores e clientes.
+**Desempenho Financeiro e Estratégias de Crédito**  
+A renegociação de R$ 4 bi em dívidas do agronegócio, a leilão de imóveis com descontos de até 40 % e a possibilidade de reajuste nas taxas de juros para habitação indicam uma estratégia de liquidez agressiva, porém a elevação de juros em três bancos concorrentes pode pressionar a competitividade da Caixa no crédito imobiliário.
 
-**Iniciativas Sociais e Sustentáveis**  
-Parcerias para acelerar a mudança climática, leilões de imóveis com descontos de até 40 % na Bahia e o pagamento continuado do Bolsa Família demonstram o comprometimento da Caixa com responsabilidade social e ambiental, reforçando sua imagem como agente de inclusão financeira e desenvolvimento sustentável."
+**Iniciativas ESG e Parcerias Estratégicas**  
+A busca por novas parcerias climáticas e a promoção do “Blue Friday Caixa” demonstram um esforço de posicionamento sustentável e de engajamento de clientes, reforçando a imagem de responsabilidade"
 C6,0,52.31,36191709.0,363.0,8435.0,Oferta ou prestação de informação sobre crédito consignado de forma inadequada,3T/2026,"**Sem Fatos Relevantes**
 Nenhuma menção crítica mapeada na mídia para esta instituição no mês vigente."
-BTG Pactual,53,40.6,27766130.0,245.0,8775.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,3T/2026,"**Instabilidade Operacional e Pressão Regulamentar**  
-Problemas recorrentes no app do BTG Pactual, combinados com a exigência judicial de esclarecimentos sobre a transferência de fundos, reforçam percepções de fragilidade operacional e aumentam a vigilância dos reguladores.
+BTG Pactual,24,40.6,27766130.0,245.0,8775.0,Insatisfação com o atendimento prestado pelo SAC ou Central de Relacionamento,3T/2026,"**Relações Comerciais e Estratégicas**  
+A desistência da compra do Banco Master, justificada como relação de cliente‑fornecedor, indica cautela estratégica, mas pode ser percebida como falta de ambição de expansão, afetando a percepção de agressividade no mercado.
 
-**Ataques de Reputação e Conflitos Setoriais**  
-E-mails vazados em que um executivo do Deutsche Bank rotula André Esteves como “picareta” geram cobertura negativa e alimentam narrativas de rivalidade entre grandes bancos, potencialmente afetando a confiança de investidores e clientes.
+**Desempenho de Mercado e Avaliações**  
+Rebaixamentos de rating por analistas (XP, n3news) e a necessidade de justificar transferências de fundos sugerem pressão sobre a confiança dos investidores e podem impactar a reputação de solidez financeira do BTG.
 
-**Reconhecimento de Inovação e Estratégia de Expansão**  
-A premiação como “Melhor Banco para Ativos Digitais” na América do Sul e a proposta de aquisição da Vero (R$ 6,3 bi) destacam a capacidade de inovação e crescimento do BTG, oferecendo contrapeso positivo à imagem institucional."
-PicPay,15,35.51,72189706.0,442.0,11164.0,Concessão de crédito (exceto consignado) sem a formalização do título adequado,3T/2026,"**Desempenho de Ações e Impacto de Guidance**  
-A queda de quase 30% nas ações do PicPay em NY, após a revisão de projeções de lucro para 2026 e o “write‑off”, evidencia forte reação negativa do mercado ao guidance mais conservador, mesmo com resultados trimestrais positivos.
+**Riscos Operacionais e Imagem Pública**  
+Instabilidades recorrentes no app e a exposição de e‑mails com insultos ao BTG (chamado de “picareta”) aumentam a vulnerabilidade reputacional, gerando dúvidas sobre a governança e a cultura corporativa."
+PicPay,15,35.51,72189706.0,442.0,11164.0,Concessão de crédito (exceto consignado) sem a formalização do título adequado,3T/2026,"**Desempenho de Ações e Percepção de Mercado**  
+A queda de quase 30% nas ações do PicPay em NY, apesar de lucro trimestral recorde, indica forte desconfiança dos investidores quanto à sustentabilidade do crescimento e à capacidade de cumprir metas futuras.
 
-**Crescimento de Lucro vs. Inadimplência**  
-O lucro líquido de R$ 271 mi (+157%) demonstra eficiência operacional, porém o aumento da inadimplência nos ativos sinaliza risco de qualidade de crédito, gerando dúvidas sobre a sustentabilidade desse crescimento.
+**Redução de Guidance e Write‑off**  
+O corte na projeção de lucro para 2026 e o reconhecimento de “write‑off” elevaram a percepção de risco operacional, reforçando a narrativa de que os resultados recentes podem ser pontuais e não refletir a saúde financeira de longo prazo.
 
-**Percepção de Mercado e Confiança dos Investidores**  
-Analistas destacam a alavancagem operacional entregue e a normalização dos ativos, mas a volatilidade acionária e a preocupação com a dívida futura reduzem a confiança dos investidores, impactando negativamente a reputação de estabilidade financeira do PicPay."
-Inter,16,18.45,45938075.0,95.0,7701.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",3T/2026,"**Risco Operacional e Conformidade**  
-A interdição da sala VIP no aeroporto de Fortaleza por alimentos vencidos evidencia falhas de controle interno e pode gerar desconfiança entre clientes premium e autoridades regulatórias.
+**Inadimplência em Alta vs Lucro Elevado**  
+O aumento de 157% no lucro foi acompanhado por crescimento da inadimplência, gerando dúvidas sobre a qualidade dos ativos e a eficácia das políticas de crédito, o que pode deteriorar a reputação de confiabilidade junto a clientes e parceiros."
+Inter,7,18.45,45938075.0,95.0,7701.0,"Irregularidades relativas a integridade, confiabilidade, segurança, sigilo ou legitimidade das operações e serviços relacionados a cartões de crédito",3T/2026,"**Inovação e Aquisição Gamificada**  
+A campanha que vincula o lançamento de GTA VI a um programa de cashback gamificado reforça a imagem do Inter como banco digital inovador e orientado ao engajamento do cliente, gerando buzz positivo e potencial de aumento de base de usuários.
 
-**Inovação e Parcerias Estratégicas**  
-A aliança com a xAI de Elon Musk posiciona o Inter como pioneiro em IA no setor bancário, reforçando sua imagem de banco digital inovador e atraindo atenção de investidores e tech‑savvy.
+**Problemas Operacionais e Impacto de Conformidade**  
+A interdição da sala VIP no aeroporto de Fortaleza por alimentos vencidos evidencia falhas de controle de qualidade e compliance, gerando risco reputacional imediato e exigindo respostas rápidas para restaurar a confiança dos clientes premium.
 
 **Desempenho Financeiro e Percepção de Mercado**  
-Lucro recorde de R$ 425 mi e crescimento de clientes contrastam com o aumento de provisões (‑39 %) e sinal de inadimplência; o mercado reage positivamente (ações em alta), mas a volatilidade persiste até que a pressão de crédito seja totalmente mitigada."
+A queda da inadimplência no 3T26 impulsionou alta de ações (até +8 % em alguns veículos), sinalizando alívio para investidores; contudo, há cautela quanto à sustentabilidade desse otimismo, demandando comunicação transparente sobre a saúde creditícia."
